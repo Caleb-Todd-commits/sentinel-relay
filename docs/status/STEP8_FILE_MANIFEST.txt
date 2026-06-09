@@ -1,0 +1,39 @@
+Step 8 file manifest — Real Band agent communication
+
+New/updated server adapter files:
+- apps/web/src/lib/band/bandTypes.ts
+- apps/web/src/lib/band/bandConfig.ts
+- apps/web/src/lib/band/bandMappers.ts
+- apps/web/src/lib/band/bandRoomStore.ts
+- apps/web/src/lib/band/bandRestClient.ts
+- apps/web/src/lib/band/routeResponses.ts
+- apps/web/src/lib/band/index.ts
+- apps/web/src/app/api/collaboration/rooms/route.ts
+- apps/web/src/app/api/collaboration/messages/route.ts
+- apps/web/src/app/api/collaboration/approvals/route.ts
+- apps/web/src/app/api/collaboration/health/route.ts
+- apps/web/src/app/api/collaboration/stream/route.ts
+
+Updated browser provider:
+- apps/web/src/lib/collaboration/BandCollaborationProvider.ts
+
+New/updated agent files:
+- agents/pyproject.toml
+- agents/README.md
+- agents/agent_config.yaml.example
+- agents/common/sentinel_agent_runtime.py
+- agents/*/main.py
+- agents/*/.env.example
+
+New scripts:
+- scripts/band/print-band-env-check.py
+- scripts/band/band-smoke-test.py
+- scripts/band/verify-band-integration.py
+
+New docs:
+- docs/45_REAL_BAND_INTEGRATION.md
+- docs/46_BAND_ENVIRONMENT_SETUP.md
+- docs/47_REMOTE_AGENT_RUNBOOK.md
+- docs/48_BAND_ROUTE_CONTRACTS.md
+- docs/49_STEP8_VERIFICATION_REPORT.md
+- docs/50_STEP8_TEAM_HANDOFF.md

@@ -1,0 +1,23 @@
+# Sentinel Relay CODEOWNERS
+# These are suggested ownership areas. Replace GitHub handles after teammates are confirmed.
+
+# Overall repo/docs
+/README.md @ctodd2022
+/docs/ @ctodd2022
+
+# Frontend
+/apps/web/src/app/ @ctodd2022
+/apps/web/src/components/ @ctodd2022
+/apps/web/src/lib/types.ts @ctodd2022
+
+# Collaboration/Band integration
+/apps/web/src/lib/collaboration/ @ctodd2022
+/agents/ @ctodd2022
+
+# Sample data and schemas
+/packages/sample-data/ @ctodd2022
+/packages/schemas/ @ctodd2022
+
+# GitHub/project config
+/.github/ @ctodd2022
+/scripts/ @ctodd2022

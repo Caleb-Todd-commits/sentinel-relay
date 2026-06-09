@@ -1,0 +1,54 @@
+name: Feature Task
+description: Build a new product feature or user-facing capability.
+title: "[Area] "
+labels: ["type:feature", "status:ready"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should be true when this is done?
+      placeholder: Build the War Room message stream so structured agent messages are visible.
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why It Matters
+      description: How does this help the demo, Band story, or judging criteria?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What should be included?
+    validations:
+      required: true
+  - type: textarea
+    id: out_of_scope
+    attributes:
+      label: Out of Scope
+      description: What should not be touched?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      value: |
+        - [ ]
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Is this blocked by another issue or decision?
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes
+      description: Implementation hints, links, or warnings.

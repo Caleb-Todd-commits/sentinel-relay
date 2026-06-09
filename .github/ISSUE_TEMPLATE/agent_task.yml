@@ -1,0 +1,50 @@
+name: Agent Task
+description: Work related to agent prompts, behavior, structured outputs, or handoffs.
+title: "[Agent] "
+labels: ["area:agents", "type:feature", "status:ready"]
+body:
+  - type: textarea
+    id: agent
+    attributes:
+      label: Agent or Agents Affected
+      placeholder: Commander, Forensics, Threat Intel, Code Review, Risk & Compliance, Remediation
+    validations:
+      required: true
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should this agent do better after this task?
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs
+      description: What data/messages does this agent receive?
+  - type: textarea
+    id: outputs
+    attributes:
+      label: Structured Outputs
+      description: What message types should this agent produce?
+  - type: textarea
+    id: handoff
+    attributes:
+      label: Handoff Behavior
+      description: Which agent should receive or challenge the output?
+  - type: textarea
+    id: approval
+    attributes:
+      label: Human Approval Boundaries
+      description: What is this agent not allowed to decide alone?
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      value: |
+        - [ ] Prompt updated
+        - [ ] Structured output documented
+        - [ ] Mock/sample message updated if needed
+        - [ ] UI impact checked
+    validations:
+      required: true

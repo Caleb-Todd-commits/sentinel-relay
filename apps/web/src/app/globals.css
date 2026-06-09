@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --relay-bg: #06101f;
+  --relay-panel: rgba(11, 22, 40, 0.86);
+  --relay-border: rgba(148, 163, 184, 0.22);
+  --relay-text: #e5edf8;
+  --relay-muted: #94a3b8;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.15), transparent 27rem),
+    radial-gradient(circle at 82% 18%, rgba(129, 140, 248, 0.13), transparent 30rem),
+    radial-gradient(circle at 50% 105%, rgba(16, 185, 129, 0.08), transparent 28rem),
+    linear-gradient(180deg, #06101f 0%, #0a1221 44%, #070b13 100%);
+  color: var(--relay-text);
+}
+
+body::before {
+  pointer-events: none;
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.23;
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+@layer components {
+  .relay-page {
+    @apply min-h-screen px-5 py-8 sm:px-8 lg:px-10;
+  }
+
+  .relay-shell {
+    @apply mx-auto w-full max-w-[1800px];
+  }
+
+  .relay-card {
+    border: 1px solid var(--relay-border);
+    background: var(--relay-panel);
+    @apply rounded-2xl p-5 shadow-panel backdrop-blur;
+  }
+
+  .relay-card-highlight {
+    background:
+      linear-gradient(135deg, rgba(14, 165, 233, 0.12), rgba(124, 58, 237, 0.10)),
+      var(--relay-panel);
+  }
+
+  .relay-control-card {
+    background:
+      linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.62)),
+      var(--relay-panel);
+  }
+
+  .relay-critical-card {
+    border-color: rgba(251, 191, 36, 0.38);
+    background:
+      radial-gradient(circle at top left, rgba(251, 191, 36, 0.12), transparent 24rem),
+      rgba(11, 22, 40, 0.9);
+  }
+
+  .relay-approval-card {
+    border-color: rgba(251, 191, 36, 0.42);
+    background:
+      radial-gradient(circle at top right, rgba(251, 191, 36, 0.12), transparent 20rem),
+      rgba(11, 22, 40, 0.92);
+  }
+
+  .relay-card-compact {
+    border: 1px solid var(--relay-border);
+    background: rgba(15, 23, 42, 0.58);
+    @apply rounded-xl p-4;
+  }
+
+  .relay-command-bar {
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background:
+      linear-gradient(135deg, rgba(15, 23, 42, 0.88), rgba(8, 47, 73, 0.35)),
+      rgba(11, 22, 40, 0.88);
+    @apply sticky top-4 z-20 flex flex-wrap items-center justify-between gap-5 rounded-3xl p-5 shadow-panel backdrop-blur-xl;
+  }
+
+  .relay-mini-stat {
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    background: rgba(2, 6, 23, 0.35);
+    @apply rounded-2xl p-3;
+  }
+
+  .relay-mini-stat dt {
+    @apply text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500;
+  }
+
+  .relay-mini-stat dd {
+    @apply mt-1 truncate text-sm font-bold text-slate-100;
+  }
+
+  .relay-message-card {
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    background: rgba(2, 6, 23, 0.26);
+    @apply rounded-2xl p-4 transition hover:border-slate-500/80;
+  }
+
+  .relay-message-card-critical {
+    border-color: rgba(251, 191, 36, 0.42);
+    background:
+      radial-gradient(circle at top left, rgba(251, 191, 36, 0.10), transparent 20rem),
+      rgba(2, 6, 23, 0.28);
+  }
+
+  .relay-badge {
+    border: 1px solid rgba(148, 163, 184, 0.28);
+    background: rgba(15, 23, 42, 0.6);
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium text-slate-300;
+  }
+
+  .relay-button-primary {
+    @apply inline-flex items-center justify-center rounded-xl bg-slate-100 px-4 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .relay-button-secondary {
+    @apply inline-flex items-center justify-center rounded-xl border border-slate-700 bg-slate-950/30 px-4 py-2.5 text-sm font-semibold text-slate-100 transition hover:border-slate-500 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .relay-label {
+    @apply text-xs font-semibold uppercase tracking-[0.16em] text-slate-500;
+  }
+
+  .relay-muted {
+    @apply text-sm text-slate-400;
+  }
+}

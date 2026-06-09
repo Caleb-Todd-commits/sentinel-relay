@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Team Start File
+    url: https://github.com/OWNER/REPO/blob/main/docs/TEAM_START_HERE.md
+    about: Read the project source of truth before opening large-scope issues.

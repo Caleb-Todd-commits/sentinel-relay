@@ -1,0 +1,47 @@
+name: Band Integration Task
+description: Work related to Band rooms, messages, participants, provider layer, or live collaboration.
+title: "[Band] "
+labels: ["area:band", "type:feature", "status:ready", "risk:integration"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What Band behavior should work when this is done?
+    validations:
+      required: true
+  - type: textarea
+    id: band_usage
+    attributes:
+      label: How Band Is Central
+      description: Explain how this uses Band during the workflow, not only at the end.
+    validations:
+      required: true
+  - type: textarea
+    id: provider
+    attributes:
+      label: Provider Impact
+      description: Does this affect CollaborationProvider, MockCollaborationProvider, or BandCollaborationProvider?
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment Variables
+      description: List any env vars needed. Do not paste real values.
+  - type: textarea
+    id: fallback
+    attributes:
+      label: Fallback Plan
+      description: How does mock mode keep working if Band is unavailable?
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      value: |
+        - [ ] Band behavior works or scaffold is clearly documented
+        - [ ] Mock fallback still works
+        - [ ] No credentials are committed
+        - [ ] README/docs updated if setup changed
+    validations:
+      required: true

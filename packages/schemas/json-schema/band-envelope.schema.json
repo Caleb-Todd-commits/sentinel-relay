@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinel-relay.dev/schemas/band-envelope.schema.json",
+  "title": "Sentinel Relay Band Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "envelopeType",
+    "caseId",
+    "roomId",
+    "senderAgentId",
+    "messageId",
+    "sentAt",
+    "traceId",
+    "payload"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "envelopeType": { "const": "sentinel_relay.agent_message" },
+    "caseId": { "type": "string" },
+    "roomId": { "type": "string" },
+    "senderAgentId": { "type": "string" },
+    "messageId": { "type": "string" },
+    "sentAt": { "type": "string", "format": "date-time" },
+    "traceId": { "type": "string" },
+    "payload": { "$ref": "./agent-message.schema.json" }
+  }
+}

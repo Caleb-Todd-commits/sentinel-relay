@@ -1,0 +1,35 @@
+Step 7 — Collaboration Provider Layer file manifest
+
+Added:
+- apps/web/src/lib/collaboration/types.ts
+- apps/web/src/lib/collaboration/index.ts
+- apps/web/src/lib/collaboration/browserConfig.ts
+- apps/web/src/lib/collaboration/syncMockWorkflowToProvider.ts
+- apps/web/src/lib/workflow/useIncidentCollaborationWorkflow.ts
+- apps/web/src/components/war-room/ProviderStatusPanel.tsx
+- apps/web/src/app/api/collaboration/rooms/route.ts
+- apps/web/src/app/api/collaboration/messages/route.ts
+- apps/web/src/app/api/collaboration/approvals/route.ts
+- scripts/provider/verify-provider-layer.py
+- docs/39_COLLABORATION_PROVIDER_LAYER.md
+- docs/40_PROVIDER_CONTRACT.md
+- docs/41_MOCK_PROVIDER_IMPLEMENTATION.md
+- docs/42_BAND_PROVIDER_SCAFFOLD.md
+- docs/43_STEP7_VERIFICATION_REPORT.md
+- docs/44_STEP7_TEAM_HANDOFF.md
+
+Updated:
+- apps/web/src/lib/collaboration/CollaborationProvider.ts
+- apps/web/src/lib/collaboration/MockCollaborationProvider.ts
+- apps/web/src/lib/collaboration/BandCollaborationProvider.ts
+- apps/web/src/lib/collaboration/getCollaborationProvider.ts
+- apps/web/src/lib/workflow/types.ts
+- apps/web/src/lib/workflow/index.ts
+- apps/web/src/app/war-room/page.tsx
+- .env.example
+- apps/web/.env.example
+- package.json
+- README.md
+- docs/TEAM_START_HERE.md
+- docs/01_BIGGEST_10_FIRST.md
+- docs/06_DECISION_LOG.md

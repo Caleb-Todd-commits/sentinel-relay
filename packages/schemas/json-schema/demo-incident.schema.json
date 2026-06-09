@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sentinel-relay.dev/schemas/demo-incident.schema.json",
+  "title": "Sentinel Relay Demo Incident",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schemaVersion",
+    "case",
+    "state",
+    "agents",
+    "messages",
+    "evidence",
+    "timeline",
+    "approvalRequest",
+    "approvalDecision",
+    "remediationTasks",
+    "finalReport"
+  ],
+  "properties": {
+    "schemaVersion": { "type": "string" },
+    "case": {
+      "type": "object",
+      "required": ["id", "roomId", "title", "summary", "severity", "status", "openedAt", "updatedAt", "businessUnit", "affectedSystem", "currentPhase", "phase", "decisionGate", "tags"],
+      "properties": {
+        "id": { "type": "string" },
+        "roomId": { "type": "string" },
+        "title": { "type": "string" },
+        "summary": { "type": "string" },
+        "severity": { "type": "string", "enum": ["informational", "low", "medium", "high", "critical"] },
+        "status": { "type": "string" },
+        "openedAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "businessUnit": { "type": "string" },
+        "affectedSystem": { "type": "string" },
+        "currentPhase": { "type": "string" },
+        "phase": { "type": "string" },
+        "decisionGate": { "type": "string" },
+        "tags": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "agents": { "type": "array", "items": { "type": "object" }, "minItems": 3 },
+    "messages": { "type": "array", "items": { "$ref": "./agent-message.schema.json" }, "minItems": 1 },
+    "evidence": { "type": "array", "items": { "type": "object" } },
+    "timeline": { "type": "array", "items": { "type": "object" } },
+    "remediationTasks": { "type": "array", "items": { "type": "object" } },
+    "finalReport": { "type": "object" }
+  }
+}

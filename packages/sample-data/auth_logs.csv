@@ -1,0 +1,5 @@
+timestamp,user_id,event,ip,region,result
+2026-06-12T21:58:02Z,svc-deploy,token_created,10.0.4.12,us-east-1,success
+2026-06-12T22:40:49Z,svc-api,token_used,198.51.100.24,us-east-1,success
+2026-06-12T22:43:18Z,svc-api,token_used,203.0.113.88,eu-west-3,success
+2026-06-12T22:44:55Z,svc-api,restricted_endpoint_attempt,203.0.113.88,eu-west-3,blocked

@@ -1,0 +1,35 @@
+# Judging Notes
+
+## Core Claim
+
+Sentinel Relay demonstrates what becomes possible when enterprise agents do not operate alone.
+
+## Why Band Is Central
+
+Band should power:
+
+- Agent identity
+- Incident room
+- Agent-to-agent messages
+- Structured handoffs
+- Task coordination
+- Shared audit trail
+- Human approval flow
+
+The demo should repeatedly show that Band is part of the actual workflow, not a final output channel.
+
+## What Judges Should Notice
+
+1. Multiple specialized agents
+2. Real task handoff
+3. Shared structured context
+4. Visible agent disagreement/challenge
+5. Human approval for high-stakes actions
+6. Final audit report generated from the collaboration trail
+7. Enterprise-relevant cybersecurity use case
+
+## Differentiator
+
+Many teams will build agents that cooperate politely. Sentinel Relay should show agents that verify, challenge, and escalate.
+
+That is more enterprise-ready.

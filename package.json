@@ -1,0 +1,37 @@
+{
+  "name": "sentinel-relay",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sentinel Relay: a Band-powered multi-agent cybersecurity incident command center.",
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "dev": "pnpm --filter sentinel-relay-web dev",
+    "build": "pnpm --filter sentinel-relay-web build",
+    "start": "pnpm --filter sentinel-relay-web start",
+    "lint": "pnpm --filter sentinel-relay-web lint",
+    "typecheck": "pnpm --filter sentinel-relay-web typecheck",
+    "verify": "bash scripts/dev/verify-web-baseline.sh && python scripts/workflow/verify-mock-flow.py && python scripts/provider/verify-provider-layer.py && python scripts/report/verify-report-layer.py",
+    "web:dev": "pnpm --filter sentinel-relay-web dev",
+    "web:build": "pnpm --filter sentinel-relay-web build",
+    "web:start": "pnpm --filter sentinel-relay-web start",
+    "web:lint": "pnpm --filter sentinel-relay-web lint",
+    "web:typecheck": "pnpm --filter sentinel-relay-web typecheck",
+    "repo:labels": "bash scripts/github/create-labels.sh",
+    "repo:milestones": "bash scripts/github/create-milestones.sh",
+    "repo:issues": "bash scripts/github/create-first-issues.sh",
+    "repo:setup-local": "bash scripts/github/setup-repo-local.sh",
+    "schemas:typecheck": "pnpm --filter @sentinel-relay/schemas typecheck",
+    "schemas:validate": "python scripts/schema/validate-sample-data.py",
+    "schemas:contract": "bash scripts/schema/check-schema-contracts.sh",
+    "workflow:verify": "python scripts/workflow/verify-mock-flow.py",
+    "provider:verify": "python scripts/provider/verify-provider-layer.py && python scripts/band/verify-band-integration.py",
+    "band:verify": "python scripts/band/verify-band-integration.py",
+    "band:env": "python scripts/band/print-band-env-check.py",
+    "band:smoke": "python scripts/band/band-smoke-test.py",
+    "report:verify": "python scripts/report/verify-report-layer.py"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=10.0.0"
+  }
+}

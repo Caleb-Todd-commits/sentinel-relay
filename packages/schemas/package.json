@@ -1,0 +1,24 @@
+{
+  "name": "@sentinel-relay/schemas",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Canonical TypeScript, JSON, and Python schema contracts for Sentinel Relay.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "validate:samples": "python ../../scripts/schema/validate-sample-data.py",
+    "contract:check": "bash ../../scripts/schema/check-schema-contracts.sh"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "5.8.3"
+  }
+}

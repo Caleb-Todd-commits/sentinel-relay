@@ -1,0 +1,12 @@
+diff --git a/config/example.env b/config/example.env
+index 8c9a21a..a31f6da 100644
+--- a/config/example.env
++++ b/config/example.env
+@@ -1,5 +1,7 @@
+ NODE_ENV=production
+ API_BASE_URL=https://api.example-saas.test
+-API_TOKEN=replace_me
++# TODO: replace before deploy
++API_TOKEN=tok_live_7f3a
+ LOG_LEVEL=info
+ CUSTOMER_EXPORT_ENABLED=true

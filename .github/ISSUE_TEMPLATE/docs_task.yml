@@ -1,0 +1,35 @@
+name: Docs or Submission Task
+description: Work related to README, pitch, demo script, architecture, or final submission.
+title: "[Docs] "
+labels: ["area:docs", "type:docs", "status:ready"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What should this document or submission asset accomplish?
+    validations:
+      required: true
+  - type: textarea
+    id: audience
+    attributes:
+      label: Audience
+      placeholder: teammates, judges, future coding agent, demo viewer
+    validations:
+      required: true
+  - type: textarea
+    id: files
+    attributes:
+      label: Files To Update
+      description: Which files are involved?
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      value: |
+        - [ ] Clear and accurate
+        - [ ] Matches actual project behavior
+        - [ ] Explains Band usage when relevant
+        - [ ] No secrets/private info included
+    validations:
+      required: true

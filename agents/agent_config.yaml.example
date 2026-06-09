@@ -1,0 +1,35 @@
+commander:
+  sentinel_agent_id: agent-commander
+  env_prefix: COMMANDER
+  band_agent_id: ""
+  band_agent_api_key_env: COMMANDER_AGENT_API_KEY
+
+forensics:
+  sentinel_agent_id: agent-forensics
+  env_prefix: FORENSICS
+  band_agent_id: ""
+  band_agent_api_key_env: FORENSICS_AGENT_API_KEY
+
+threat_intel:
+  sentinel_agent_id: agent-threat-intel
+  env_prefix: THREAT_INTEL
+  band_agent_id: ""
+  band_agent_api_key_env: THREAT_INTEL_AGENT_API_KEY
+
+code_review:
+  sentinel_agent_id: agent-code-review
+  env_prefix: CODE_REVIEW
+  band_agent_id: ""
+  band_agent_api_key_env: CODE_REVIEW_AGENT_API_KEY
+
+risk_compliance:
+  sentinel_agent_id: agent-risk-compliance
+  env_prefix: RISK_COMPLIANCE
+  band_agent_id: ""
+  band_agent_api_key_env: RISK_COMPLIANCE_AGENT_API_KEY
+
+remediation:
+  sentinel_agent_id: agent-remediation
+  env_prefix: REMEDIATION
+  band_agent_id: ""
+  band_agent_api_key_env: REMEDIATION_AGENT_API_KEY

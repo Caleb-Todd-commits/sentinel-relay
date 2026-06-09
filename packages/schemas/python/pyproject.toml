@@ -1,0 +1,9 @@
+[project]
+name = "sentinel-relay-schemas"
+version = "0.1.0"
+description = "Python schema models for Sentinel Relay agents."
+requires-python = ">=3.11"
+dependencies = ["pydantic>=2.7"]
+
+[tool.ruff]
+line-length = 100

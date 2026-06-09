@@ -1,0 +1,39 @@
+Step 9 File Manifest — Final Report and Audit Replay
+
+New frontend report model:
+- apps/web/src/lib/report/auditReportModel.ts
+- apps/web/src/lib/report/index.ts
+
+New report UI components:
+- apps/web/src/components/report/ReportHero.tsx
+- apps/web/src/components/report/ReportMetricsGrid.tsx
+- apps/web/src/components/report/ReportSectionCard.tsx
+- apps/web/src/components/report/EvidenceMatrix.tsx
+- apps/web/src/components/report/AuditTrailTable.tsx
+- apps/web/src/components/report/ApprovalDecisionRecord.tsx
+- apps/web/src/components/report/RemediationReportCard.tsx
+- apps/web/src/components/report/ReportIntegrityPanel.tsx
+- apps/web/src/components/report/ReportExportPanel.tsx
+- apps/web/src/components/report/OpenQuestionsCard.tsx
+- apps/web/src/components/report/index.ts
+
+Updated frontend pages/components:
+- apps/web/src/app/report/page.tsx
+- apps/web/src/components/ReportPreview.tsx
+
+New verification:
+- scripts/report/verify-report-layer.py
+
+New docs:
+- docs/51_FINAL_REPORT_AND_AUDIT_REPLAY.md
+- docs/52_REPORT_UI_COMPONENTS.md
+- docs/53_REPORT_TRACEABILITY_MODEL.md
+- docs/54_STEP9_VERIFICATION_REPORT.md
+- docs/55_STEP9_TEAM_HANDOFF.md
+
+Updated project docs/config:
+- README.md
+- package.json
+- docs/TEAM_START_HERE.md
+- docs/01_BIGGEST_10_FIRST.md
+- docs/06_DECISION_LOG.md

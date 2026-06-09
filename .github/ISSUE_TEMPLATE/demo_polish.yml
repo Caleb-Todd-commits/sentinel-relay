@@ -1,0 +1,32 @@
+name: Demo Polish Task
+description: Improve the final demo, UI polish, video, or judge-facing clarity.
+title: "[Demo] "
+labels: ["type:demo", "area:submission", "status:ready"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      description: What will make the demo clearer or stronger?
+    validations:
+      required: true
+  - type: textarea
+    id: demo_moment
+    attributes:
+      label: Demo Moment Affected
+      placeholder: opening hook, Band handoff, challenge moment, approval gate, final report, replay
+  - type: textarea
+    id: before_after
+    attributes:
+      label: Before / After
+      description: What is weak now and what will be better after this?
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance Criteria
+      value: |
+        - [ ] Improves judge understanding
+        - [ ] Does not break the core demo path
+        - [ ] Tested in browser or reviewed in script/video
+    validations:
+      required: true

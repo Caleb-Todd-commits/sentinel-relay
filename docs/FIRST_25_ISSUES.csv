@@ -1,0 +1,26 @@
+Issue,Title,Milestone,Priority,Area,Type,Risk,Primary Owner
+1,"[Repo] Create public GitHub repo and push baseline","M0 — Repo Ready",P0,devops,chore,demo-critical,DevOps/Caleb
+2,"[Repo] Add branch protection and PR review rules","M0 — Repo Ready",P0,devops,chore,,DevOps/Caleb
+3,"[Repo] Create GitHub labels and milestones","M0 — Repo Ready",P0,devops,chore,,DevOps/Caleb
+4,"[Team] Assign initial workstream owners","M0 — Repo Ready",P0,docs,decision,,Caleb
+5,"[DevEx] Verify every teammate can run the app locally","M0 — Repo Ready",P0,devops,chore,demo-critical,All
+6,"[Frontend] Build war room layout shell","M1 — Mock Demo Vertical Slice",P0,frontend,feature,demo-critical,Frontend Lead
+7,"[Schemas] Define shared incident and message types","M1 — Mock Demo Vertical Slice",P0,schemas,feature,demo-critical,Agent Logic + Frontend
+8,"[Demo] Build mocked incident state for API key exposure scenario","M1 — Mock Demo Vertical Slice",P0,demo-data,demo,demo-critical,Demo/Data Lead
+9,"[Frontend] Add Run Demo Incident and replay controls","M1 — Mock Demo Vertical Slice",P0,frontend,feature,demo-critical,Frontend Lead
+10,"[Frontend] Build structured agent message cards","M1 — Mock Demo Vertical Slice",P0,frontend,feature,demo-critical,Frontend Lead
+11,"[Frontend] Build evidence board from structured findings","M1 — Mock Demo Vertical Slice",P1,frontend,feature,,Frontend Lead
+12,"[Agent] Add visible risk/compliance challenge moment","M1 — Mock Demo Vertical Slice",P0,agents,demo,demo-critical,Agent Logic Lead
+13,"[Frontend] Build human approval gate for containment actions","M1 — Mock Demo Vertical Slice",P0,frontend,feature,demo-critical,Frontend Lead
+14,"[Band] Create CollaborationProvider interface and mock provider","M2 — Band Collaboration Connected",P0,band,feature,"integration;demo-critical",Band Lead
+15,"[Band] Connect incident room creation through Band","M2 — Band Collaboration Connected",P0,band,feature,integration,Band Lead
+16,"[Band] Register specialized agents in incident room","M2 — Band Collaboration Connected",P0,band,feature,integration,Band + Agent Leads
+17,"[Agent] Expand prompts for all six specialized agents","M3 — Agent Intelligence and Structured Handoffs",P1,agents,feature,,Agent Logic Lead
+18,"[Report] Build audit-ready final report page","M1 — Mock Demo Vertical Slice",P0,reporting,feature,demo-critical,Report/Frontend Lead
+19,"[Report] Add audit replay mode","M4 — Demo Polish and Submission",P1,reporting,feature,,Frontend Lead
+20,"[Docs] Prepare README for hackathon judges","M4 — Demo Polish and Submission",P0,docs,docs,demo-critical,Caleb + Docs Lead
+21,"[Docs] Create architecture diagram for judges","M4 — Demo Polish and Submission",P1,docs,docs,,Docs Lead
+22,"[Pitch] Finalize 3-minute demo video script","M4 — Demo Polish and Submission",P0,submission,demo,demo-critical,Caleb
+23,"[DevOps] Deploy frontend to Vercel","M4 — Demo Polish and Submission",P0,devops,chore,demo-critical,DevOps Lead
+24,"[Submission] Draft lablab project submission copy","M4 — Demo Polish and Submission",P0,submission,docs,demo-critical,Caleb
+25,"[QA] Run final smoke test before submission","M4 — Demo Polish and Submission",P0,devops,bug,demo-critical,All
