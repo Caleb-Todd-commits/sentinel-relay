@@ -29,22 +29,27 @@ Recommended owner:
 Caleb-Todd-commits/sentinel-relay
 ```
 
-Use a public GitHub repo unless hackathon rules say otherwise. Public repo is normally required for lablab submissions.
+The working team repo is:
+
+```txt
+https://github.com/Caleb-Todd-commits/sentinel-relay
+```
+
+Keep it private while credentials, live integration notes, and team setup are still moving. Switch to public only when the team is ready for hackathon submission and has re-run the secret checks.
 
 ## Repo Visibility
 
-Use:
+Current team setup:
 
 ```txt
-Public
+Private
 ```
 
 Reason:
 
-- Public repo is expected for hackathon judging.
-- Judges can review the source.
-- The team can include the repo link in the final submission.
-- Vercel can deploy from it cleanly.
+- The invited team can collaborate without exposing in-progress integration notes.
+- Secrets are still handled only through local `.env` files and deployment secret stores.
+- The repo can be made public later if hackathon submission requires source review.
 
 ## Local Repo Setup
 
@@ -54,7 +59,7 @@ From the root of the project folder:
 git init
 git add .
 git commit -m "chore: initialize Sentinel Relay baseline"
-gh repo create sentinel-relay --public --source=. --remote=origin --push
+gh repo create sentinel-relay --private --source=. --remote=origin --push
 ```
 
 If GitHub CLI is not installed, create the repo manually at GitHub.com, then run:

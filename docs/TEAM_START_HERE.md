@@ -26,6 +26,7 @@ Sentinel Relay is a **Band-powered multi-agent cybersecurity incident command ce
 6. `docs/06_DECISION_LOG.md`
 7. `docs/07_TEAM_ONBOARDING_CHECKLIST.md`
 8. `docs/01_BIGGEST_10_FIRST.md`
+9. `docs/56_TEAM_BRANCHING_BASELINE.md`
 
 ---
 
@@ -105,8 +106,8 @@ The app now has a product-shaped frontend with `/`, `/demo`, `/war-room`, `/repo
 Run from the repo root:
 
 ```bash
-pnpm install
-pnpm dev
+corepack pnpm install
+corepack pnpm dev
 ```
 
 Open:
@@ -118,11 +119,12 @@ http://localhost:3000
 Useful verification commands:
 
 ```bash
-pnpm schemas:validate
-pnpm schemas:typecheck
-pnpm workflow:verify
-pnpm typecheck
-pnpm build
+corepack pnpm schemas:validate
+corepack pnpm schemas:typecheck
+corepack pnpm workflow:verify
+corepack pnpm typecheck
+corepack pnpm build
+corepack pnpm verify
 ```
 
 ## Step 5 Update — Mock Incident Flow Baseline
@@ -200,9 +202,9 @@ docs/48_BAND_ROUTE_CONTRACTS.md
 Useful commands:
 
 ```bash
-pnpm band:verify
-pnpm band:env
-pnpm band:smoke
+corepack pnpm band:verify
+corepack pnpm band:env
+corepack pnpm band:smoke
 ```
 
 Live Band Mode requires:

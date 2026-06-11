@@ -84,8 +84,8 @@ sentinel-relay/
 From the repository root:
 
 ```bash
-pnpm install
-pnpm dev
+corepack pnpm install
+corepack pnpm dev
 ```
 
 Open:
@@ -97,11 +97,29 @@ http://localhost:3000
 Useful commands:
 
 ```bash
-pnpm typecheck
-pnpm build
-pnpm verify
-pnpm report:verify
+corepack pnpm typecheck
+corepack pnpm build
+corepack pnpm verify
+corepack pnpm report:verify
 ```
+
+`packageManager` pins the repo to pnpm 10.11.0. If your machine already has a working `pnpm` command, `pnpm install` and `pnpm verify` are fine too. Corepack is the safest shared path because it uses the pinned package manager version.
+
+## Team Branching Baseline
+
+Before starting feature branches, read:
+
+```txt
+docs/56_TEAM_BRANCHING_BASELINE.md
+```
+
+Current shared repo:
+
+```txt
+https://github.com/Caleb-Todd-commits/sentinel-relay
+```
+
+Keep Mock Mode working on every branch. Live Band credentials belong only in local `.env` files and deployment secret stores, never in git.
 
 ## Current Routes
 
@@ -207,9 +225,9 @@ The web app keeps a stable import path through `apps/web/src/lib/types.ts`, whic
 Useful schema commands:
 
 ```bash
-pnpm schemas:validate
-pnpm schemas:typecheck
-pnpm schemas:contract
+corepack pnpm schemas:validate
+corepack pnpm schemas:typecheck
+corepack pnpm schemas:contract
 ```
 
 ## Step 5 Mock Workflow Baseline
@@ -244,7 +262,7 @@ The workflow demonstrates:
 Useful workflow command:
 
 ```bash
-pnpm workflow:verify
+corepack pnpm workflow:verify
 ```
 
 The most important Step 5 docs are:
@@ -313,14 +331,14 @@ Mock Mode is fully functional and keeps the demo reliable. Band Mode is scaffold
 Provider verification:
 
 ```bash
-pnpm provider:verify
+corepack pnpm provider:verify
 ```
 
 Full baseline verification:
 
 ```bash
-pnpm verify
-pnpm report:verify
+corepack pnpm verify
+corepack pnpm report:verify
 ```
 
 
@@ -338,9 +356,9 @@ scripts/band/
 Useful Band commands:
 
 ```bash
-pnpm band:env
-pnpm band:verify
-pnpm band:smoke
+corepack pnpm band:env
+corepack pnpm band:verify
+corepack pnpm band:smoke
 ```
 
 Band Mode is opt-in:

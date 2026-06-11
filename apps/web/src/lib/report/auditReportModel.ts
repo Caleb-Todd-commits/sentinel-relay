@@ -6,7 +6,6 @@ import type {
   EvidenceReference,
   FinalReport,
   RemediationTask,
-  TimelineEvent,
 } from "@/lib/types";
 
 export type ReportReadinessStatus = "ready" | "blocked" | "needs_review";

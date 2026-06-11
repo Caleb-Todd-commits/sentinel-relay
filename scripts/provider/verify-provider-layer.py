@@ -43,9 +43,9 @@ REQUIRED_PATTERNS = {
         "hydrateRoomSnapshot",
     ],
     "apps/web/src/lib/collaboration/BandCollaborationProvider.ts": [
-        "server-side API routes",
-        "Band Mode scaffold",
-        "BAND_ADAPTER_NOT_CONNECTED",
+        "server routes hold Band credentials",
+        "Band Mode via server adapter",
+        "Band credentials stay server-side",
     ],
     "apps/web/src/lib/collaboration/browserConfig.ts": [
         "NEXT_PUBLIC_COLLABORATION_MODE",

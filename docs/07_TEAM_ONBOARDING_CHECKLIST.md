@@ -13,6 +13,7 @@ Every teammate should read and complete this checklist before starting major wor
 5. `docs/05_TERMINOLOGY.md`
 6. `docs/06_DECISION_LOG.md`
 7. `docs/01_BIGGEST_10_FIRST.md`
+8. `docs/56_TEAM_BRANCHING_BASELINE.md`
 
 ---
 
@@ -87,6 +88,8 @@ Each teammate should own one primary lane.
 - [ ] I know what files I should not touch without discussion.
 - [ ] I know the current branch plan.
 - [ ] I know how to run the frontend locally.
+- [ ] I ran `corepack pnpm install`.
+- [ ] I ran `corepack pnpm verify` or know why my change is docs-only.
 - [ ] I understand that Band must be central.
 - [ ] I understand that mock mode is allowed but not the final story.
 - [ ] I will not commit secrets.

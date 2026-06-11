@@ -4,7 +4,6 @@ import type {
   ApprovalDecision,
   ApprovalRequest,
   CollaborationMode,
-  IncidentStateSnapshot,
   TaskStatus,
 } from "@/lib/types";
 

@@ -38,8 +38,9 @@ Select all that apply:
 
 Commands run:
 
-- [ ] `cd apps/web && pnpm typecheck`
-- [ ] `cd apps/web && pnpm build`
+- [ ] `corepack pnpm verify`
+- [ ] `corepack pnpm typecheck`
+- [ ] `corepack pnpm build`
 - [ ] Manual test in browser
 - [ ] Not applicable / docs only
 

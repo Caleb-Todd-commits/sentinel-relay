@@ -73,13 +73,14 @@ export function useIncidentCollaborationWorkflow(initialStep = 0) {
   useEffect(() => {
     if (!roomId) return;
 
+    const currentRoomId = roomId;
     const syncToken = activeSyncToken.current + 1;
     activeSyncToken.current = syncToken;
 
     async function syncStep() {
       try {
         setSyncStatus("syncing");
-        const result = await syncMockWorkflowToProvider(provider, roomId, baseWorkflow);
+        const result = await syncMockWorkflowToProvider(provider, currentRoomId, baseWorkflow);
         if (activeSyncToken.current !== syncToken) return;
         setSnapshot(result.snapshot);
         setLastSyncedStep(result.syncedStep);

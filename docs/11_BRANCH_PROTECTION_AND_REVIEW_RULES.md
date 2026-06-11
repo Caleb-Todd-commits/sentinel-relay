@@ -165,11 +165,10 @@ Examples:
 For frontend changes:
 
 ```bash
-cd apps/web
-pnpm install
-pnpm typecheck
-pnpm build
-pnpm dev
+corepack pnpm install
+corepack pnpm typecheck
+corepack pnpm build
+corepack pnpm dev
 ```
 
 Then verify:

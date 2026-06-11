@@ -1,23 +1,23 @@
 # Sentinel Relay CODEOWNERS
-# These are suggested ownership areas. Replace GitHub handles after teammates are confirmed.
+# These are suggested ownership areas. Add teammate handles as lanes are assigned.
 
 # Overall repo/docs
-/README.md @ctodd2022
-/docs/ @ctodd2022
+/README.md @Caleb-Todd-commits
+/docs/ @Caleb-Todd-commits
 
 # Frontend
-/apps/web/src/app/ @ctodd2022
-/apps/web/src/components/ @ctodd2022
-/apps/web/src/lib/types.ts @ctodd2022
+/apps/web/src/app/ @Caleb-Todd-commits
+/apps/web/src/components/ @Caleb-Todd-commits
+/apps/web/src/lib/types.ts @Caleb-Todd-commits
 
 # Collaboration/Band integration
-/apps/web/src/lib/collaboration/ @ctodd2022
-/agents/ @ctodd2022
+/apps/web/src/lib/collaboration/ @Caleb-Todd-commits
+/agents/ @Caleb-Todd-commits
 
 # Sample data and schemas
-/packages/sample-data/ @ctodd2022
-/packages/schemas/ @ctodd2022
+/packages/sample-data/ @Caleb-Todd-commits
+/packages/schemas/ @Caleb-Todd-commits
 
 # GitHub/project config
-/.github/ @ctodd2022
-/scripts/ @ctodd2022
+/.github/ @Caleb-Todd-commits
+/scripts/ @Caleb-Todd-commits
