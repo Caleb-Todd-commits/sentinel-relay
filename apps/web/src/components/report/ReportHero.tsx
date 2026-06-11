@@ -7,6 +7,8 @@ export function ReportHero({ caseFile, model }: { caseFile: IncidentCase; model:
   return (
     <header className="relay-card relative overflow-hidden">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-sky-300/70 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent" />
+
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-3">
           <div className="flex flex-wrap gap-2">
@@ -17,12 +19,18 @@ export function ReportHero({ caseFile, model }: { caseFile: IncidentCase; model:
           </div>
           <div>
             <p className="relay-label">Final Incident Report</p>
-            <h1 className="mt-2 max-w-5xl text-3xl font-bold tracking-tight md:text-5xl">{model.report.title}</h1>
+            <h1 className="mt-2 max-w-5xl text-3xl font-bold tracking-tight md:text-5xl">
+              {model.report.title}
+            </h1>
           </div>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link href="/war-room" className="relay-button-secondary">Back to War Room</Link>
-          <Link href="/demo" className="relay-button-primary">Restart Demo</Link>
+          <Link href="/war-room" className="relay-button-secondary">
+            Back to War Room
+          </Link>
+          <Link href="/demo" className="relay-button-primary">
+            Restart Demo
+          </Link>
         </div>
       </div>
 
@@ -37,7 +45,10 @@ export function ReportHero({ caseFile, model }: { caseFile: IncidentCase; model:
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-slate-500">Severity</dt>
-              <dd className="font-semibold text-amber-200">{model.report.severity.toUpperCase()}</dd>
+              <dd className="relative font-semibold text-amber-200">
+                <span className="absolute -left-3 top-1/2 h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(251,191,36,0.8)]" />
+                {model.report.severity.toUpperCase()}
+              </dd>
             </div>
             <div className="flex justify-between gap-4">
               <dt className="text-slate-500">Decision gate</dt>
