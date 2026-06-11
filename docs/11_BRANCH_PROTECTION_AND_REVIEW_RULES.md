@@ -34,7 +34,18 @@ feature branches → main
 
 `main` must stay stable.
 
-Recommended settings in GitHub:
+Current GitHub settings for `main`:
+
+- Require a pull request before merging.
+- Require 1 approval.
+- Dismiss stale pull request approvals when new commits are pushed.
+- Require status check: `Typecheck and build web app`.
+- Require branches to be up to date before merging.
+- Block force pushes.
+- Block deletions.
+- Admins can bypass for emergency demo recovery.
+
+If these settings need to be recreated manually:
 
 1. Go to the GitHub repo.
 2. Click **Settings**.
@@ -46,7 +57,7 @@ Enable:
 
 - Require a pull request before merging.
 - Require approvals: `1`.
-- Dismiss stale pull request approvals when new commits are pushed: optional.
+- Dismiss stale pull request approvals when new commits are pushed.
 - Require conversation resolution before merging.
 - Block force pushes.
 - Block deletions.

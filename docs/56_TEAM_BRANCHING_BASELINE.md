@@ -37,6 +37,8 @@ feature branches -> dev -> main
 
 Keep `main` stable. Use `dev` as the shared integration branch once the team starts merging parallel work. If the team is moving fast and `dev` slows everyone down, merge feature branches into `main` only after `corepack pnpm verify` passes.
 
+`main` is protected on GitHub. Non-admin changes need a pull request, one approval, and the `Typecheck and build web app` CI check.
+
 ## Workstream Lanes
 
 - Frontend and War Room UI
