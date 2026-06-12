@@ -385,7 +385,7 @@ Acceptance criteria:
 
 - [ ] Risk agent challenges a weak breach conclusion.
 - [ ] Challenge references specific missing evidence.
-- [ ] Commander assigns follow-up verification.
+- [ ] Band Leader assigns follow-up verification.
 - [ ] Challenge appears in War Room UI.
 - [ ] Final report mentions the challenge.
 
@@ -495,7 +495,7 @@ M2 — Band Collaboration Connected
 
 Acceptance criteria:
 
-- [ ] Commander agent can join/appear.
+- [ ] Band Leader agent can join/appear.
 - [ ] Forensics agent can join/appear.
 - [ ] Risk/compliance agent can join/appear.
 - [ ] At least one additional agent joins/appears.
@@ -523,7 +523,7 @@ M3 — Agent Intelligence and Structured Handoffs
 
 Acceptance criteria:
 
-- [ ] Commander prompt is specific.
+- [ ] Band Leader prompt is specific.
 - [ ] Forensics prompt is specific.
 - [ ] Threat Intel prompt is specific.
 - [ ] Code Review prompt is specific.

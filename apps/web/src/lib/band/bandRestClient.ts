@@ -8,7 +8,7 @@ export class BandRestClient {
     return this.config;
   }
 
-  async verifyCommanderIdentity(): Promise<BandRequestResult<unknown>> {
+  async verifyBandLeaderIdentity(): Promise<BandRequestResult<unknown>> {
     return this.request<unknown>("agent", "/me", { method: "GET" });
   }
 
@@ -104,12 +104,12 @@ export class BandRestClient {
   }
 
   private async request<T>(perspective: BandApiPerspective, path: string, options: { method: "GET" | "POST" | "DELETE"; body?: unknown }): Promise<BandRequestResult<T>> {
-    const apiKey = perspective === "human" ? this.config.humanApiKey : this.config.commanderAgentApiKey;
+    const apiKey = perspective === "human" ? this.config.humanApiKey : this.config.bandLeaderAgentApiKey;
     if (!apiKey) {
       return {
         ok: false,
         status: 0,
-        error: perspective === "human" ? "BAND_HUMAN_API_KEY is not configured." : "BAND_COMMANDER_AGENT_API_KEY is not configured.",
+        error: perspective === "human" ? "BAND_HUMAN_API_KEY is not configured." : "BAND_LEADER_AGENT_API_KEY is not configured.",
       };
     }
 

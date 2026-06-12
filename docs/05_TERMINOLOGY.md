@@ -54,7 +54,7 @@ A specialized AI worker with a defined role, allowed actions, and output format.
 
 Agents in this project:
 
-- Incident Commander Agent
+- Band Leader
 - Forensics Agent
 - Threat Intel Agent
 - Code Review Agent

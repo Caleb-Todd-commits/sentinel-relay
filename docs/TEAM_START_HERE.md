@@ -48,7 +48,7 @@ A suspicious API token is used from an unusual region after a Friday deployment.
 
 ## Agent Roles
 
-1. **Incident Commander Agent** — opens the case, assigns tasks, coordinates the workflow, requests approval.
+1. **Band Leader** — opens the case, assigns tasks, coordinates the workflow, requests approval.
 2. **Forensics Agent** — reviews logs and builds the timeline.
 3. **Threat Intel Agent** — assesses suspicious indicators and confidence.
 4. **Code Review Agent** — checks recent code/config changes for exposed secrets or unsafe changes.
@@ -212,7 +212,7 @@ Live Band Mode requires:
 - `NEXT_PUBLIC_COLLABORATION_MODE="band"`
 - `NEXT_PUBLIC_ENABLE_BAND_MODE="true"`
 - `BAND_PROVIDER_ENABLED="true"`
-- `BAND_COMMANDER_AGENT_API_KEY`
+- `BAND_LEADER_AGENT_API_KEY`
 - specialist participant IDs for routed @mentioned messages
 
 Keep the app in Mock Mode when preparing the final backup demo.

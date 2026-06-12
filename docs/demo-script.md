@@ -16,7 +16,7 @@ Show the War Room being created.
 
 Show agents posting structured messages:
 
-- Commander opens the case and assigns investigation.
+- Band Leader opens the case and assigns investigation.
 - Forensics finds suspicious API token activity.
 - Code Review finds a risky diff.
 - Threat Intel gives confidence.

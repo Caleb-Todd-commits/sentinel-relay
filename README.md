@@ -42,7 +42,7 @@ A SaaS company detects suspicious API activity shortly after a Friday deployment
 
 ## Agent Team
 
-- Incident Commander Agent
+- Band Leader
 - Forensics Agent
 - Threat Intel Agent
 - Code Review Agent
@@ -367,7 +367,7 @@ Band Mode is opt-in:
 NEXT_PUBLIC_COLLABORATION_MODE="band"
 NEXT_PUBLIC_ENABLE_BAND_MODE="true"
 BAND_PROVIDER_ENABLED="true"
-BAND_COMMANDER_AGENT_API_KEY="..."
+BAND_LEADER_AGENT_API_KEY="..."
 ```
 
 Keep Mock Mode as the final-demo fallback.

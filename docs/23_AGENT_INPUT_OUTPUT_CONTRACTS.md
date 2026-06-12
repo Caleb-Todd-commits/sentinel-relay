@@ -20,7 +20,7 @@ Every agent should output an `AgentMessage`.
 
 No agent should output only freeform text.
 
-## Commander Agent
+## Band Leader Agent
 
 ### Inputs
 

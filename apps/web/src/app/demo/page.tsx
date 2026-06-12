@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/Badge";
 import { mockAgents, mockEvidence, mockIncidentCase, mockMessages } from "@/lib/mockIncident";
 
 const flow = [
-  "Commander opens a Band incident room.",
+  "Band Leader opens a Band incident room.",
   "Forensics and Code Review agents collect evidence.",
   "Threat Intel verifies confidence without overclaiming.",
   "Risk & Compliance challenges the breach classification.",

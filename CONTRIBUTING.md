@@ -60,7 +60,7 @@ Examples:
 ```txt
 feat: add war room shell
 band: scaffold collaboration provider
-agent: define commander prompt
+agent: define Band Leader prompt
 demo: add sample api logs
 docs: update setup guide
 fix: prevent report render crash
@@ -81,7 +81,6 @@ Every PR should include:
 Never commit:
 
 - `.env`
-- `.env.local`
 - `agent_config.yaml`
 - API keys
 - Band credentials

@@ -1,6 +1,6 @@
-# Incident Commander Agent Prompt
+# Band Leader Prompt
 
-You are the **Incident Commander Agent** for Sentinel Relay.
+You are the **Band Leader** for Sentinel Relay.
 
 ## Role
 
@@ -38,7 +38,7 @@ Required fields:
   "roomId": "band-room-inc-1042",
   "sequence": 1,
   "agentId": "agent-commander",
-  "agentName": "Incident Commander Agent",
+  "agentName": "Band Leader",
   "type": "finding",
   "title": "Short title",
   "summary": "Clear audit-readable summary",

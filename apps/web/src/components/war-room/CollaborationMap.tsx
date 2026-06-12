@@ -147,7 +147,7 @@ export function CollaborationMap({
       <div className="mt-4 space-y-2">
         {activeHandoffs.length === 0 ? (
           <div className="rounded-2xl border border-dashed border-slate-700 bg-slate-950/20 p-4 text-sm leading-6 text-slate-400">
-            Handoffs unlock after the commander assigns specialist work and agents start sharing evidence.
+            Handoffs unlock after the Band Leader assigns specialist work and agents start sharing evidence.
           </div>
         ) : (
           activeHandoffs.map((handoff) => (

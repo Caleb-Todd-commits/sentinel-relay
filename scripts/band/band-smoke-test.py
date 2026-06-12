@@ -2,7 +2,7 @@
 """Smoke-test the public Band REST API connection with safe identity checks.
 
 This script does not create a chat. It only verifies whether the configured
-Commander Agent key can call GET /api/v1/agent/me, and whether the optional
+Band Leader Agent key can call GET /api/v1/agent/me, and whether the optional
 Human key can call GET /api/v1/me/profile.
 """
 
@@ -50,14 +50,18 @@ def safe_payload(payload: object) -> object:
 
 def main() -> int:
     base = clean_url(os.environ.get("BAND_API_BASE_URL"))
-    commander_key = os.environ.get("BAND_COMMANDER_AGENT_API_KEY", "").strip()
+    band_leader_key = (
+        os.environ.get("BAND_LEADER_AGENT_API_KEY", "").strip()
+        or os.environ.get("BAND_COMMANDER_AGENT_API_KEY", "").strip()
+        or os.environ.get("COMMANDER_AGENT_API_KEY", "").strip()
+    )
     human_key = os.environ.get("BAND_HUMAN_API_KEY", "").strip()
 
-    if not commander_key:
-        print("FAIL BAND_COMMANDER_AGENT_API_KEY is required for the smoke test.")
+    if not band_leader_key:
+        print("FAIL BAND_LEADER_AGENT_API_KEY is required for the smoke test.")
         return 1
 
-    ok, status, payload = request_json(f"{base}/agent/me", commander_key)
+    ok, status, payload = request_json(f"{base}/agent/me", band_leader_key)
     print(json.dumps({"check": "agent/me", "ok": ok, "status": status, "payload": safe_payload(payload)}, indent=2))
     if not ok:
         return 1

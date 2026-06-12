@@ -37,6 +37,14 @@ def _missing_dependency(package: str, install_hint: str) -> NoReturn:
     )
 
 
+def _read_env(*names: str) -> str | None:
+    for name in names:
+        value = os.getenv(name)
+        if value and value.strip():
+            return value.strip()
+    return None
+
+
 def describe_agent(agent_id: str, agent_name: str, env_prefix: str) -> dict[str, str]:
     return {
         "sentinel_agent_id": agent_id,
@@ -48,7 +56,14 @@ def describe_agent(agent_id: str, agent_name: str, env_prefix: str) -> dict[str,
     }
 
 
-async def run_thenvoi_langgraph_agent(*, sentinel_agent_id: str, agent_name: str, env_prefix: str, prompt_path: Path) -> None:
+async def run_thenvoi_langgraph_agent(
+    *,
+    sentinel_agent_id: str,
+    agent_name: str,
+    env_prefix: str,
+    prompt_path: Path,
+    legacy_env_prefixes: tuple[str, ...] = (),
+) -> None:
     """Run a remote Band/Thenvoi agent with the LangGraph SDK adapter.
 
     Set `SENTINEL_RELAY_AGENT_OFFLINE_MODE=true` to print the contract without
@@ -62,8 +77,9 @@ async def run_thenvoi_langgraph_agent(*, sentinel_agent_id: str, agent_name: str
         print(f"Prompt file: {prompt_path}")
         return
 
-    agent_id = os.getenv(f"{env_prefix}_AGENT_ID") or os.getenv("BAND_AGENT_ID")
-    api_key = os.getenv(f"{env_prefix}_AGENT_API_KEY") or os.getenv("BAND_AGENT_API_KEY")
+    env_prefixes = (env_prefix, *legacy_env_prefixes)
+    agent_id = _read_env(*(f"{prefix}_AGENT_ID" for prefix in env_prefixes), "BAND_AGENT_ID")
+    api_key = _read_env(*(f"{prefix}_AGENT_API_KEY" for prefix in env_prefixes), "BAND_AGENT_API_KEY")
 
     if not agent_id or not api_key:
         raise SystemExit(
@@ -100,7 +116,14 @@ async def run_thenvoi_langgraph_agent(*, sentinel_agent_id: str, agent_name: str
     await agent.run()
 
 
-def run_agent_entrypoint(*, sentinel_agent_id: str, agent_name: str, env_prefix: str, prompt_file: str) -> None:
+def run_agent_entrypoint(
+    *,
+    sentinel_agent_id: str,
+    agent_name: str,
+    env_prefix: str,
+    prompt_file: str,
+    legacy_env_prefixes: tuple[str, ...] = (),
+) -> None:
     prompt_path = Path(prompt_file).resolve()
     asyncio.run(
         run_thenvoi_langgraph_agent(
@@ -108,5 +131,6 @@ def run_agent_entrypoint(*, sentinel_agent_id: str, agent_name: str, env_prefix:
             agent_name=agent_name,
             env_prefix=env_prefix,
             prompt_path=prompt_path,
+            legacy_env_prefixes=legacy_env_prefixes,
         )
     )

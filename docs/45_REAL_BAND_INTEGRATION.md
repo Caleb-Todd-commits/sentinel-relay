@@ -49,7 +49,7 @@ This gives us a reliable dashboard and the proper live agent model.
 POST /api/v1/agent/chats
 ```
 
-using the commander agent API key.
+using the Band Leader API key.
 
 It then stores a local dashboard mirror keyed by the returned Band chat ID.
 

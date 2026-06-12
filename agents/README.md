@@ -2,7 +2,7 @@
 
 These folders contain the six remote agent workers used by Sentinel Relay:
 
-- `commander`
+- `Band Leader`
 - `forensics`
 - `threat_intel`
 - `code_review`
@@ -33,8 +33,8 @@ pip install "thenvoi-sdk[langgraph]" langchain-openai langgraph python-dotenv
 Copy the root `.env.example` to `.env` and fill the per-agent values:
 
 ```env
-COMMANDER_AGENT_ID=""
-COMMANDER_AGENT_API_KEY=""
+BAND_LEADER_AGENT_ID=""
+BAND_LEADER_AGENT_API_KEY=""
 FORENSICS_AGENT_ID=""
 FORENSICS_AGENT_API_KEY=""
 THREAT_INTEL_AGENT_ID=""

@@ -18,7 +18,7 @@ packages/schemas/examples/demo_incident.json
 The sample incident must include:
 
 1. At least three AI agents.
-2. A Commander agent.
+2. A Band Leader agent.
 3. A Forensics agent.
 4. A Risk & Compliance agent.
 5. At least one `finding` message.

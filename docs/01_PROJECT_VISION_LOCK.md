@@ -29,7 +29,7 @@ The name communicates the core product clearly: a coordinated security-response 
 
 Enterprise security incidents are not solved by one person or one AI assistant. They require investigation, engineering review, risk judgment, approvals, and documentation.
 
-Sentinel Relay creates a shared Band incident room where multiple specialized agents work together like an incident response team. A commander agent coordinates the case, a forensics agent reviews logs, a code review agent checks recent changes, a threat intel agent assesses indicators, a risk and compliance agent challenges conclusions, and a remediation agent prepares the fix plan.
+Sentinel Relay creates a shared Band incident room where multiple specialized agents work together like an incident response team. A Band Leader coordinates the case, a forensics agent reviews logs, a code review agent checks recent changes, a threat intel agent assesses indicators, a risk and compliance agent challenges conclusions, and a remediation agent prepares the fix plan.
 
 Band is the coordination layer. Agents pass structured evidence, assign tasks, challenge each other, request human approval, and produce a final audit trail.
 
@@ -207,7 +207,7 @@ The agents should discover or infer the following:
 
 The product should demonstrate at least 3 agents, but the target design uses 6.
 
-### 1. Incident Commander Agent
+### 1. Band Leader
 
 **Purpose:** Own the case flow.
 
@@ -336,9 +336,9 @@ The human role can be represented through the frontend UI at first. It does not 
 
 The final demo must include these moments:
 
-### Moment 1 — Commander Opens Case
+### Moment 1 — Band Leader Opens Case
 
-The Incident Commander creates the case and assigns investigation tasks.
+The Incident Band Leader creates the case and assigns investigation tasks.
 
 ### Moment 2 — Forensics Finds Suspicious Activity
 
@@ -358,7 +358,7 @@ Threat Intel adds confidence scoring and points out uncertainty.
 
 ### Moment 6 — Human Approval Gate
 
-Commander requests approval before containment/remediation actions are marked approved.
+Band Leader requests approval before containment/remediation actions are marked approved.
 
 ### Moment 7 — Remediation Plan
 

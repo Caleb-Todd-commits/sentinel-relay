@@ -30,7 +30,6 @@ apps/web/src/lib/workflow/types.ts
 apps/web/src/lib/workflow/index.ts
 apps/web/src/app/war-room/page.tsx
 .env.example
-apps/web/.env.example
 README.md
 docs/TEAM_START_HERE.md
 docs/01_BIGGEST_10_FIRST.md

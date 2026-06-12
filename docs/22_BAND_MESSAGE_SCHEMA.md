@@ -105,16 +105,16 @@ This is how the demo proves actual coordination rather than hidden orchestration
 
 The sample incident should include this minimum sequence:
 
-1. Commander opens the case.
-2. Commander assigns work.
+1. Band Leader opens the case.
+2. Band Leader assigns work.
 3. Forensics submits a finding.
 4. Threat Intel verifies or qualifies confidence.
 5. Code Review submits a finding.
 6. Risk & Compliance challenges a conclusion.
-7. Commander requests human approval.
+7. Band Leader requests human approval.
 8. Human approves limited containment.
 9. Remediation creates fix tasks.
-10. Commander generates the final report.
+10. Band Leader generates the final report.
 
 ## Strongest judge-facing moment
 

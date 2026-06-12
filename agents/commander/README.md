@@ -1,4 +1,4 @@
-# Incident Commander Agent
+# Band Leader
 
 ## Role
 
@@ -30,7 +30,7 @@ Placeholder agent folder. Connect to Band after the mock workflow and collaborat
 
 - `main.py` — agent entrypoint placeholder
 - `prompt.md` — role and structured output prompt
-- `.env.example` — local environment template
+- root `.env.example` — shared environment template
 
 ## First Implementation Goal
 

@@ -98,7 +98,6 @@ When the app is running:
 - `apps/web/tailwind.config.ts`
 - `apps/web/tsconfig.json`
 - `apps/web/postcss.config.mjs`
-- `apps/web/.env.example`
 - `apps/web/.eslintrc.json`
 - `apps/web/README.md`
 
