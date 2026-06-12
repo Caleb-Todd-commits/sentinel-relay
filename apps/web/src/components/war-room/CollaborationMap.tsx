@@ -11,12 +11,12 @@ const statusTone: Record<WorkflowHandoff["status"], "neutral" | "success" | "war
 };
 
 const AGENT_POSITIONS: Record<string, { x: number; y: number }> = {
-  commander: { x: 50, y: 12 },
-  forensics: { x: 18, y: 42 },
-  threat_intel: { x: 82, y: 42 },
-  code_review: { x: 18, y: 72 },
-  risk_compliance: { x: 82, y: 72 },
-  remediation: { x: 50, y: 90 },
+  "agent-commander": { x: 50, y: 12 },
+  "agent-forensics": { x: 18, y: 42 },
+  "agent-threat-intel": { x: 82, y: 42 },
+  "agent-code-review": { x: 18, y: 72 },
+  "agent-risk-compliance": { x: 82, y: 72 },
+  "agent-remediation": { x: 50, y: 90 },
 };
 
 function getAgentPos(agentId: string, index: number, total: number) {
