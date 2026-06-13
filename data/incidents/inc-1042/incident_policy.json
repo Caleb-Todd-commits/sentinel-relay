@@ -1,0 +1,39 @@
+{
+  "policyId": "SEC-IR-API-KEY-001",
+  "title": "API Credential Exposure Response Policy",
+  "approvalRules": [
+    {
+      "action": "rotate_or_revoke_production_credentials",
+      "requiresHumanApproval": true,
+      "approver": "Security Lead",
+      "reason": "Credential rotation can disrupt customer-facing services."
+    },
+    {
+      "action": "disable_customer_export_endpoint",
+      "requiresHumanApproval": true,
+      "approver": "Security Lead",
+      "reason": "Containment changes production availability and may affect customer operations."
+    },
+    {
+      "action": "external_customer_notification",
+      "requiresHumanApproval": true,
+      "approver": "Security Lead plus Legal",
+      "reason": "Notification requires verified customer-impact scope and legal review."
+    }
+  ],
+  "customerImpactRules": [
+    "Do not claim confirmed breach until logs or downstream telemetry show customer records were returned to an unauthorized actor.",
+    "If customer records were returned but actor identity is unresolved, classify as suspected exposure and continue evidence collection.",
+    "External notification is deferred until Legal approves scope and wording."
+  ],
+  "severityRules": [
+    {
+      "severity": "high",
+      "condition": "Sensitive customer endpoints were accessed with a likely exposed production credential."
+    },
+    {
+      "severity": "critical",
+      "condition": "Confirmed unauthorized exfiltration, active abuse, or inability to contain the credential."
+    }
+  ]
+}

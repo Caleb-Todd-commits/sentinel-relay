@@ -17,6 +17,7 @@ Completed baseline steps:
 7. **Collaboration provider layer added** — Mock and Band providers share a stable provider contract, with server-side route scaffolds protecting secrets.
 8. **Real Band communication layer connected** — server-side Band REST adapter, room/message/approval routes, local dashboard mirror, SSE stream, Band health/smoke scripts, and Python remote agent scaffolds.
 9. **Final report and audit replay built** — enterprise-style report page, audit replay table, evidence matrix, approval record, remediation control plan, integrity checks, and report verification script.
+10. **Evidence-driven AI/ML API workflow added** — realistic incident evidence packet, Band-posted specialist findings, AI/ML API policy gate, AI/ML API Band Leader synthesis, and static evidence verification.
 
 Current mode:
 
@@ -25,6 +26,14 @@ Mock Mode first, Band Mode opt-in, stable provider architecture.
 ```
 
 The app is intentionally runnable without Band credentials so the team always has a stable demo surface. Live Band Mode is now wired behind server-side API routes and remains opt-in until credentials, participants, and remote agent workers are configured.
+
+Prize-path live rehearsal:
+
+```bash
+corepack pnpm workflow:evidence:live
+```
+
+Run this after starting the app with the root `.env` loaded. It posts an evidence-driven multi-agent workflow through the Band app routes and requires AI/ML API to perform the policy gate and Band Leader synthesis.
 
 ## Primary Track
 
@@ -71,6 +80,7 @@ sentinel-relay/
   apps/
     web/                    # Next.js frontend baseline
   agents/                   # Python remote agent workers
+  data/incidents/            # Safe evidence packets for live prize workflows
   packages/
     sample-data/            # Safe sample incident files
     schemas/                # Message/schema notes
@@ -100,6 +110,8 @@ Useful commands:
 corepack pnpm typecheck
 corepack pnpm build
 corepack pnpm verify
+corepack pnpm workflow:evidence:verify
+corepack pnpm workflow:evidence:live
 corepack pnpm report:verify
 ```
 
@@ -145,6 +157,7 @@ docs/46_BAND_ENVIRONMENT_SETUP.md
 docs/47_REMOTE_AGENT_RUNBOOK.md
 docs/51_FINAL_REPORT_AND_AUDIT_REPLAY.md
 docs/53_REPORT_TRACEABILITY_MODEL.md
+docs/57_EVIDENCE_DRIVEN_AI_ML_API_WORKFLOW.md
 ```
 
 Step 1 docs:
@@ -194,13 +207,13 @@ docs/18_UI_COMPONENT_INVENTORY.md
 
 ## Current Build Step
 
-Step 8 is now complete:
+Step 10 is now complete:
 
 ```txt
-Connect Real Band Agent Communication.
+Evidence-driven AI/ML API workflow.
 ```
 
-The War Room can still run in reliable Mock Mode, and Band Mode now routes through secure server-side API routes for room creation, participant registration, structured events, routed messages, approvals, and a local dashboard mirror.
+The War Room can still run in reliable Mock Mode, and Band Mode now routes through secure server-side API routes for room creation, participant registration, structured events, routed messages, approvals, and a local dashboard mirror. The evidence workflow is the strongest live path for judging because it shows agents deriving findings from realistic artifacts and AI/ML API performing real cross-agent reasoning.
 
 ## Step 4 Schema Baseline
 

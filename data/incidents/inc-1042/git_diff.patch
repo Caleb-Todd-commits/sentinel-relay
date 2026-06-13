@@ -1,0 +1,36 @@
+diff --git a/services/customer-records/src/auth/service-token.ts b/services/customer-records/src/auth/service-token.ts
+index 61bf8b2..e248d7a 100644
+--- a/services/customer-records/src/auth/service-token.ts
++++ b/services/customer-records/src/auth/service-token.ts
+@@ -10,14 +10,27 @@ export async function getServiceToken() {
+   try {
+     return await secretsManager.getSecretValue("prod/payments/customer-records/token");
+   } catch (error) {
+-    audit.warn("customer_records_token_lookup_failed", { error: String(error) });
+-    throw error;
++    audit.warn("customer_records_token_lookup_failed", {
++      error: String(error),
++      fallbackEnabled: process.env.ALLOW_FALLBACK_TOKEN === "true",
++    });
++
++    if (process.env.ALLOW_FALLBACK_TOKEN === "true") {
++      audit.warn("customer_records_using_fallback_token", {
++        tokenLabel: "svc-payments-fallback-redacted",
++      });
++      return process.env.PAYMENTS_API_FALLBACK_TOKEN;
++    }
++
++    throw error;
+   }
+ }
+diff --git a/services/customer-records/.env.release b/services/customer-records/.env.release
+new file mode 100644
+index 0000000..3f8c7a2
+--- /dev/null
++++ b/services/customer-records/.env.release
+@@ -0,0 +1,5 @@
++NODE_ENV=production
++ALLOW_FALLBACK_TOKEN=true
++PAYMENTS_API_FALLBACK_TOKEN=REDACTED_DEMO_VALUE_NOT_A_SECRET
++CUSTOMER_EXPORT_ENABLED=true
++LOG_LEVEL=info

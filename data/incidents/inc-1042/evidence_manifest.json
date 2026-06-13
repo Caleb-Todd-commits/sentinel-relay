@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "0.1.0",
+  "caseId": "INC-1042",
+  "title": "Possible API Key Exposure After Friday Deploy",
+  "createdFor": "Sentinel Relay evidence-driven Band workflow",
+  "safety": {
+    "containsRealSecrets": false,
+    "containsCustomerPersonalData": false,
+    "notes": [
+      "This packet is synthetic lab evidence using real-world log shapes.",
+      "IP addresses use documentation ranges and should not be treated as real attribution.",
+      "Token-like values are redacted labels only and are not usable credentials."
+    ]
+  },
+  "evidence": [
+    {
+      "id": "ev-api-gateway-logs",
+      "kind": "log",
+      "path": "api_gateway_logs.jsonl",
+      "description": "Customer Records API gateway request logs around the suspicious spike."
+    },
+    {
+      "id": "ev-auth-events",
+      "kind": "log",
+      "path": "auth_events.jsonl",
+      "description": "Service-token auth events and anomaly signals."
+    },
+    {
+      "id": "ev-cloudtrail-events",
+      "kind": "log",
+      "path": "cloudtrail_events.jsonl",
+      "description": "CloudTrail-shaped deployment and secret-access events."
+    },
+    {
+      "id": "ev-code-diff",
+      "kind": "code_diff",
+      "path": "git_diff.patch",
+      "description": "Friday deploy diff that introduced a fallback token path."
+    },
+    {
+      "id": "ev-secret-scan",
+      "kind": "configuration",
+      "path": "secret_scan.json",
+      "description": "Secret scanner output from the release branch."
+    },
+    {
+      "id": "ev-ip-intel",
+      "kind": "external_indicator",
+      "path": "suspicious_ips.json",
+      "description": "Indicator notes for source IPs seen in the spike."
+    },
+    {
+      "id": "ev-incident-policy",
+      "kind": "policy",
+      "path": "incident_policy.json",
+      "description": "Human-approval and customer-notification policy used by Risk & Compliance."
+    }
+  ]
+}
