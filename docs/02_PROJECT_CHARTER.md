@@ -44,7 +44,7 @@ It should not merely summarize a security alert. It should coordinate a process:
 
 ### Primary User
 
-Security lead, incident commander, or technical manager responsible for triaging and coordinating a possible cyber incident.
+Security lead, incident Band Leader, or technical manager responsible for triaging and coordinating a possible cyber incident.
 
 ### Secondary Users
 

@@ -33,7 +33,7 @@ Each Sentinel Relay agent must output a structured message. The output should ne
 
 ## Agent-specific notes
 
-- Commander outputs `case_opened`, `task_assignment`, `approval_request`, `report_section`, and `state_update`.
+- Band Leader outputs `case_opened`, `task_assignment`, `approval_request`, `report_section`, and `state_update`.
 - Forensics outputs `finding`, `verification`, and `handoff`.
 - Threat Intel outputs `verification`, `risk_assessment`, and `challenge` when indicators are weak.
 - Code Review outputs `finding`, `verification`, and `remediation_task` suggestions.

@@ -85,11 +85,10 @@ def main() -> None:
             if pattern not in text:
                 fail(f"Pattern {pattern!r} missing from {path}")
 
-    for path in [".env.example", "apps/web/.env.example"]:
-        text = (ROOT / path).read_text(encoding="utf-8")
-        for pattern in FORBIDDEN_PUBLIC_SECRET_PATTERNS:
-            if pattern in text:
-                fail(f"Forbidden public secret pattern {pattern!r} found in {path}")
+    text = (ROOT / ".env.example").read_text(encoding="utf-8")
+    for pattern in FORBIDDEN_PUBLIC_SECRET_PATTERNS:
+        if pattern in text:
+            fail(f"Forbidden public secret pattern {pattern!r} found in .env.example")
 
     print("[OK] Step 7 provider layer files are present.")
     print("[OK] War Room uses provider-backed workflow hook.")

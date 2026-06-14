@@ -14,7 +14,6 @@ Never commit:
 - AI/ML API keys
 - Featherless keys
 - `.env`
-- `.env.local`
 - `agent_config.yaml`
 - real production logs
 - real customer data

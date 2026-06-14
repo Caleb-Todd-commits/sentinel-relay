@@ -212,13 +212,13 @@ Supporting documents and app files:
 Completed mock flow:
 
 1. Demo staged and ready.
-2. Commander opens the Band-style incident room.
+2. Band Leader opens the Band-style incident room.
 3. Specialist review tasks are assigned.
 4. Forensics identifies suspicious API token usage.
 5. Threat Intel qualifies confidence without overclaiming.
 6. Code Review finds possible token exposure in the recent diff.
 7. Risk & Compliance challenges the customer-impact claim.
-8. Commander requests human approval.
+8. Band Leader requests human approval.
 9. Human Security Lead approves containment and defers customer notice.
 10. Remediation creates scoped fix tasks.
 11. Final audit-ready report appears.

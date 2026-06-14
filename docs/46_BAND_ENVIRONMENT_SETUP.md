@@ -20,8 +20,8 @@ NEXT_PUBLIC_ENABLE_BAND_MODE="true"
 BAND_PROVIDER_ENABLED="true"
 BAND_API_BASE_URL="https://app.band.ai/api/v1"
 BAND_WS_URL="wss://app.band.ai/api/v1/socket/websocket"
-BAND_COMMANDER_AGENT_API_KEY="paste-commander-agent-api-key"
-BAND_COMMANDER_PARTICIPANT_ID="paste-commander-participant-id"
+BAND_LEADER_AGENT_API_KEY="paste-band-leader-agent-api-key"
+BAND_LEADER_AGENT_ID="paste-band-leader-agent-id"
 ```
 
 ## Participant IDs
@@ -60,7 +60,7 @@ BAND_PROVIDER_ENABLED="true"
 NEXT_PUBLIC_COLLABORATION_MODE="band"
 NEXT_PUBLIC_ENABLE_BAND_MODE="true"
 BAND_DRY_RUN="true"
-BAND_COMMANDER_AGENT_API_KEY="dry-run"
+BAND_LEADER_AGENT_API_KEY="dry-run"
 ```
 
 ## Checks
@@ -80,7 +80,7 @@ pnpm band:smoke
 3. Configure Band dry run.
 4. Start web app in Band Mode dry run.
 5. Confirm `/war-room` creates a dry-run room and local mirror.
-6. Add real commander key.
+6. Add real Band Leader key.
 7. Run `pnpm band:smoke`.
 8. Add participant IDs.
 9. Start remote agent workers.

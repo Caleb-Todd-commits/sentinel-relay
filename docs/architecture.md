@@ -62,7 +62,7 @@ The system should use structured messages:
 ## Agent Flow
 
 ```txt
-Commander
+Band Leader
   -> Forensics
   -> Code Review
   -> Threat Intel

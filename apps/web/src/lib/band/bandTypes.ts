@@ -49,9 +49,9 @@ export type BandRuntimeConfig = {
   enabled: boolean;
   baseUrl: string;
   wsUrl: string;
-  commanderAgentApiKey?: string;
+  bandLeaderAgentApiKey?: string;
   humanApiKey?: string;
-  commanderAgentId?: string;
+  bandLeaderAgentId?: string;
   dashboardHumanParticipantId?: string;
   dryRun: boolean;
   configuredAgents: Record<string, BandConfiguredAgent>;

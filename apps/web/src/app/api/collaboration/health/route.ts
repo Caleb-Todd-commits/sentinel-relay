@@ -16,15 +16,15 @@ export async function GET(request: Request) {
   }
 
   const client = new BandRestClient();
-  const commander = await client.verifyCommanderIdentity();
+  const bandLeader = await client.verifyBandLeaderIdentity();
   const human = await client.verifyHumanIdentity();
 
   return NextResponse.json({
-    status: commander.ok ? "ready" : "error",
+    status: bandLeader.ok ? "ready" : "error",
     liveChecked: true,
     summary,
     checks: {
-      commanderAgentApi: commander,
+      bandLeaderAgentApi: bandLeader,
       humanApi: human,
     },
   });

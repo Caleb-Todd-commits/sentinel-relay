@@ -88,6 +88,6 @@ Example:
 ```txt
 branch: band/agent-routing
 owner: @username
-goal: connect routed Band messages for commander -> specialist handoffs
+goal: connect routed Band messages for Band Leader -> specialist handoffs
 touching: apps/web/src/lib/band, agents/common
 ```

@@ -24,7 +24,7 @@ The hackathon is about cross-framework multi-agent systems where agents collabor
 
 Sentinel Relay demonstrates exactly that:
 
-- Planning: Commander opens the case and assigns investigation tasks.
+- Planning: Band Leader opens the case and assigns investigation tasks.
 - Execution: Forensics, Code Review, and Threat Intel agents investigate.
 - Review: Risk & Compliance challenges unsupported claims.
 - Decision-making: Human approval controls high-impact actions.
@@ -64,11 +64,11 @@ Show the sample case: Possible API Key Exposure After Friday Deploy.
 
 ### 1:15–1:55 — Agent Collaboration
 
-Show the Commander assigning tasks, Forensics submitting evidence, Code Review finding possible token exposure, and Threat Intel adding confidence.
+Show the Band Leader assigning tasks, Forensics submitting evidence, Code Review finding possible token exposure, and Threat Intel adding confidence.
 
 ### 1:55–2:20 — Challenge and Approval
 
-Show Risk & Compliance challenging the breach classification. Then show the Commander requesting human approval before containment.
+Show Risk & Compliance challenging the breach classification. Then show the Band Leader requesting human approval before containment.
 
 ### 2:20–2:45 — Remediation and Report
 

@@ -33,3 +33,18 @@ The demo should repeatedly show that Band is part of the actual workflow, not a 
 Many teams will build agents that cooperate politely. Sentinel Relay should show agents that verify, challenge, and escalate.
 
 That is more enterprise-ready.
+
+## Partner Prize Proof
+
+The evidence-driven workflow in `docs/57_EVIDENCE_DRIVEN_AI_ML_API_WORKFLOW.md`
+is the strongest AI/ML API story.
+
+AI/ML API performs two visible jobs:
+
+1. Risk & Compliance policy gate over Forensics, Threat Intel, Code Review, and
+   incident policy evidence.
+2. Band Leader synthesis over the Band room snapshot after approval and
+   remediation task updates.
+
+In the presentation, emphasize that the partner API is used for reasoning over
+shared Band context, not for a cosmetic final paragraph.

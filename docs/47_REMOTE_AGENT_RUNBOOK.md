@@ -19,13 +19,13 @@ uv sync
 
 ## Configure
 
-Create `agents/.env` from the root `.env.example` or `agents/agent_config.yaml.example`.
+Use the root `.env` created from `.env.example`. The remote agents load that same root `.env` automatically.
 
 Required per agent:
 
 ```env
-COMMANDER_AGENT_ID=""
-COMMANDER_AGENT_API_KEY=""
+BAND_LEADER_AGENT_ID=""
+BAND_LEADER_AGENT_API_KEY=""
 FORENSICS_AGENT_ID=""
 FORENSICS_AGENT_API_KEY=""
 THREAT_INTEL_AGENT_ID=""
@@ -86,7 +86,7 @@ This usually means a participant ID is missing, a message had no routable mentio
 Check:
 
 - `BAND_API_BASE_URL`
-- `BAND_COMMANDER_AGENT_API_KEY`
+- `BAND_LEADER_AGENT_API_KEY`
 - Whether the key belongs to a remote agent, not a human user
 - Whether the account/workspace has access to the required Band API
 

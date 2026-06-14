@@ -27,7 +27,7 @@ const stages = [
   {
     threshold: 7,
     title: "Human gate opens",
-    body: "Commander requests approval before containment can proceed.",
+    body: "Band Leader requests approval before containment can proceed.",
   },
   {
     threshold: 8,
@@ -53,7 +53,7 @@ export function CriticalMomentCard({ workflow }: { workflow: WorkflowViewModel }
             Challenge → approval → constrained action
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-            This is the moment that proves multi-agent coordination: one agent limits another agent&apos;s conclusion, the commander escalates, and remediation only acts inside the approved scope.
+            This is the moment that proves multi-agent coordination: one agent limits another agent&apos;s conclusion, the Band Leader escalates, and remediation only acts inside the approved scope.
           </p>
         </div>
         <Badge tone={approvalReached ? "success" : challengeReached ? "warning" : "neutral"}>

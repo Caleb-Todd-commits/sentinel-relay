@@ -37,7 +37,7 @@ Examples:
 ```txt
 [Frontend] Build war room layout shell
 [Band] Create collaboration provider interface
-[Agent] Define commander agent structured output
+[Agent] Define Band Leader structured output
 [Demo] Add API key exposure sample incident files
 [Report] Build final audit report page
 [Docs] Update README with local setup commands
@@ -268,7 +268,7 @@ Make the agents feel specialized and useful.
 
 Includes:
 
-- Commander orchestration
+- Band Leader orchestration
 - Forensics findings
 - Threat Intel confidence assessment
 - Code Review root-cause hypothesis

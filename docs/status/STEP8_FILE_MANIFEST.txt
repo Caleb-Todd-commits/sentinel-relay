@@ -23,7 +23,7 @@ New/updated agent files:
 - agents/agent_config.yaml.example
 - agents/common/sentinel_agent_runtime.py
 - agents/*/main.py
-- agents/*/.env.example
+- root .env.example
 
 New scripts:
 - scripts/band/print-band-env-check.py

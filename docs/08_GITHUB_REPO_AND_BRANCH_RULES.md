@@ -141,7 +141,7 @@ feature/evidence-board
 feature/audit-replay
 band/collaboration-provider
 band/room-creation
-agent/commander-routing
+agent/Band Leader-routing
 agent/forensics-log-parser
 docs/demo-script-v1
 demo/sample-incident-data
@@ -195,7 +195,7 @@ Examples:
 feat: add war room shell
 ui: add agent roster cards
 band: scaffold collaboration provider
-agent: define commander output schema
+agent: define Band Leader output schema
 demo: add api key exposure sample logs
 docs: add judge pitch narrative
 fix: prevent empty timeline render crash
@@ -289,7 +289,7 @@ Examples:
 ```txt
 [Frontend] Build war room layout shell
 [Band] Create collaboration provider interface
-[Agent] Define commander agent prompt and schema
+[Agent] Define Band Leader prompt and schema
 [Demo] Create API key exposure sample data
 [Report] Build audit report page
 [Pitch] Draft 3-minute demo script
@@ -382,7 +382,6 @@ Never commit:
 - API keys
 - Band credentials
 - `.env`
-- `.env.local`
 - `agent_config.yaml`
 - real logs
 - real customer data

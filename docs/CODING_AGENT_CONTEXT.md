@@ -24,12 +24,12 @@ Possible API Key Exposure After Friday Deploy.
 
 ## Required Workflow
 
-1. Commander opens the case.
+1. Band Leader opens the case.
 2. Forensics reviews logs and submits evidence.
 3. Code Review checks recent diff/config.
 4. Threat Intel assesses confidence.
 5. Risk & Compliance challenges unsupported claims.
-6. Commander requests human approval.
+6. Band Leader requests human approval.
 7. Human approves containment/remediation.
 8. Remediation creates fix tasks.
 9. Final report is generated.
