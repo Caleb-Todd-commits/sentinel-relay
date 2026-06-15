@@ -66,3 +66,19 @@ uv run python remediation/main.py
 ```
 
 For the final demo, start the agents before running the live Band workflow so the agents are already connected when the dashboard creates the incident room and posts @mentioned tasks.
+
+## Mock / offline flow (zero network, zero model calls)
+
+The six agents are implemented as pure `handle_turn(ctx) -> AgentMessage` functions
+in each `*/agent.py`, decoupled from Band behind `common/interface.py`. The mock
+runner drives the full 14-step Commander-led @mention chain for inc-1042 using only
+the `data/incidents/inc-1042` fixtures and the standard library — no API key needed:
+
+```bash
+python3 agents/mock/run_mock_flow.py          # human-readable transcript + self-checks
+python3 agents/mock/run_mock_flow.py --json   # full AgentMessage[] for the frontend
+```
+
+Every message is schema-validated (with retry) against `AgentMessage` v0.4.0 before it
+is routed. The same `handle_turn` seam is what Person 2's Band transport calls in live
+mode; only the transport and an optional LLM enrichment layer change.
