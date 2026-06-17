@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-06-14T16:32:00Z",
+  "notes": "Synthetic indicator file for the hackathon demo. Documentation IP ranges avoid attributing activity to real organizations.",
+  "indicators": [
+    {
+      "ip": "203.0.113.142",
+      "classification": "unexpected external source",
+      "confidence": "medium",
+      "observations": [
+        "First seen for the OIDC-issued exporter token at 2026-06-14T16:24:39Z.",
+        "Used a preview-workflow user agent against high-volume export endpoints.",
+        "Attempted another export after revocation."
+      ]
+    },
+    {
+      "ip": "198.51.100.221",
+      "classification": "unexpected external source",
+      "confidence": "medium",
+      "observations": [
+        "Probed an internal canary path.",
+        "Used python-requests rather than the expected analytics worker.",
+        "Accessed a payment-methods endpoint with the federated token."
+      ]
+    },
+    {
+      "ip": "198.51.100.44",
+      "classification": "expected deployment egress",
+      "confidence": "high",
+      "observations": [
+        "Known CI and production worker egress for Payments Platform.",
+        "Observed before and after the suspicious spike."
+      ]
+    }
+  ]
+}

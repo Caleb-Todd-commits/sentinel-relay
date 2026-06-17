@@ -1,12 +1,12 @@
-"""Load the inc-1042 incident packet into agent-facing context objects.
+"""Load synthetic incident packets into agent-facing context objects.
 
-Reads only the synthetic lab fixtures under ``data/incidents/inc-1042`` (real
-log shapes, redacted values, documentation-range IPs). No network, no secrets.
+Reads only the synthetic lab fixtures under ``data/incidents`` (real log shapes,
+redacted values, documentation-range IPs). No network, no secrets.
 
 The canonical case / state / agent-profile shapes mirror
 ``packages/schemas/examples/demo_incident.json`` but are defined here so the
-agents lane runs standalone. Evidence is loaded live from the inc-1042 manifest
-so the evidence board shows real items with real IDs.
+agents lane runs standalone. Evidence is loaded live from each manifest so the
+evidence board shows real items with real IDs.
 """
 
 from __future__ import annotations
@@ -19,7 +19,8 @@ from typing import Any
 from common.schema import deterministic_timestamp
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_INCIDENT_DIR = _REPO_ROOT / "data" / "incidents" / "inc-1042"
+INCIDENTS_DIR = _REPO_ROOT / "data" / "incidents"
+DEFAULT_INCIDENT_DIR = INCIDENTS_DIR / "inc-1042"
 
 CASE_ID = "INC-1042"
 ROOM_ID = "band-room-inc-1042"
@@ -139,7 +140,7 @@ SPECIALIST_AGENT_IDS = [
 
 @dataclass
 class IncidentPacket:
-    """Loaded inc-1042 context shared by every agent turn."""
+    """Loaded incident context shared by every agent turn."""
 
     case: dict[str, Any]
     state: dict[str, Any]
@@ -187,38 +188,79 @@ def _build_evidence(incident_dir: Path, manifest: dict[str, Any]) -> list[dict[s
     return evidence
 
 
-def load_incident(incident_dir: Path | str = DEFAULT_INCIDENT_DIR) -> IncidentPacket:
-    """Load the inc-1042 packet (manifest + policy + per-evidence excerpts)."""
-    incident_dir = Path(incident_dir)
+def incident_dir_for_id(incident_id: str) -> Path:
+    """Return the fixture directory for a case id such as ``INC-1043``."""
+
+    normalized = incident_id.strip().lower().replace("_", "-")
+    if not normalized:
+        raise ValueError("incident_id cannot be empty")
+    if not normalized.startswith("inc-"):
+        normalized = f"inc-{normalized}"
+    return INCIDENTS_DIR / normalized
+
+
+def resolve_incident_dir(
+    *,
+    incident_id: str | None = None,
+    incident_dir: Path | str | None = None,
+) -> Path:
+    """Resolve an explicit directory or incident id to a synthetic fixture path."""
+
+    if incident_dir:
+        resolved = Path(incident_dir)
+    elif incident_id:
+        resolved = incident_dir_for_id(incident_id)
+    else:
+        resolved = DEFAULT_INCIDENT_DIR
+
+    if not resolved.exists():
+        requested = f"incident_id={incident_id!r}, incident_dir={str(incident_dir)!r}"
+        raise FileNotFoundError(f"No synthetic incident fixture found for {requested}: {resolved}")
+    return resolved
+
+
+def load_incident(
+    incident_dir: Path | str | None = None,
+    *,
+    incident_id: str | None = None,
+) -> IncidentPacket:
+    """Load an incident packet (manifest + policy + per-evidence excerpts)."""
+
+    incident_dir = resolve_incident_dir(incident_id=incident_id, incident_dir=incident_dir)
     manifest = json.loads((incident_dir / "evidence_manifest.json").read_text())
     policy = json.loads((incident_dir / "incident_policy.json").read_text())
     evidence = _build_evidence(incident_dir, manifest)
+    case_id = manifest.get("caseId", CASE_ID)
+    room_id = manifest.get("roomId", f"band-room-{str(case_id).lower()}")
 
     case = {
-        "id": CASE_ID,
-        "roomId": ROOM_ID,
+        "id": case_id,
+        "roomId": room_id,
         "title": manifest.get("title", "Possible API Key Exposure After Friday Deploy"),
-        "summary": (
-            "A suspicious API usage spike appeared shortly after a Friday deploy. "
-            "Specialist agents must determine whether a token was exposed, whether "
-            "customer data was accessed, what requires human approval, and what "
-            "remediation should happen next."
+        "summary": manifest.get(
+            "summary",
+            (
+                "A suspicious API usage spike appeared shortly after a Friday deploy. "
+                "Specialist agents must determine whether a token was exposed, whether "
+                "customer data was accessed, what requires human approval, and what "
+                "remediation should happen next."
+            ),
         ),
         "severity": "high",
         "status": "investigating",
         "openedAt": deterministic_timestamp(1),
         "updatedAt": deterministic_timestamp(14),
-        "businessUnit": "Payments Platform",
-        "affectedSystem": "Customer Records API",
+        "businessUnit": manifest.get("businessUnit", "Payments Platform"),
+        "affectedSystem": manifest.get("affectedSystem", "Customer Records API"),
         "currentPhase": "Coordinated investigation",
         "phase": "hypothesis_review",
         "decisionGate": "human_required",
         "owner": "Human Security Lead",
-        "tags": ["hackathon-demo", "api-key-exposure", "band-coordination"],
+        "tags": manifest.get("tags", ["hackathon-demo", "api-key-exposure", "band-coordination"]),
     }
     state = {
-        "caseId": CASE_ID,
-        "roomId": ROOM_ID,
+        "caseId": case_id,
+        "roomId": room_id,
         "status": "investigating",
         "severity": "high",
         "phase": "hypothesis_review",

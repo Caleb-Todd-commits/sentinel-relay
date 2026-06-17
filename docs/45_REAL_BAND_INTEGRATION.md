@@ -14,6 +14,8 @@ The implementation now includes:
 - Health endpoint for credential checks
 - Server-sent event stream for the War Room dashboard mirror
 - Python remote agent worker scaffolds using the Band/Thenvoi SDK pattern
+- Python collaboration API workers that run the real `handle_turn` agents against
+  the app room mirror and post through the Band-backed server route
 - Env and smoke-test scripts
 
 ## Why the Integration Is Split
@@ -32,9 +34,11 @@ The remote agents use a separate flow:
 
 ```txt
 Remote Python agent worker
-  -> Band/Thenvoi Python SDK
-    -> REST for actions
-    -> WebSocket for incoming @mentions and room events
+  -> either Band/Thenvoi Python SDK
+    -> REST for actions + WebSocket for incoming @mentions
+  -> or Sentinel Relay collaboration API worker
+    -> polls /api/collaboration/rooms
+    -> posts /api/collaboration/messages
 ```
 
 This gives us a reliable dashboard and the proper live agent model.
