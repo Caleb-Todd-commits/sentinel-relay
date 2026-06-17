@@ -79,6 +79,41 @@ def _human_approval_turn(ctx: AgentTurnContext) -> dict[str, Any]:
     )
 
 
+# actor_id -> deterministic (canned) handle_turn. The live runner reuses
+# build_steps() and _context() and swaps this map for LLM-backed turns; the
+# human approval gate is a human actor, not an LLM, so it stays canned in both.
+CANNED_TURNS: dict[str, Any] = {
+    "agent-commander": commander_turn,
+    "agent-forensics": forensics_turn,
+    "agent-code-review": code_review_turn,
+    "agent-threat-intel": threat_intel_turn,
+    "agent-risk-compliance": risk_turn,
+    "agent-remediation": remediation_turn,
+    "agent-human-approver": _human_approval_turn,
+}
+
+
+def build_steps() -> list[tuple[str, dict[str, Any]]]:
+    """The 14 ordered turns as (actor_id, task). Single source of truth for the
+    flow — both the mock runner and the live runner iterate this list."""
+    return [
+        ("agent-commander", {"kind": "open_case"}),
+        ("agent-commander", {"kind": "assign", "assignee": "agent-forensics", "assigneeName": "Forensics", "objective": "Quantify exposure from gateway, auth, and CloudTrail logs."}),
+        ("agent-commander", {"kind": "assign", "assignee": "agent-code-review", "assigneeName": "Code Review", "objective": "Identify the deploy change that introduced the exposure path."}),
+        ("agent-commander", {"kind": "assign", "assignee": "agent-threat-intel", "assigneeName": "Threat Intel", "objective": "Assess the external source IPs without overstating attribution."}),
+        ("agent-forensics", {"kind": "report"}),
+        ("agent-code-review", {"kind": "report"}),
+        ("agent-threat-intel", {"kind": "report"}),
+        ("agent-commander", {"kind": "assign", "assignee": "agent-risk-compliance", "assigneeName": "Risk & Compliance", "objective": "Rule on severity and required approvals per the incident policy."}),
+        ("agent-risk-compliance", {"kind": "assess", "policyId": "SEC-IR-API-KEY-001"}),
+        ("agent-commander", {"kind": "request_approval"}),
+        ("agent-human-approver", {"kind": "decide"}),
+        ("agent-commander", {"kind": "assign", "assignee": "agent-remediation", "assigneeName": "Remediation", "objective": "Execute the approved containment scope only.", "approvedScope": ["Rotate fallback token", "Disable fallback token path", "Patch config"]}),
+        ("agent-remediation", {"kind": "remediate", "approvedScope": ["Rotate fallback token", "Disable fallback token path"]}),
+        ("agent-commander", {"kind": "generate_report"}),
+    ]
+
+
 def _context(packet: IncidentPacket, room: MockBandRoom, actor_id: str, task: dict[str, Any], sequence: int) -> AgentTurnContext:
     return AgentTurnContext(
         case=packet.case,
@@ -98,27 +133,9 @@ def run_flow() -> MockBandRoom:
     for agent_id, handle in HANDLES.items():
         room.register(agent_id, handle)
 
-    # (actor_id, handle_turn, task) for each of the 14 ordered turns.
-    steps = [
-        ("agent-commander", commander_turn, {"kind": "open_case"}),
-        ("agent-commander", commander_turn, {"kind": "assign", "assignee": "agent-forensics", "assigneeName": "Forensics", "objective": "Quantify exposure from gateway, auth, and CloudTrail logs."}),
-        ("agent-commander", commander_turn, {"kind": "assign", "assignee": "agent-code-review", "assigneeName": "Code Review", "objective": "Identify the deploy change that introduced the exposure path."}),
-        ("agent-commander", commander_turn, {"kind": "assign", "assignee": "agent-threat-intel", "assigneeName": "Threat Intel", "objective": "Assess the external source IPs without overstating attribution."}),
-        ("agent-forensics", forensics_turn, {"kind": "report"}),
-        ("agent-code-review", code_review_turn, {"kind": "report"}),
-        ("agent-threat-intel", threat_intel_turn, {"kind": "report"}),
-        ("agent-commander", commander_turn, {"kind": "assign", "assignee": "agent-risk-compliance", "assigneeName": "Risk & Compliance", "objective": "Rule on severity and required approvals per the incident policy."}),
-        ("agent-risk-compliance", risk_turn, {"kind": "assess", "policyId": "SEC-IR-API-KEY-001"}),
-        ("agent-commander", commander_turn, {"kind": "request_approval"}),
-        ("agent-human-approver", _human_approval_turn, {"kind": "decide"}),
-        ("agent-commander", commander_turn, {"kind": "assign", "assignee": "agent-remediation", "assigneeName": "Remediation", "objective": "Execute the approved containment scope only.", "approvedScope": ["Rotate fallback token", "Disable fallback token path", "Patch config"]}),
-        ("agent-remediation", remediation_turn, {"kind": "remediate", "approvedScope": ["Rotate fallback token", "Disable fallback token path"]}),
-        ("agent-commander", commander_turn, {"kind": "generate_report"}),
-    ]
-
-    for sequence, (actor_id, handle_turn, task) in enumerate(steps, start=1):
+    for sequence, (actor_id, task) in enumerate(build_steps(), start=1):
         ctx = _context(packet, room, actor_id, task, sequence)
-        room.post(handle_turn, ctx)
+        room.post(CANNED_TURNS[actor_id], ctx)
 
     return room
 
