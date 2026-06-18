@@ -1,0 +1,39 @@
+{
+  "policyId": "SEC-IR-OIDC-002",
+  "title": "Federated CI Credential Exposure Response Policy",
+  "approvalRules": [
+    {
+      "action": "revoke_federated_sessions",
+      "requiresHumanApproval": true,
+      "approver": "Security Lead",
+      "reason": "Revoking active sessions can disrupt production and preview workflows."
+    },
+    {
+      "action": "tighten_oidc_trust_policy",
+      "requiresHumanApproval": true,
+      "approver": "Security Lead",
+      "reason": "IAM trust-policy changes can interrupt deployments."
+    },
+    {
+      "action": "external_customer_notification",
+      "requiresHumanApproval": true,
+      "approver": "Security Lead plus Legal",
+      "reason": "Notification requires verified customer-impact scope and legal review."
+    }
+  ],
+  "customerImpactRules": [
+    "Do not claim confirmed breach until logs or downstream telemetry show customer records were returned to an unauthorized actor.",
+    "If customer records were returned but actor identity is unresolved, classify as suspected exposure and continue evidence collection.",
+    "External notification is deferred until Legal approves scope and wording."
+  ],
+  "severityRules": [
+    {
+      "severity": "high",
+      "condition": "Sensitive customer endpoints were accessed with a federated production credential from an untrusted workflow."
+    },
+    {
+      "severity": "critical",
+      "condition": "Confirmed unauthorized exfiltration, active abuse, or inability to contain the federated credential."
+    }
+  ]
+}

@@ -63,6 +63,22 @@ BAND_DRY_RUN="true"
 BAND_LEADER_AGENT_API_KEY="dry-run"
 ```
 
+## Python Agent Worker Mode
+
+To run the real Python `handle_turn` agents against the room created by the app,
+start the workers in collaboration API mode:
+
+```env
+SENTINEL_RELAY_AGENT_RUNTIME="collaboration-api"
+SENTINEL_RELAY_APP_URL="http://127.0.0.1:3000"
+SENTINEL_RELAY_AGENT_ROOM_ID="paste-room-id-from-war-room"
+SENTINEL_RELAY_AGENT_POLL_SECONDS="2"
+```
+
+Use this with Band Mode or Band dry run. The workers poll the app mirror and post
+back through `/api/collaboration/messages`, so the app server still owns Band
+credentials and Band publishing.
+
 ## Checks
 
 ```bash

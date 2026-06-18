@@ -1,0 +1,64 @@
+{
+  "schemaVersion": "0.1.0",
+  "caseId": "INC-1043",
+  "roomId": "band-room-inc-1043",
+  "title": "OIDC Trust Regression Exposed Analytics Exporter Token",
+  "summary": "A suspicious Customer Records export spike followed an IAM trust-policy change that widened GitHub OIDC access from the protected main branch to a repo-wide wildcard. Specialist agents must decide what was accessed, whether the token is contained, and which irreversible decisions require human approval.",
+  "businessUnit": "Payments Platform",
+  "affectedSystem": "Customer Records API",
+  "tags": ["hackathon-demo", "oidc-trust-regression", "band-coordination"],
+  "createdFor": "Sentinel Relay evidence-driven Band workflow",
+  "safety": {
+    "containsRealSecrets": false,
+    "containsCustomerPersonalData": false,
+    "notes": [
+      "This packet is synthetic lab evidence using real-world log shapes.",
+      "IP addresses use documentation ranges and should not be treated as real attribution.",
+      "Token-like values are redacted labels only and are not usable credentials."
+    ]
+  },
+  "evidence": [
+    {
+      "id": "ev-api-gateway-logs",
+      "kind": "log",
+      "path": "api_gateway_logs.jsonl",
+      "description": "Customer Records API gateway request logs around the OIDC-issued token abuse."
+    },
+    {
+      "id": "ev-auth-events",
+      "kind": "log",
+      "path": "auth_events.jsonl",
+      "description": "Federated-token issuance, service-token use, and revocation events."
+    },
+    {
+      "id": "ev-cloudtrail-events",
+      "kind": "log",
+      "path": "cloudtrail_events.jsonl",
+      "description": "CloudTrail-shaped IAM trust-policy and STS events."
+    },
+    {
+      "id": "ev-code-diff",
+      "kind": "code_diff",
+      "path": "git_diff.patch",
+      "description": "IAM policy diff that widened GitHub OIDC trust to unprotected refs."
+    },
+    {
+      "id": "ev-secret-scan",
+      "kind": "configuration",
+      "path": "secret_scan.json",
+      "description": "Secret scanner output showing this was not a committed-secret incident."
+    },
+    {
+      "id": "ev-ip-intel",
+      "kind": "external_indicator",
+      "path": "suspicious_ips.json",
+      "description": "Indicator notes for source IPs seen in the OIDC abuse window."
+    },
+    {
+      "id": "ev-incident-policy",
+      "kind": "policy",
+      "path": "incident_policy.json",
+      "description": "Human-approval and customer-notification policy used by Risk & Compliance."
+    }
+  ]
+}

@@ -66,6 +66,13 @@ Required for live AI/ML API partner usage:
 AIMLAPI_API_KEY
 AIMLAPI_BASE_URL="https://api.aimlapi.com/v1"
 AIMLAPI_MODEL="gpt-4o-mini"
+SENTINEL_RELAY_AIMLAPI_ENABLED="true"
+```
+
+Optional strict rehearsal mode:
+
+```txt
+SENTINEL_RELAY_AIMLAPI_REQUIRE_LIVE="true"
 ```
 
 `BAND_HUMAN_API_KEY` is still optional. Without it, Sentinel Relay uses the
@@ -133,3 +140,26 @@ Use this workflow to show that Sentinel Relay is more than a project frame:
 The strongest live moment is the Risk gate: the system finds enough evidence for
 urgent containment, but refuses to claim customer notification is ready until
 scope and Legal review are complete.
+
+## Agent-Level AI/ML API Guardrails
+
+The Python agents now use `agents/common/aimlapi_enrichment.py` for the same
+partner-prize story:
+
+- Risk & Compliance calls the `risk_policy_gate` enrichment.
+- Band Leader calls the `band_leader_synthesis` enrichment.
+- Both calls use the OpenAI-compatible AI/ML API chat-completions shape:
+  `POST {AIMLAPI_BASE_URL}/chat/completions`.
+- Both calls are constrained to evidence-derived facts and recent room message
+  summaries.
+- The returned JSON is sanitized before being stored in `AgentMessage.payload`.
+
+The guardrails deliberately block common demo-killers:
+
+- fake evidence IDs are dropped,
+- critical severity is downgraded to high unless the packet actually supports it,
+- customer notification remains held for Legal scope review,
+- summaries that omit the locked `10,227` record count fall back to the
+  deterministic synthesis,
+- missing or failed API calls use deterministic fallback unless strict rehearsal
+  mode is enabled.

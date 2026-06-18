@@ -27,6 +27,13 @@ from urllib.request import Request, urlopen
 
 
 ROOT = Path(__file__).resolve().parents[2]
+AGENTS_DIR = ROOT / "agents"
+if str(AGENTS_DIR) not in sys.path:
+    sys.path.insert(0, str(AGENTS_DIR))
+
+from common.fixtures import load_incident, resolve_incident_dir  # noqa: E402
+from mock.run_mock_flow import run_flow as run_mock_agent_flow  # noqa: E402
+
 DEFAULT_EVIDENCE_DIR = ROOT / "data" / "incidents" / "inc-1042"
 SCHEMA_VERSION = "0.4.0"
 CASE_ID = "INC-1042"
@@ -692,11 +699,82 @@ def register_agents(client: AppClient, room_id: str) -> None:
         )
 
 
+def message_for_room(message: dict[str, Any], room_id: str) -> dict[str, Any]:
+    """Copy a validated AgentMessage into the live collaboration room id."""
+
+    return {**message, "roomId": room_id}
+
+
+def approval_request_from_message(message: dict[str, Any]) -> dict[str, Any] | None:
+    payload = message.get("payload") if isinstance(message.get("payload"), dict) else {}
+    data = payload.get("data") if isinstance(payload.get("data"), dict) else {}
+    request_id = data.get("approvalRequestId")
+    if message.get("type") != "approval_request" or not request_id:
+        return None
+    requested_actions = [str(item) for item in data.get("requestedActions", []) if str(item).strip()]
+    return {
+        "id": str(request_id),
+        "caseId": message["caseId"],
+        "requestedByAgentId": message["agentId"],
+        "action": "; ".join(requested_actions) or message["title"],
+        "reason": message["summary"],
+        "severity": message["severity"],
+        "evidenceIds": message.get("evidenceIds", []),
+        "riskIfApproved": data.get("riskIfApproved", "Stops ongoing exposure but may disrupt production."),
+        "riskIfRejected": data.get("riskIfRejected", "Exposure may remain active while investigation continues."),
+        "requiredApprover": data.get("requiredApprover", "Security Lead"),
+        "status": "pending",
+        "createdAt": message.get("createdAt") or now_iso(),
+    }
+
+
+def approval_decision_from_message(message: dict[str, Any]) -> dict[str, Any] | None:
+    payload = message.get("payload") if isinstance(message.get("payload"), dict) else {}
+    data = payload.get("data") if isinstance(payload.get("data"), dict) else {}
+    request_id = data.get("approvalRequestId")
+    if message.get("type") != "approval_decision" or not request_id:
+        return None
+    return {
+        "id": f"decision-{request_id}",
+        "requestId": str(request_id),
+        "decision": data.get("decision", "approved"),
+        "decidedBy": data.get("decidedBy", "Human Security Lead"),
+        "rationale": message["summary"],
+        "decidedAt": message.get("createdAt") or now_iso(),
+        "approvedActionScope": data.get("approvedScope", []),
+        "explicitlyNotApproved": data.get("explicitlyNotApproved", []),
+    }
+
+
+def remediation_tasks_from_message(message: dict[str, Any]) -> list[dict[str, Any]]:
+    payload = message.get("payload") if isinstance(message.get("payload"), dict) else {}
+    data = payload.get("data") if isinstance(payload.get("data"), dict) else {}
+    tasks = data.get("tasks")
+    if message.get("type") != "remediation_task" or not isinstance(tasks, list):
+        return []
+    return [
+        task
+        for task in tasks
+        if isinstance(task, dict) and task.get("id") and task.get("status")
+    ]
+
+
 def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
     load_dotenv(ROOT / ".env")
-    evidence_dir = Path(args.evidence_dir).resolve()
-    evidence = load_evidence(evidence_dir)
-    aiml = AimlApiClient(disabled=args.skip_aimlapi, require_live=args.require_aimlapi, timeout=args.timeout)
+    evidence_dir = resolve_incident_dir(
+        incident_id=args.incident_id,
+        incident_dir=args.evidence_dir,
+    ).resolve()
+    packet = load_incident(evidence_dir)
+
+    if args.skip_aimlapi:
+        os.environ["SENTINEL_RELAY_AIMLAPI_ENABLED"] = "false"
+        os.environ["SENTINEL_RELAY_AIMLAPI_REQUIRE_LIVE"] = "false"
+    else:
+        os.environ["SENTINEL_RELAY_AIMLAPI_ENABLED"] = "true"
+        if args.require_aimlapi:
+            os.environ["SENTINEL_RELAY_AIMLAPI_REQUIRE_LIVE"] = "true"
+
     app = AppClient(args.app_url, args.timeout)
 
     health = app.get("/health?live=false")
@@ -708,8 +786,8 @@ def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
         {
             "action": "createIncidentRoom",
             "input": {
-                "caseId": CASE_ID,
-                "title": f"{CASE_TITLE} - evidence run",
+                "caseId": packet.case["id"],
+                "title": f"{packet.case['title']} - evidence run",
                 "requestedBy": "evidence-workflow-runner",
             },
         },
@@ -717,291 +795,58 @@ def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
     room_id = room["id"]
     register_agents(app, room_id)
 
-    forensics = build_forensics_finding(evidence)
-    code_review = build_code_review_finding(evidence)
-    threat_intel = build_threat_intel_finding(evidence, forensics)
+    mock_room = run_mock_agent_flow(incident_dir=evidence_dir)
+    snapshot: dict[str, Any] = {"messages": []}
+    for original_message in mock_room.transcript:
+        message = message_for_room(original_message, room_id)
+        snapshot = post_message(app, room_id, message)
 
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=1,
-            agent_id="agent-commander",
-            agent_name="Band Leader",
-            message_type="task_assignment",
-            title="Evidence packet assigned to specialist agents",
-            summary=(
-                "Band Leader opened an evidence-driven investigation and assigned logs, code diff, "
-                "indicator review, policy review, and remediation planning to specialist agents."
-            ),
-            confidence=1.0,
-            severity="high",
-            evidence_ids=[item["id"] for item in evidence["manifest"]["evidence"]],
-            target_agent_ids=["agent-forensics", "agent-code-review", "agent-threat-intel", "agent-risk-compliance"],
-            decision_impact="Starts the shared Band room trail from a concrete evidence packet.",
-            next_action="Specialist agents derive findings from their assigned evidence.",
-            payload={
-                "kind": "generic",
-                "data": {
-                    "evidenceManifest": "data/incidents/inc-1042/evidence_manifest.json",
-                    "assignedEvidenceIds": [item["id"] for item in evidence["manifest"]["evidence"]],
+        approval_request = approval_request_from_message(message)
+        if approval_request:
+            snapshot = app.post(
+                "/approvals",
+                {
+                    "action": "requestHumanApproval",
+                    "roomId": room_id,
+                    "request": approval_request,
                 },
-            },
-        ),
-    )
+            )["snapshot"]
 
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=2,
-            agent_id="agent-forensics",
-            agent_name="Forensics Agent",
-            message_type="finding",
-            title="Suspicious fallback-token reads found in API logs",
-            summary=forensics["summary"],
-            confidence=forensics["confidence"],
-            severity=forensics["severity"],
-            evidence_ids=forensics["evidenceIds"],
-            target_agent_ids=["agent-commander", "agent-threat-intel", "agent-risk-compliance"],
-            decision_impact="Shows the suspicious access pattern and record volume that drive containment urgency.",
-            next_action="Threat Intel should assess the indicators; Risk should evaluate notification and approval posture.",
-            payload=finding_payload(forensics),
-        ),
-    )
-
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=3,
-            agent_id="agent-code-review",
-            agent_name="Code Review Agent",
-            message_type="finding",
-            title="Friday deploy introduced a fallback-token exposure path",
-            summary=code_review["summary"],
-            confidence=code_review["confidence"],
-            severity=code_review["severity"],
-            evidence_ids=code_review["evidenceIds"],
-            target_agent_ids=["agent-commander", "agent-risk-compliance", "agent-remediation"],
-            decision_impact="Links the suspicious runtime behavior to a concrete deployment and fix path.",
-            next_action="Risk should require approval for credential rotation; Remediation should remove the fallback path.",
-            payload=finding_payload(code_review),
-        ),
-    )
-
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=4,
-            agent_id="agent-threat-intel",
-            agent_name="Threat Intel Agent",
-            message_type="finding",
-            title="Indicator confidence supports urgency but not attribution",
-            summary=threat_intel["summary"],
-            confidence=threat_intel["confidence"],
-            severity=threat_intel["severity"],
-            evidence_ids=threat_intel["evidenceIds"],
-            target_agent_ids=["agent-commander", "agent-risk-compliance", "agent-forensics"],
-            decision_impact="Keeps the response evidence-based by separating behavior confidence from actor attribution.",
-            next_action="Risk should challenge overbroad breach claims and approve containment-focused action.",
-            payload=finding_payload(threat_intel),
-        ),
-    )
-
-    policy_gate = call_policy_gate(aiml, evidence, forensics, code_review, threat_intel)
-    gate_data = policy_gate.data
-    source_message_ids = [message.get("id") for message in snapshot.get("messages", [])]
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=5,
-            agent_id="agent-risk-compliance",
-            agent_name="Risk & Compliance Agent",
-            message_type="challenge",
-            title="Policy gate blocks customer notification but approves containment request",
-            summary=str(gate_data.get("challenge", policy_gate_fallback(forensics, code_review, threat_intel)["challenge"])),
-            confidence=float(gate_data.get("confidence", 0.82)),
-            severity=str(gate_data.get("recommendedSeverity", "high")),
-            evidence_ids=list(gate_data.get("evidenceIds", ["ev-incident-policy"])),
-            target_agent_ids=["agent-commander", "agent-remediation", "agent-code-review"],
-            decision_impact="Prevents an unsupported external notification while preserving urgent containment momentum.",
-            next_action="Request human approval for token rotation and temporary export throttling.",
-            payload={
-                "kind": "generic",
-                "data": {
-                    "challenge": {
-                        "requiredNextStep": "Approve containment, defer external notification, and preserve evidence for scope review.",
-                        "blocking": True,
-                        "suggestedOwnerAgentId": "agent-remediation",
-                    },
-                    "policyGate": gate_data,
-                    "sourceMessageIds": source_message_ids,
-                    "partnerTool": policy_gate.metadata(),
+        approval_decision = approval_decision_from_message(message)
+        if approval_decision:
+            snapshot = app.post(
+                "/approvals",
+                {
+                    "action": "submitHumanDecision",
+                    "roomId": room_id,
+                    "decision": approval_decision,
                 },
-            },
-        ),
-    )
+            )["snapshot"]
 
-    approval_request = {
-        "id": "approval-inc-1042-containment",
-        "caseId": CASE_ID,
-        "requestedByAgentId": "agent-risk-compliance",
-        "action": "Rotate the fallback token, disable the fallback path, and temporarily throttle customer export endpoints.",
-        "reason": "Evidence supports likely credential exposure and suspicious customer-data reads, but policy requires human approval for production containment.",
-        "severity": "high",
-        "evidenceIds": list(gate_data.get("evidenceIds", ["ev-api-gateway-logs", "ev-code-diff", "ev-incident-policy"])),
-        "riskIfApproved": "Temporary export disruption and credential-rotation coordination overhead.",
-        "riskIfRejected": "The suspected exposed credential path may remain usable and customer-data exports may continue.",
-        "requiredApprover": "Security Lead",
-        "status": "pending",
-        "createdAt": now_iso(),
-    }
-    snapshot = app.post(
-        "/approvals",
-        {
-            "action": "requestHumanApproval",
-            "roomId": room_id,
-            "request": approval_request,
-        },
-    )["snapshot"]
-
-    approval_decision = {
-        "id": "decision-inc-1042-containment",
-        "requestId": approval_request["id"],
-        "decision": "approved",
-        "decidedBy": "Human Security Lead",
-        "rationale": "Approve containment and credential rotation now; explicitly defer customer notification until scope and Legal review are complete.",
-        "decidedAt": now_iso(),
-        "approvedActionScope": [
-            "Rotate fallback token and production service credential.",
-            "Disable fallback token path in production.",
-            "Temporarily throttle customer export endpoint while scope is reviewed.",
-        ],
-        "explicitlyNotApproved": [
-            "External customer notification.",
-            "Closing the incident.",
-            "Public breach attribution."
-        ],
-    }
-    snapshot = app.post(
-        "/approvals",
-        {
-            "action": "submitHumanDecision",
-            "roomId": room_id,
-            "decision": approval_decision,
-        },
-    )["snapshot"]
-
-    remediation_tasks = [
-        {
-            "taskId": "rem-rotate-fallback-token",
-            "status": "done",
-            "evidenceIds": ["ev-auth-events", "ev-cloudtrail-events", "ev-incident-policy"],
-            "acceptanceCriteria": ["Old fallback token returns 401.", "New token is stored only in the managed secret store."],
-        },
-        {
-            "taskId": "rem-remove-fallback-path",
-            "status": "review",
-            "evidenceIds": ["ev-code-diff", "ev-secret-scan"],
-            "acceptanceCriteria": ["Token lookup fails closed.", "Release env file no longer contains fallback token variables."],
-        },
-        {
-            "taskId": "rem-scope-customer-impact",
-            "status": "in_progress",
-            "evidenceIds": ["ev-api-gateway-logs", "ev-auth-events"],
-            "acceptanceCriteria": ["Returned record IDs mapped to accounts.", "Legal-ready customer-impact summary created."],
-        },
-    ]
-    for task in remediation_tasks:
-        snapshot = app.post(
-            "/messages",
-            {
-                "action": "updateTaskStatus",
-                "roomId": room_id,
-                "taskId": task["taskId"],
-                "status": task["status"],
-            },
-        )["snapshot"]
-
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=6,
-            agent_id="agent-remediation",
-            agent_name="Remediation Agent",
-            message_type="remediation_task",
-            title="Containment plan started after human approval",
-            summary=(
-                "Credential rotation is marked done, fail-closed code changes are in review, and customer-impact scoping remains in progress."
-            ),
-            confidence=0.86,
-            severity="high",
-            evidence_ids=["ev-auth-events", "ev-cloudtrail-events", "ev-code-diff", "ev-incident-policy"],
-            target_agent_ids=["agent-commander", "agent-risk-compliance", "agent-code-review"],
-            decision_impact="Turns the approval decision into trackable remediation state in the Band room.",
-            next_action="Band Leader should synthesize final judge-facing status and open questions.",
-            payload={
-                "kind": "generic",
-                "data": {
-                    "tasks": remediation_tasks,
-                    "approvalDecisionId": approval_decision["id"],
+        for task in remediation_tasks_from_message(message):
+            snapshot = app.post(
+                "/messages",
+                {
+                    "action": "updateTaskStatus",
+                    "roomId": room_id,
+                    "taskId": str(task["id"]),
+                    "status": str(task["status"]),
                 },
-            },
-        ),
-    )
-
-    synthesis = call_band_leader_synthesis(
-        aiml,
-        snapshot_summary=snapshot_summary(snapshot),
-        forensics=forensics,
-        code_review=code_review,
-        threat_intel=threat_intel,
-        policy_gate=policy_gate,
-    )
-    synthesis_data = synthesis.data
-    executive_summary = str(synthesis_data.get("executiveSummary", synthesis_fallback(forensics, code_review, threat_intel, gate_data)["executiveSummary"]))
-    snapshot = post_message(
-        app,
-        room_id,
-        make_message(
-            room_id=room_id,
-            sequence=7,
-            agent_id="agent-commander",
-            agent_name="Band Leader",
-            message_type="report_section",
-            title="AI/ML API synthesized the Band room into a judge-ready incident status",
-            summary=executive_summary,
-            confidence=float(synthesis_data.get("confidence", 0.82)),
-            severity=str(synthesis_data.get("severity", "high")),
-            evidence_ids=list(synthesis_data.get("evidenceIds", gate_data.get("evidenceIds", []))),
-            target_agent_ids=["agent-forensics", "agent-threat-intel", "agent-code-review", "agent-risk-compliance", "agent-remediation"],
-            decision_impact="Shows partner-powered cross-agent reasoning over Band-shared context.",
-            next_action="Use the final status, approvals, and open questions in the video and submission narrative.",
-            payload={
-                "kind": "generic",
-                "data": {
-                    "synthesis": synthesis_data,
-                    "partnerTool": synthesis.metadata(),
-                    "policyGatePartnerTool": policy_gate.metadata(),
-                    "bandSnapshotSummary": snapshot_summary(snapshot),
-                },
-            },
-        ),
-    )
+            )["snapshot"]
 
     summary = snapshot_summary(snapshot)
+    final_message = mock_room.transcript[-1]
+    final_data = (final_message.get("payload") or {}).get("data") or {}
+    derived_facts = final_data.get("derivedFacts") if isinstance(final_data, dict) else {}
+    risk_message = next(
+        (message for message in mock_room.transcript if message.get("agentId") == "agent-risk-compliance"),
+        {},
+    )
+    risk_data = ((risk_message.get("payload") or {}).get("data") or {}) if isinstance(risk_message, dict) else {}
+    final_partner = final_data.get("partnerTool") if isinstance(final_data, dict) else {}
+    risk_partner = risk_data.get("partnerTool") if isinstance(risk_data, dict) else {}
     return {
-        "caseId": CASE_ID,
+        "caseId": packet.case["id"],
         "roomId": room_id,
         "evidenceDir": str(evidence_dir.relative_to(ROOT)),
         "messagesPosted": summary["messages"],
@@ -1011,12 +856,16 @@ def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
         "taskStatuses": summary["taskStatuses"],
         "auditEvents": summary["auditEvents"],
         "remoteWarnings": summary["remoteWarnings"],
-        "recordsReturnedBySuspiciousReads": forensics["metrics"]["recordsReturned"],
+        "recordsReturnedBySuspiciousReads": (
+            derived_facts.get("recordsReturnedToUnexpectedIps")
+            if isinstance(derived_facts, dict)
+            else None
+        ),
         "aimlapi": {
-            "model": aiml.model,
-            "baseUrl": aiml.base_url,
-            "policyGate": policy_gate.metadata(),
-            "bandLeaderSynthesis": synthesis.metadata(),
+            "model": os.environ.get("AIMLAPI_MODEL", "gpt-4o-mini"),
+            "baseUrl": os.environ.get("AIMLAPI_BASE_URL", "https://api.aimlapi.com/v1"),
+            "policyGate": risk_partner,
+            "bandLeaderSynthesis": final_partner,
         },
         "latestMessageIds": summary["latestMessageIds"],
     }
@@ -1025,7 +874,8 @@ def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run the evidence-driven Band workflow.")
     parser.add_argument("--app-url", default=os.environ.get("SENTINEL_RELAY_APP_URL", "http://127.0.0.1:3000"))
-    parser.add_argument("--evidence-dir", default=str(DEFAULT_EVIDENCE_DIR))
+    parser.add_argument("--incident-id", help="Synthetic incident id, e.g. INC-1042 or INC-1043.")
+    parser.add_argument("--evidence-dir", help="Path to a synthetic incident fixture directory.")
     parser.add_argument("--timeout", type=int, default=45)
     parser.add_argument("--skip-aimlapi", action="store_true", help="Use deterministic fallbacks instead of AI/ML API calls.")
     parser.add_argument("--require-aimlapi", action="store_true", help="Fail if AI/ML API cannot be called live.")

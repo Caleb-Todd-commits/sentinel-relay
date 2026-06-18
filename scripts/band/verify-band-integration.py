@@ -21,6 +21,8 @@ REQUIRED_FILES = [
     "docs/45_REAL_BAND_INTEGRATION.md",
     "docs/46_BAND_ENVIRONMENT_SETUP.md",
     "docs/47_REMOTE_AGENT_RUNBOOK.md",
+    "agents/common/collaboration_api_worker.py",
+    "agents/mock/verify_collaboration_api_worker.py",
 ]
 
 REQUIRED_SNIPPETS = {
@@ -40,6 +42,12 @@ REQUIRED_SNIPPETS = {
         "EventSource",
         "/stream",
         "server adapter",
+    ],
+    "agents/common/collaboration_api_worker.py": [
+        "SENTINEL_RELAY_AGENT_ROOM_ID",
+        "/api/collaboration/rooms",
+        "/api/collaboration/messages",
+        "select_next_actionable_message",
     ],
 }
 

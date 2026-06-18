@@ -47,6 +47,32 @@ SENTINEL_RELAY_AGENT_OFFLINE_MODE=true uv run python commander/main.py
 
 This prints the agent contract without connecting to Band.
 
+## Collaboration API Worker Mode
+
+Use this mode when you want the real Sentinel Relay agent logic to answer the
+room created by the app. The worker polls the app's local Band mirror and posts
+validated `AgentMessage` responses through the same server route that publishes
+to Band.
+
+```bash
+export SENTINEL_RELAY_AGENT_RUNTIME="collaboration-api"
+export SENTINEL_RELAY_APP_URL="http://127.0.0.1:3000"
+export SENTINEL_RELAY_AGENT_ROOM_ID="paste-room-id-from-war-room"
+```
+
+For one-turn debugging:
+
+```bash
+export SENTINEL_RELAY_AGENT_ONCE="true"
+```
+
+Required before this mode can post:
+
+- the web app is running,
+- the War Room has created a Band Mode room,
+- `BAND_PROVIDER_ENABLED=true` on the app server,
+- either real Band credentials are configured or `BAND_DRY_RUN=true`.
+
 ## Start Agents
 
 Use separate terminals:
@@ -59,6 +85,9 @@ uv run python code_review/main.py
 uv run python risk_compliance/main.py
 uv run python remediation/main.py
 ```
+
+The same commands work for both `thenvoi` runtime and `collaboration-api`
+runtime; choose the runtime with `SENTINEL_RELAY_AGENT_RUNTIME`.
 
 ## Demo Order
 
@@ -76,6 +105,11 @@ uv run python remediation/main.py
 ### Agent starts but does not respond
 
 Check that the message targeted the agent with a configured participant ID and handle. Band routes agent messages by explicit @mentions.
+
+In `collaboration-api` mode, also check `SENTINEL_RELAY_AGENT_ROOM_ID`, the app
+URL, and whether the inbound message is actionable. Specialists answer
+`task_assignment` messages addressed to them; Band Leader waits for all three
+specialist findings before assigning Risk & Compliance.
 
 ### Dashboard shows Band warnings
 

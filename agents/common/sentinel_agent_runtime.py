@@ -124,6 +124,29 @@ def run_agent_entrypoint(
     prompt_file: str,
     legacy_env_prefixes: tuple[str, ...] = (),
 ) -> None:
+    _load_dotenv_if_available()
+
+    if os.getenv("SENTINEL_RELAY_AGENT_OFFLINE_MODE") == "true":
+        print(f"{agent_name} offline contract: {describe_agent(sentinel_agent_id, agent_name, env_prefix)}")
+        print(f"Prompt file: {Path(prompt_file).resolve()}")
+        return
+
+    runtime = (os.getenv("SENTINEL_RELAY_AGENT_RUNTIME") or "thenvoi").strip().lower()
+    if runtime in {"collaboration-api", "api", "mirror"}:
+        from common.collaboration_api_worker import run_collaboration_api_worker_entrypoint
+
+        run_collaboration_api_worker_entrypoint(
+            sentinel_agent_id=sentinel_agent_id,
+            agent_name=agent_name,
+        )
+        return
+
+    if runtime != "thenvoi":
+        raise SystemExit(
+            f"Unknown SENTINEL_RELAY_AGENT_RUNTIME={runtime!r}. "
+            "Use 'thenvoi' or 'collaboration-api'."
+        )
+
     prompt_path = Path(prompt_file).resolve()
     asyncio.run(
         run_thenvoi_langgraph_agent(
