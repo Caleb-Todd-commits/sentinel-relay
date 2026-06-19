@@ -12,6 +12,7 @@ out/
 dist/
 build/
 .coverage/
+.python-runtime/
 
 # env/secrets
 .env

@@ -10,7 +10,7 @@
     "start": "corepack pnpm --filter sentinel-relay-web start",
     "lint": "corepack pnpm --filter sentinel-relay-web lint",
     "typecheck": "corepack pnpm --filter sentinel-relay-web typecheck",
-    "verify": "bash scripts/dev/verify-web-baseline.sh && python scripts/workflow/verify-mock-flow.py && python scripts/provider/verify-provider-layer.py && python scripts/report/verify-report-layer.py && python scripts/demo/verify-evidence-pack.py && python3 agents/mock/run_mock_flow.py && python3 agents/mock/verify_evidence_analysis.py && python3 agents/mock/verify_aimlapi_enrichment.py && python3 agents/mock/verify_agent_quality.py && python3 agents/mock/verify_fixture_generalization.py && python3 agents/mock/verify_turn_adapter.py && python3 agents/mock/verify_collaboration_api_worker.py",
+    "verify": "bash scripts/dev/verify-web-baseline.sh && python scripts/dev/verify-streamlined-ui.py && python scripts/workflow/verify-mock-flow.py && python scripts/provider/verify-provider-layer.py && python scripts/report/verify-report-layer.py && python scripts/demo/verify-evidence-pack.py && python scripts/demo/verify-agent-run-api.py && python3 agents/mock/run_mock_flow.py && python3 agents/mock/verify_evidence_analysis.py && python3 agents/mock/verify_aimlapi_enrichment.py && python3 agents/mock/verify_agent_quality.py && python3 agents/mock/verify_fixture_generalization.py && python3 agents/mock/verify_turn_adapter.py && python3 agents/mock/verify_collaboration_api_worker.py",
     "web:dev": "corepack pnpm --filter sentinel-relay-web dev",
     "web:build": "corepack pnpm --filter sentinel-relay-web build",
     "web:start": "corepack pnpm --filter sentinel-relay-web start",

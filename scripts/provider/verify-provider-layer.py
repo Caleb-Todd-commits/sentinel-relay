@@ -16,7 +16,8 @@ REQUIRED_FILES = [
     "apps/web/src/lib/collaboration/browserConfig.ts",
     "apps/web/src/lib/collaboration/syncMockWorkflowToProvider.ts",
     "apps/web/src/lib/workflow/useIncidentCollaborationWorkflow.ts",
-    "apps/web/src/components/war-room/ProviderStatusPanel.tsx",
+    "apps/web/src/components/LiveInvestigationWorkspace.tsx",
+    "apps/web/api/agent_run.py",
     "apps/web/src/app/api/collaboration/rooms/route.ts",
     "apps/web/src/app/api/collaboration/messages/route.ts",
     "apps/web/src/app/api/collaboration/approvals/route.ts",
@@ -51,8 +52,10 @@ REQUIRED_PATTERNS = {
         "NEXT_PUBLIC_COLLABORATION_MODE",
         "NEXT_PUBLIC_ENABLE_BAND_MODE",
     ],
-    "apps/web/src/app/war-room/page.tsx": [
-        "useIncidentCollaborationWorkflow",
+    "apps/web/src/components/LiveInvestigationWorkspace.tsx": [
+        "/api/agent_run",
+        "Live · Band + AI",
+        "Verified replay",
     ],
     ".env.example": [
         "NEXT_PUBLIC_COLLABORATION_MODE",
@@ -90,7 +93,7 @@ def main() -> None:
             fail(f"Forbidden public secret pattern {pattern!r} found in .env.example")
 
     print("[OK] Step 7 provider layer files are present.")
-    print("[OK] War Room uses provider-backed workflow hook.")
+    print("[OK] Three-panel workspace uses the Vercel agent runtime with replay fallback.")
     print("[OK] Mock provider exposes room/message/snapshot/approval methods.")
     print("[OK] Band provider is safely scaffolded behind server routes.")
     print("[OK] Env examples avoid public Band secret variables.")

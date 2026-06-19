@@ -107,7 +107,11 @@ def run_flow(
     *,
     incident_id: str | None = None,
     incident_dir: Path | str | None = None,
+    stop_after: int = EXPECTED_STEPS,
 ) -> MockBandRoom:
+    if stop_after < 1 or stop_after > EXPECTED_STEPS:
+        raise ValueError(f"stop_after must be between 1 and {EXPECTED_STEPS}")
+
     packet = load_incident(incident_dir=incident_dir, incident_id=incident_id)
     room = MockBandRoom(room_id=packet.case["roomId"])
     for agent_id, handle in HANDLES.items():
@@ -139,7 +143,7 @@ def run_flow(
         ("agent-commander", commander_turn, {"kind": "generate_report"}),
     ]
 
-    for sequence, (actor_id, handle_turn, task) in enumerate(steps, start=1):
+    for sequence, (actor_id, handle_turn, task) in enumerate(steps[:stop_after], start=1):
         ctx = _context(packet, room, actor_id, task, sequence)
         room.post(handle_turn, ctx)
 

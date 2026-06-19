@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/**/*.py": {
+      "maxDuration": 60,
+      "includeFiles": ".python-runtime/**",
+      "excludeFiles": "{.next/**,node_modules/**,../../agents/.venv/**,../../submission/**,../../outputs/**,../../docs/**,../../tests/**,../../.git/**}"
+    }
+  }
+}

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Static verification for Step 9 final report and audit replay files.
+"""Static verification for the report model and streamlined result panel.
 
 This is intentionally dependency-light so teammates can run it before node_modules
 are installed. It checks that the judge-facing report layer exists and that the
-sample incident still contains the audit/report records Step 9 expects.
+sample incident still contains the audit/report records the product expects.
 """
 from __future__ import annotations
 
@@ -16,16 +16,7 @@ REQUIRED_FILES = [
     "apps/web/src/app/report/page.tsx",
     "apps/web/src/lib/report/auditReportModel.ts",
     "apps/web/src/lib/report/index.ts",
-    "apps/web/src/components/report/ReportHero.tsx",
-    "apps/web/src/components/report/ReportMetricsGrid.tsx",
-    "apps/web/src/components/report/ReportSectionCard.tsx",
-    "apps/web/src/components/report/EvidenceMatrix.tsx",
-    "apps/web/src/components/report/AuditTrailTable.tsx",
-    "apps/web/src/components/report/ApprovalDecisionRecord.tsx",
-    "apps/web/src/components/report/RemediationReportCard.tsx",
-    "apps/web/src/components/report/ReportIntegrityPanel.tsx",
-    "apps/web/src/components/report/ReportExportPanel.tsx",
-    "apps/web/src/components/report/OpenQuestionsCard.tsx",
+    "apps/web/src/components/LiveInvestigationWorkspace.tsx",
     "docs/51_FINAL_REPORT_AND_AUDIT_REPLAY.md",
     "docs/52_REPORT_UI_COMPONENTS.md",
     "docs/53_REPORT_TRACEABILITY_MODEL.md",
@@ -42,14 +33,12 @@ REQUIRED_REPORT_TERMS = [
     "buildEvidenceMatrix",
 ]
 
-REQUIRED_PAGE_COMPONENTS = [
-    "ReportHero",
-    "ReportMetricsGrid",
-    "ReportIntegrityPanel",
-    "AuditTrailTable",
-    "EvidenceMatrix",
-    "RemediationReportCard",
-    "ReportExportPanel",
+REQUIRED_RESULT_TERMS = [
+    '"summary"',
+    '"evidence"',
+    '"audit"',
+    "finalReport",
+    "approvedActionScope",
 ]
 
 
@@ -78,7 +67,7 @@ def main() -> None:
         assert_file(path)
 
     assert_contains("apps/web/src/lib/report/auditReportModel.ts", REQUIRED_REPORT_TERMS)
-    assert_contains("apps/web/src/app/report/page.tsx", REQUIRED_PAGE_COMPONENTS)
+    assert_contains("apps/web/src/components/LiveInvestigationWorkspace.tsx", REQUIRED_RESULT_TERMS)
 
     incident = read_demo_json()
     report = incident.get("finalReport", {})
@@ -99,7 +88,7 @@ def main() -> None:
     if len(tasks) < 4:
         raise SystemExit("Demo incident should include at least 4 remediation tasks.")
 
-    print("Step 9 report layer verification passed.")
+    print("Streamlined report layer verification passed.")
     print(f"Report sections: {len(report.get('sections', []))}")
     print(f"Audit events: {len(report.get('auditTrailMessageIds', []))}")
     print(f"Evidence items: {len(evidence)}")
