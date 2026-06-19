@@ -4,6 +4,16 @@
 
 The project demonstrates a high-stakes enterprise workflow where specialized agents coordinate through Band to investigate evidence, challenge weak conclusions, request human approval, create remediation tasks, and generate an audit-ready final report.
 
+## Live Demo
+
+**Production:** https://sentinel-relay-alpha.vercel.app
+
+Start with the home page, then run the guided incident from `/war-room` to see the evidence handoff, Risk challenge, human approval gate, remediation plan, and audit-ready report.
+
+## Hackathon Submission Kit
+
+Final submission copy, narration, screenshots, demo video, and pitch deck live in [`submission/`](submission/README.md).
+
 ## Current Build Status
 
 Completed baseline steps:
@@ -204,6 +214,10 @@ docs/18_UI_COMPONENT_INVENTORY.md
 - Prefer one polished scenario over many weak scenarios.
 - Make collaboration visible, structured, and evidence-backed.
 - Do not remove the Risk challenge or human approval gate; those are the strongest proof moments.
+
+## License
+
+Sentinel Relay is available under the [MIT License](LICENSE).
 
 ## Current Build Step
 

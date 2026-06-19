@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentinel Relay cover</title>
+    <style>
+      * { box-sizing: border-box; }
+      html, body { width: 1600px; height: 900px; margin: 0; overflow: hidden; }
+      body {
+        color: #f8fbff;
+        font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        background: #061326 url("../../submission/cover-background.png") center / cover no-repeat;
+      }
+      .veil {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(90deg, rgba(4, 15, 31, .97) 0%, rgba(4, 15, 31, .90) 35%, rgba(4, 15, 31, .32) 56%, rgba(4, 15, 31, .04) 76%),
+          linear-gradient(180deg, rgba(4, 15, 31, .08), rgba(4, 15, 31, .22));
+      }
+      .rail { position: absolute; inset: 0 auto 0 0; width: 12px; background: #38bdf8; }
+      main { position: relative; width: 660px; padding: 80px 0 0 72px; }
+      .track { color: #fbbf24; font-weight: 800; letter-spacing: .12em; font-size: 20px; }
+      .brand { margin-top: 46px; color: #34d399; font-size: 27px; font-weight: 850; letter-spacing: .04em; }
+      h1 { margin: 54px 0 0; font-size: 63px; line-height: 1.04; letter-spacing: -.045em; }
+      .sub { margin: 56px 0 0; color: #b8c7dc; font-size: 25px; line-height: 1.55; }
+      .rule { width: 460px; height: 2px; margin-top: 66px; background: #37516d; }
+      .stats { margin-top: 32px; display: grid; gap: 15px; font-size: 21px; font-weight: 800; letter-spacing: .06em; }
+      .agents { color: #38bdf8; }
+      .response { color: #a78bfa; }
+    </style>
+  </head>
+  <body>
+    <div class="veil"></div>
+    <div class="rail"></div>
+    <main>
+      <div class="track">TRACK 3&nbsp;&nbsp;/&nbsp;&nbsp;HIGH-STAKES</div>
+      <div class="brand">SENTINEL RELAY</div>
+      <h1>Agents should<br />not agree<br />by default.</h1>
+      <p class="sub">Band-powered cybersecurity incident command<br />Evidence. Challenge. Human approval. Audit trail.</p>
+      <div class="rule"></div>
+      <div class="stats">
+        <div class="agents">7 SPECIALIST AGENTS</div>
+        <div class="response">1 ACCOUNTABLE RESPONSE</div>
+      </div>
+    </main>
+  </body>
+</html>

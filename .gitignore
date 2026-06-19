@@ -33,3 +33,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 .vercel
+
+# generated submission workspaces
+/outputs/
+/submission-home.png
+/submission/cover-background.png
+/submission/cover-raw.png

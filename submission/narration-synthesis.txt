@@ -1,0 +1,15 @@
+Security incidents are not single-prompt problems. Investigation, engineering review, risk judgment, approval, remediation, and reporting all need different specialists—and every handoff can lose context. [[slnc 3000]]
+
+Sentinel Relay is a Band-powered incident command center. Specialized agents coordinate in one shared room, exchange structured evidence, challenge weak conclusions, request human approval, and preserve an audit trail. [[slnc 3000]]
+
+The Band Leader opens incident I N C ten forty-two and assigns Forensics, Code Review, and Threat Intelligence. Their findings are not isolated model outputs. Each message carries role identity, evidence references, task state, and explicit routing through the shared Band workflow. [[slnc 3000]]
+
+The agents correlate synthetic A P I logs, authentication events, code changes, and policy evidence. Forensics confirms unauthorized reads. Code Review identifies the unsafe fallback credential path. Threat Intelligence assesses exploitation likelihood without inventing attribution. [[slnc 3000]]
+
+Then the system does something most agent demos avoid: it disagrees. Risk and Compliance challenges the phrase, confirmed exfiltration. The evidence proves unauthorized access, but not downstream misuse. The workflow holds notification and blocks high-impact action until the decision is properly scoped. [[slnc 3000]]
+
+A human Security Lead approves issuer-first containment: revoke the token, rotate secrets, and fix the unsafe path. Customer notification is explicitly not approved until record scope is verified. Approval is part of the shared state—not a checkbox added afterward. [[slnc 3000]]
+
+Remediation receives the approved scope, records the control plan, and closes the handoff. Sentinel Relay generates an audit-ready report from the collaboration trail: messages, evidence, challenges, approval, and tasks. [[slnc 3000]]
+
+Without Band, these are disconnected assistants. With Band, they become an accountable response team that carries context forward, challenges itself, keeps humans in control, and leaves behind a report the company can trust.
