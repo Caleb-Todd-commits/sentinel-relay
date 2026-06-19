@@ -5,16 +5,16 @@ import { mockAgents, mockIncidentCase } from "@/lib/mockIncident";
 
 const differentiators = [
   {
-    title: "Band as the command layer",
-    body: "Agents are designed to pass structured context, evidence, assignments, challenges, and approvals through Band rather than acting as isolated chatbots.",
+    title: "Structured coordination",
+    body: "Agents pass evidence, challenges, and approvals through a shared incident room — not isolated chat sessions.",
   },
   {
-    title: "High-stakes workflow",
-    body: "The demo focuses on cyber incident response where traceability, review, and escalation matter more than raw automation speed.",
+    title: "Human approval gate",
+    body: "High-impact containment actions are blocked until a human security lead explicitly approves scope.",
   },
   {
-    title: "Judge-readable product",
-    body: "The War Room makes every handoff visible: who found evidence, who challenged it, who approved action, and what changed because of it.",
+    title: "Full audit trail",
+    body: "Every handoff, challenge, and decision becomes a replayable record — who found what, who challenged it, what was approved.",
   },
 ];
 
@@ -26,18 +26,17 @@ export default function HomePage() {
         <div className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
           <div className="space-y-7">
             <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">Band Hackathon</Badge>
-              <Badge tone="warning">Track 3 · regulated/high-stakes</Badge>
+              <Badge tone="accent">Multi-agent incident response</Badge>
               <Badge>{mockAgents.length} specialist agents</Badge>
             </div>
             <div className="space-y-4">
               <h1 className="max-w-4xl text-5xl font-bold tracking-tight md:text-6xl">Sentinel Relay</h1>
               <p className="max-w-3xl text-lg leading-8 text-slate-300">
-                A multi-agent cybersecurity incident command center where specialized agents coordinate through Band, exchange structured evidence, challenge weak conclusions, request human approval, and generate audit-ready incident reports.
+                Specialized agents coordinate through Band to investigate a security incident — exchanging evidence, challenging weak conclusions, and requesting human approval before any high-impact action is taken.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/demo" className="relay-button-primary">Start demo incident</Link>
+              <Link href="/scenarios" className="relay-button-primary">Run a live scenario</Link>
               <Link href="/war-room" className="relay-button-secondary">Open War Room</Link>
               <Link href="/report" className="relay-button-secondary">View report</Link>
             </div>
@@ -52,28 +51,28 @@ export default function HomePage() {
           </div>
           <aside className="relay-card space-y-5">
             <div>
-              <Badge tone="warning">Current demo case</Badge>
+              <Badge tone="warning">Active scenario</Badge>
               <h2 className="mt-3 text-2xl font-bold">{mockIncidentCase.title}</h2>
               <p className="mt-3 text-sm leading-6 text-slate-300">{mockIncidentCase.summary}</p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <div className="relay-card-compact">
-                <p className="relay-label">Affected system</p>
-                <p className="mt-2 font-semibold">{mockIncidentCase.affectedSystem}</p>
+            <dl className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <dt className="relay-label">Affected system</dt>
+                <dd className="mt-1.5 font-semibold text-slate-100">{mockIncidentCase.affectedSystem}</dd>
               </div>
-              <div className="relay-card-compact">
-                <p className="relay-label">Decision model</p>
-                <p className="mt-2 font-semibold">Human approval gate</p>
+              <div>
+                <dt className="relay-label">Decision model</dt>
+                <dd className="mt-1.5 font-semibold text-slate-100">Human approval gate</dd>
               </div>
-              <div className="relay-card-compact">
-                <p className="relay-label">Visible proof</p>
-                <p className="mt-2 font-semibold">Agent disagreement</p>
+              <div>
+                <dt className="relay-label">Agent behavior</dt>
+                <dd className="mt-1.5 font-semibold text-slate-100">Agents challenge each other</dd>
               </div>
-              <div className="relay-card-compact">
-                <p className="relay-label">Final artifact</p>
-                <p className="mt-2 font-semibold">Audit report</p>
+              <div>
+                <dt className="relay-label">Final artifact</dt>
+                <dd className="mt-1.5 font-semibold text-slate-100">Audit report</dd>
               </div>
-            </div>
+            </dl>
           </aside>
         </div>
       </section>

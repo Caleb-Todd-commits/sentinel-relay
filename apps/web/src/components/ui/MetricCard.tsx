@@ -1,5 +1,3 @@
-import { Badge } from "./Badge";
-
 type MetricCardProps = {
   label: string;
   value: string;
@@ -7,13 +5,18 @@ type MetricCardProps = {
   tone?: "neutral" | "success" | "warning" | "danger" | "accent";
 };
 
+const toneBorder: Record<NonNullable<MetricCardProps["tone"]>, string> = {
+  neutral: "border-slate-700/80",
+  success: "border-emerald-400/30",
+  warning: "border-amber-400/30",
+  danger: "border-red-400/30",
+  accent: "border-sky-400/30",
+};
+
 export function MetricCard({ label, value, detail, tone = "neutral" }: MetricCardProps) {
   return (
-    <div className="relay-card-compact space-y-2">
-      <div className="flex items-center justify-between gap-3">
-        <p className="relay-label">{label}</p>
-        <Badge tone={tone}>{tone}</Badge>
-      </div>
+    <div className={`relay-card-compact space-y-2 ${toneBorder[tone]}`}>
+      <p className="relay-label">{label}</p>
       <p className="text-2xl font-bold tracking-tight">{value}</p>
       {detail ? <p className="relay-muted">{detail}</p> : null}
     </div>

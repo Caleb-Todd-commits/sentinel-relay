@@ -237,7 +237,7 @@ function buildMetrics(report: FinalReport, messages: AgentMessage[], evidence: E
     {
       label: "Audit trail",
       value: `${report.auditTrailMessageIds.length} events`,
-      detail: "Structured Band-style records included in final report.",
+      detail: "Ordered coordination events from the shared incident room, included in the final report.",
       tone: "accent",
     },
     {
@@ -305,11 +305,11 @@ export function buildAuditReportModel(incident: DemoIncident): AuditReportModel 
     generatedByName: agentLabel(incident.agents, incident.finalReport.generatedByAgentId),
     primaryLimitations: collectPrimaryLimitations(incident.evidence, incident.finalReport),
     exportChecklist: [
-      "Confirm live Band room ID and participant IDs are attached before production use.",
       "Attach raw logs, diff artifact, and incident policy snapshot to the case record.",
-      "Confirm exact customer record scope before external notification.",
-      "Have legal/comms review any customer-facing message before release.",
+      "Confirm exact customer record scope before any external notification.",
+      "Have legal and comms review any customer-facing message before release.",
       "Close remediation tasks only after acceptance criteria and test plan pass.",
+      "Archive the coordination room record alongside the audit report.",
     ],
   };
 }

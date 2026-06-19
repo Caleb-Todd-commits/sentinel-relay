@@ -194,6 +194,6 @@ export function deriveWorkflowViewModel(stepIndexInput: number): WorkflowViewMod
     canApprove: stepIndex === 7,
     canReplay: stepIndex > 0,
     canComplete: stepIndex < totalSteps,
-    modeLabel: "Mock Mode · Band contract replay",
+    modeLabel: "Mock Mode",
   };
 }

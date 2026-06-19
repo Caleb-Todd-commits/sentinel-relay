@@ -48,12 +48,12 @@ export function CriticalMomentCard({ workflow }: { workflow: WorkflowViewModel }
     <section className="relay-card relay-critical-card" aria-labelledby="critical-moment-heading">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <Badge tone={challengeReached ? "warning" : "neutral"}>Winning demo moment</Badge>
+          <Badge tone={challengeReached ? "warning" : "neutral"}>Multi-agent coordination</Badge>
           <h2 id="critical-moment-heading" className="mt-3 text-lg font-semibold">
             Challenge → approval → constrained action
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
-            This is the moment that proves multi-agent coordination: one agent limits another agent&apos;s conclusion, the Band Leader escalates, and remediation only acts inside the approved scope.
+            One agent limits another agent&apos;s conclusion, the Band Leader escalates to a human decision, and remediation only acts inside the explicitly approved scope.
           </p>
         </div>
         <Badge tone={approvalReached ? "success" : challengeReached ? "warning" : "neutral"}>

@@ -4,12 +4,12 @@ import { Badge } from "@/components/ui/Badge";
 import { mockAgents, mockEvidence, mockIncidentCase, mockMessages } from "@/lib/mockIncident";
 
 const flow = [
-  "Band Leader opens a Band incident room.",
-  "Forensics and Code Review agents collect evidence.",
-  "Threat Intel verifies confidence without overclaiming.",
+  "Band Leader opens a shared incident room.",
+  "Forensics and Code Review agents collect and post evidence.",
+  "Threat Intel assesses confidence without overclaiming.",
   "Risk & Compliance challenges the breach classification.",
-  "A human security lead approves containment.",
-  "Remediation tasks and final audit report are generated.",
+  "A human security lead approves containment scope.",
+  "Remediation tasks and a final audit report are generated.",
 ];
 
 export default function DemoPage() {
@@ -19,45 +19,71 @@ export default function DemoPage() {
       <section className="relay-shell space-y-6 py-8">
         <div className="relay-card space-y-4">
           <div className="flex flex-wrap gap-2">
-            <Badge tone="warning">Sample incident</Badge>
-            <Badge>Mock Mode</Badge>
-            <Badge tone="accent">Band-ready architecture</Badge>
+            <Badge tone="warning">Active scenario</Badge>
+            <Badge tone="accent">Band-powered coordination</Badge>
           </div>
           <h1 className="text-3xl font-bold tracking-tight md:text-4xl">{mockIncidentCase.title}</h1>
           <p className="max-w-4xl text-sm leading-6 text-slate-300 md:text-base">{mockIncidentCase.summary}</p>
-          <div className="grid gap-3 md:grid-cols-4">
-            <div className="relay-card-compact"><p className="relay-label">Messages</p><p className="mt-2 text-2xl font-bold">{mockMessages.length}</p></div>
-            <div className="relay-card-compact"><p className="relay-label">Agents</p><p className="mt-2 text-2xl font-bold">{mockAgents.length}</p></div>
-            <div className="relay-card-compact"><p className="relay-label">Evidence</p><p className="mt-2 text-2xl font-bold">{mockEvidence.length}</p></div>
-            <div className="relay-card-compact"><p className="relay-label">Core proof</p><p className="mt-2 text-lg font-bold">Challenge + approval</p></div>
-          </div>
+          <dl className="grid gap-4 md:grid-cols-4">
+            <div>
+              <dt className="relay-label">Messages</dt>
+              <dd className="mt-1.5 text-2xl font-bold text-slate-100">{mockMessages.length}</dd>
+            </div>
+            <div>
+              <dt className="relay-label">Agents</dt>
+              <dd className="mt-1.5 text-2xl font-bold text-slate-100">{mockAgents.length}</dd>
+            </div>
+            <div>
+              <dt className="relay-label">Evidence items</dt>
+              <dd className="mt-1.5 text-2xl font-bold text-slate-100">{mockEvidence.length}</dd>
+            </div>
+            <div>
+              <dt className="relay-label">Core proof</dt>
+              <dd className="mt-1.5 text-lg font-bold text-slate-100">Challenge + approval</dd>
+            </div>
+          </dl>
           <div className="flex flex-wrap gap-3 pt-2">
-            <Link href="/war-room" className="relay-button-primary">Launch War Room</Link>
-            <Link href="/report" className="relay-button-secondary">Preview Final Report</Link>
+            <Link href="/war-room" className="relay-button-primary">Open War Room</Link>
+            <Link href="/report" className="relay-button-secondary">View Final Report</Link>
           </div>
         </div>
 
-        <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-          <section className="relay-card">
-            <h2 className="font-semibold">Demo flow</h2>
-            <ol className="mt-4 space-y-3">
-              {flow.map((item, index) => (
-                <li key={item} className="flex gap-3 rounded-xl border border-slate-700/80 bg-slate-950/25 p-3">
-                  <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-400/10 text-sm font-bold text-sky-100">{index + 1}</span>
-                  <span className="text-sm leading-6 text-slate-300">{item}</span>
-                </li>
-              ))}
-            </ol>
-          </section>
-          <section className="relay-card">
-            <h2 className="font-semibold">Why this baseline matters</h2>
-            <div className="mt-4 space-y-3 text-sm leading-6 text-slate-300">
-              <p>The baseline is intentionally demoable before real APIs are connected. That protects the team from losing the pitch because an external integration fails during a live judge review.</p>
-              <p>The code structure is already shaped around the final product: structured messages, provider abstraction, agent roster, evidence references, approval gates, remediation tasks, and final report output.</p>
-              <p>When Band integration is added, the UI should not need to be rebuilt. The mock collaboration stream is the contract that the real Band provider must satisfy.</p>
+        <section className="relay-card">
+          <h2 className="font-semibold">What happens in the War Room</h2>
+          <ol className="mt-4 space-y-3">
+            {flow.map((item, index) => (
+              <li key={item} className="flex gap-3">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-sky-400/10 text-sm font-bold text-sky-100">{index + 1}</span>
+                <span className="text-sm leading-6 text-slate-300 pt-0.5">{item}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="relay-card relay-card-highlight space-y-4">
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <Badge tone="accent">Live agents</Badge>
+              <h2 className="mt-3 text-lg font-semibold">Run a second incident — different evidence, different findings</h2>
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">
+                A second scenario (INC-1043) covers an IAM trust-policy regression that exposed a GitHub OIDC token — a completely different root cause, different record count, and different containment steps. The same six agents investigate it live from the evidence files.
+              </p>
             </div>
-          </section>
-        </div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2 text-sm">
+            <div className="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
+              <p className="relay-label">INC-1042 — this scenario</p>
+              <p className="mt-1.5 font-semibold text-slate-100">Fallback API token · 10,227 records</p>
+            </div>
+            <div className="rounded-xl border border-slate-700/70 bg-slate-950/25 p-3">
+              <p className="relay-label">INC-1043 — alternate scenario</p>
+              <p className="mt-1.5 font-semibold text-slate-100">OIDC trust regression · 3,636 records</p>
+            </div>
+          </div>
+          <Link href="/scenarios" className="relay-button-primary inline-flex">
+            Run live scenarios →
+          </Link>
+        </section>
       </section>
     </main>
   );

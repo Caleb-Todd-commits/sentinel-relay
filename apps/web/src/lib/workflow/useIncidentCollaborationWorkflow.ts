@@ -144,7 +144,7 @@ export function useIncidentCollaborationWorkflow(initialStep = 0) {
   return {
     ...baseWorkflow,
     messages: shouldUseProviderMessages ? providerMessages : baseWorkflow.messages,
-    modeLabel: `${providerHealth.label} · ${syncStatus}`,
+    modeLabel: providerHealth.label,
     collaboration,
     actions: {
       start,

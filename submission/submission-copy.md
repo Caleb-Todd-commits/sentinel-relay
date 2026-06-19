@@ -18,7 +18,7 @@ Security incidents are not single-prompt problems. Investigation, engineering re
 
 Sentinel Relay turns that process into a visible multi-agent workflow. A Band Leader opens a shared incident room and delegates work to Forensics, Code Review, Threat Intelligence, Risk & Compliance, and Remediation agents. Each specialist posts structured findings and evidence references into Band. Risk & Compliance can challenge unsupported claims, and high-impact containment remains blocked until a human Security Lead approves a precisely scoped action.
 
-Band is the coordination layer—not a notification wrapper. It carries agent identity, task handoffs, shared room context, challenges, approval state, remediation updates, and the collaboration record used to generate the final report. The judge-facing War Room makes that coordination legible in seconds through a message stream, evidence board, collaboration map, decision state, and audit replay.
+Band is the coordination layer—not a notification wrapper. It carries agent identity, task handoffs, shared room context, challenges, approval state, remediation updates, and the collaboration record used to generate the final report. The War Room makes that coordination legible in seconds through a message stream, evidence board, collaboration map, decision state, and audit replay.
 
 The demo investigates a synthetic API-key exposure after a Friday deployment. Agents correlate API access, authentication events, code changes, incident policy, and customer-impact evidence. They distinguish proven unauthorized access from unsupported exfiltration claims, request approval for issuer-first containment, and preserve the decision boundary that customer notification remains held pending scope verification.
 

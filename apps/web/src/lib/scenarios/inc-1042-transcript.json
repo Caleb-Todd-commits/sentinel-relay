@@ -1,0 +1,1438 @@
+[
+  {
+    "id": "msg-inc-1042-001",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 1,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "case_opened",
+    "title": "INC-1042 opened: treat as active credential compromise (svc-payments-api)",
+    "summary": "Opened the Band room for INC-1042 and framing it as an active credential compromise until proven otherwise: A suspicious API usage spike appeared shortly after a Friday deploy. Specialist agents must determine whether a token was exposed, whether customer data was accessed, what requires human approval, and what remediation should happen next. Registered forensics, threat intel, code review, risk/compliance, and remediation. Working hypothesis to confirm/refute: ALLOW_FALLBACK_TOKEN fail-open path + committed .env.release exposed a credential for subject svc-payments-api and it is being used from external sources.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-forensics",
+      "agent-threat-intel",
+      "agent-code-review",
+      "agent-risk-compliance",
+      "agent-remediation"
+    ],
+    "createdAt": "2026-06-12T21:08:11Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Creates the shared coordination space and the case file every specialist anchors to.",
+    "nextAction": "Assign evidence-review tasks; forensics establishes the exposure window first.",
+    "correlationId": "trace-inc-1042-001",
+    "payload": {
+      "kind": "case_opened",
+      "data": {
+        "roomCreated": true,
+        "registeredAgentIds": [
+          "agent-forensics",
+          "agent-threat-intel",
+          "agent-code-review",
+          "agent-risk-compliance",
+          "agent-remediation"
+        ],
+        "caseFile": {
+          "detectionSource": "Customer Records API usage spike after the Friday deploy",
+          "secretType": "application service bearer token (fallback for subject svc-payments-api)",
+          "affectedIdentity": "svc-payments-api (reaches customer summary, bulk export, payment-methods)",
+          "repoBranch": "to confirm with repo owner (not in evidence packet)",
+          "introducingCommitSha": "to confirm \u2014 diff blobs 61bf8b2->e248d7a",
+          "deployImageId": "release-9814 (ci-release-role) / Lambda customer-records-api",
+          "owner": "Human Security Lead",
+          "earliestExposureTime": "2026-06-12T20:47:11Z (deploy enabled ALLOW_FALLBACK_TOKEN)",
+          "firstObservedUnauthorizedUse": "2026-06-12T21:04:59Z",
+          "issuerVerifiedInactiveAt": "2026-06-12T21:12:02Z",
+          "stillLive": "to be answered by issuer logs; do not assume rotation == dead",
+          "logsToPreserve": [
+            "ev-api-gateway-logs",
+            "ev-auth-events",
+            "ev-cloudtrail-events",
+            "ev-secret-scan",
+            "ev-code-diff",
+            "Lambda config history"
+          ]
+        },
+        "containmentDoctrine": "Issuer-first: revoke/rotate at the provider before code/history cleanup, which can recontaminate from old clones."
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-002",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 2,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Forensics",
+    "summary": "Assigning Forensics to: Quantify exposure from gateway, auth, and CloudTrail logs. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-forensics"
+    ],
+    "createdAt": "2026-06-12T21:08:22Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Forensics.",
+    "correlationId": "trace-inc-1042-002",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-forensics",
+        "assignedToAgentId": "agent-forensics",
+        "objective": "Quantify exposure from gateway, auth, and CloudTrail logs.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-003",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 3,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Code Review",
+    "summary": "Assigning Code Review to: Identify the deploy change that introduced the exposure path. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-code-review"
+    ],
+    "createdAt": "2026-06-12T21:08:33Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Code Review.",
+    "correlationId": "trace-inc-1042-003",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-code-review",
+        "assignedToAgentId": "agent-code-review",
+        "objective": "Identify the deploy change that introduced the exposure path.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-004",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 4,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Threat Intel",
+    "summary": "Assigning Threat Intel to: Assess the external source IPs without overstating attribution. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-threat-intel"
+    ],
+    "createdAt": "2026-06-12T21:08:44Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Threat Intel.",
+    "correlationId": "trace-inc-1042-004",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-threat-intel",
+        "assignedToAgentId": "agent-threat-intel",
+        "objective": "Assess the external source IPs without overstating attribution.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-005",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 5,
+    "agentId": "agent-forensics",
+    "agentName": "Forensics Agent",
+    "type": "finding",
+    "title": "svc-payments-api fallback token: 10,227 records read across a verified-closed window",
+    "summary": "Treating this as an active credential compromise: the static fallback bearer token for subject svc-payments-api was loaded after a Secrets Manager throttle (2026-06-12T20:55:38Z) and then used by 2 off-baseline external IPs (198.51.100.188, 203.0.113.77) to read 10,227 customer records (bulk export + payment-methods) until the issuer verified the token dead at 2026-06-12T21:12:02Z. The exposure window opened at the 2026-06-12T20:47:11Z deploy, not at first abuse; rotation started 2026-06-12T21:11:38Z but the window only closes on the issuer deny. Records were returned to unauthorized sources, but actor identity and any downstream reuse are unproven from logs alone.",
+    "confidence": 0.86,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-cloudtrail-events"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:08:55Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Quantifies confirmed unauthorized data-plane access and fixes the exposure window for the legal clock, but does not by itself prove actor identity or downstream misuse.",
+    "nextAction": "Risk & Compliance should classify severity and the breach-notification posture; Code Review should hunt for sibling credentials that survive rotation. Do not yet claim confirmed exfiltration.",
+    "correlationId": "trace-inc-1042-005",
+    "payload": {
+      "kind": "finding",
+      "data": {
+        "findings": [
+          {
+            "claim": "Exposure window opened with the Friday deploy at 2026-06-12T20:47:11Z and is issuer-verified closed at 2026-06-12T21:12:02Z; rotation alone did not close it \u2014 the issuer deny did.",
+            "evidenceRef": "ev-cloudtrail-events",
+            "source": "cloudtrail_events.jsonl",
+            "observation": "UpdateFunctionConfiguration set ALLOW_FALLBACK_TOKEN=true at 2026-06-12T20:47:11Z (arn:aws:sts::111122223333:assumed-role/ci-release-role/release-9814); Secrets Manager GetSecretValue threw ThrottlingException at 2026-06-12T20:55:36Z, forcing the fallback path."
+          },
+          {
+            "claim": "Compromised principal is the service identity svc-payments-api via its STATIC fallback bearer token svc-payments-fallback-redacted, not an AWS IAM key \u2014 blast radius is whatever that subject can call on Customer Records.",
+            "evidenceRef": "ev-auth-events",
+            "source": "auth_events.jsonl",
+            "observation": "fallback_token_loaded at 2026-06-12T20:55:38Z (signals: secret_manager_timeout, fallback_enabled); same subject normally served by svc-payments-prod-v2."
+          },
+          {
+            "claim": "Token was not merely exposed but actively USED by 2 off-baseline external sources, including enumeration-then-export and a retry after rotation.",
+            "evidenceRef": "ev-auth-events",
+            "source": "auth_events.jsonl",
+            "observation": "198.51.100.188, 203.0.113.77 used the fallback token starting at 2026-06-12T21:04:59Z. One source retried at 2026-06-12T21:12:02Z and was DENIED (token_revoked, post_rotation_attempt)."
+          },
+          {
+            "claim": "Gateway data-plane logs quantify 10,227 customer records returned to unauthorized IPs before rotation; benign prod worker traffic is excluded.",
+            "evidenceRef": "ev-api-gateway-logs",
+            "source": "api_gateway_logs.jsonl",
+            "observation": "5 successful fallback-token responses returned records from eu-west-3/us-west-2; denied scopes: /v1/billing/events/export. Post-rotation export was denied at 2026-06-12T21:12:02Z."
+          }
+        ],
+        "compromisedIdentity": {
+          "subject": "svc-payments-api",
+          "credentialType": "static application service bearer token (fallback)",
+          "credentialLabel": "svc-payments-fallback-redacted",
+          "notAnIamOrCloudKey": true,
+          "reachableScope": [
+            "/v1/customers/summary",
+            "/v1/customers/export (bulk)",
+            "/v1/customers/{id}/payment-methods (sensitive)"
+          ],
+          "deniedScope": [
+            "/v1/billing/events/export (403 \u2014 outside this subject's grant)"
+          ]
+        },
+        "exposureWindow": {
+          "openedAt": "2026-06-12T20:47:11Z",
+          "openedBy": "deploy: UpdateFunctionConfiguration set ALLOW_FALLBACK_TOKEN=true (release-9814)",
+          "fallbackFirstLoadedAt": "2026-06-12T20:55:38Z",
+          "credentialFirstObservedAt": "2026-06-12T20:55:38Z",
+          "firstUnauthorizedUseAt": "2026-06-12T21:04:59Z",
+          "rotationStartedAt": "2026-06-12T21:11:38Z",
+          "issuerVerifiedInactiveAt": "2026-06-12T21:12:02Z",
+          "status": "verified_closed",
+          "note": "A later code deletion would NOT close the window; only the issuer-side deny does."
+        },
+        "recordsExportedEstimate": 10227,
+        "exportBreakdown": [
+          {
+            "requestId": "req-1042-0002",
+            "ip": "203.0.113.77",
+            "endpoint": "/v1/customers/export?segment=all&limit=5000",
+            "records": 5000,
+            "status": 200
+          },
+          {
+            "requestId": "req-1042-0003",
+            "ip": "203.0.113.77",
+            "endpoint": "/v1/customers/export?segment=all&cursor=5000",
+            "records": 5000,
+            "status": 200
+          },
+          {
+            "requestId": "req-1042-0004",
+            "ip": "203.0.113.77",
+            "endpoint": "/v1/customers/42/payment-methods",
+            "records": 4,
+            "status": 200
+          },
+          {
+            "requestId": "req-1042-0005",
+            "ip": "203.0.113.77",
+            "endpoint": "/v1/customers/2871/payment-methods",
+            "records": 4,
+            "status": 200
+          },
+          {
+            "requestId": "req-1042-0008",
+            "ip": "198.51.100.188",
+            "endpoint": "/v1/customers/export?segment=vip",
+            "records": 219,
+            "status": 200
+          }
+        ],
+        "exposedVsUsed": {
+          "exposed": "Fallback token shipped in .env.release and live behind ALLOW_FALLBACK_TOKEN.",
+          "actuallyUsed": "Confirmed used: new_ip_for_token + impossible_travel + user_agent_changed, then bulk_access_pattern and a VIP canary_probe->export sequence.",
+          "offBaseline": "curl/8.1.2, python-requests/2.31 from eu-west-3/us-west-2 vs baseline IP(s) 198.51.100.24."
+        },
+        "loggingGap": "Control-plane (CloudTrail) and data-plane (API gateway) logging are separate. Here the gateway data-plane captured records_returned, so we can quantify what was read. If data-plane logging had been off, CloudTrail would still show the throttle, fallback load, and Lambda invokes \u2014 i.e. suspicious admin activity \u2014 but we could NOT prove customer records were actually returned. Absence of data-plane logs is not evidence of no access.",
+        "chainOfCustody": {
+          "preservedEvidence": [
+            "ev-api-gateway-logs",
+            "ev-auth-events",
+            "ev-cloudtrail-events"
+          ],
+          "alsoPreserve": [
+            "ev-secret-scan",
+            "ev-code-diff",
+            "Lambda config history for customer-records-api"
+          ],
+          "collectionNote": "Evidence IDs are immutable references collected with deterministic timestamps; do not mutate source logs."
+        },
+        "limitations": [
+          "No actor attribution from logs alone (see Threat Intel).",
+          "Downstream reuse, resale, or caching of the 10,227 records is unverified.",
+          "Exact customer-row identities behind the export counts still need data mapping."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "unauthorizedSourceIps": [
+            "198.51.100.188",
+            "203.0.113.77"
+          ],
+          "unauthorizedSuccessCount": 5,
+          "bulkExportRecords": 10219,
+          "vipExportRecords": 219
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-006",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 6,
+    "agentId": "agent-code-review",
+    "agentName": "Code Review Agent",
+    "type": "finding",
+    "title": "Root cause: Friday deploy added a fallback token path + committed .env.release; a sibling credential survives rotation",
+    "summary": "The deploy diff touched services/customer-records/src/auth/service-token.ts, services/customer-records/.env.release and changed getServiceToken() to fail OPEN to a static env fallback (PAYMENTS_API_FALLBACK_TOKEN) behind ALLOW_FALLBACK_TOKEN. A new committed .env.release shipped that token plus CUSTOMER_EXPORT_ENABLED=true. The scanner flagged 1 high-severity unresolved finding(s) and the release still went out. Critically, subject svc-payments-api now has two credentials \u2014 the Secrets Manager primary and this static fallback \u2014 so rotating one leaves the other alive: containment must hit BOTH issuers and disable the fallback path, not just rotate the token.",
+    "confidence": 0.91,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-code-diff",
+      "ev-secret-scan"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:06Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Establishes the root-cause change AND warns that single-credential rotation would leave a sibling path usable \u2014 the classic incomplete-containment failure.",
+    "nextAction": "Remediation must disable the ALLOW_FALLBACK_TOKEN path, remove .env.release, invalidate the fallback at its issuer, AND confirm no other clone/CI/image still carries it; add a deploy-time secret-scan gate.",
+    "correlationId": "trace-inc-1042-006",
+    "payload": {
+      "kind": "finding",
+      "data": {
+        "findings": [
+          {
+            "claim": "Introducing change: the Friday deploy added a fallback-token code path in getServiceToken() guarded by ALLOW_FALLBACK_TOKEN.",
+            "evidenceRef": "ev-code-diff",
+            "source": "git_diff.patch",
+            "observation": "services/customer-records/src/auth/service-token.ts (blob 61bf8b2->e248d7a): on Secrets Manager failure it now returns process.env.PAYMENTS_API_FALLBACK_TOKEN when ALLOW_FALLBACK_TOKEN === 'true' instead of failing closed."
+          },
+          {
+            "claim": "Secret sprawl: a NEW committed .env.release ships the fallback token variable and turns the path on in production.",
+            "evidenceRef": "ev-secret-scan",
+            "source": "secret_scan.json",
+            "observation": "secret-1042-001 reported 1 unresolved high finding(s) at services/customer-records/.env.release:3; the build proceeded despite the unresolved high finding, so push/secret protection was effectively bypassed or absent."
+          },
+          {
+            "claim": "SIBLING-CREDENTIAL RISK: subject svc-payments-api is now authenticated by TWO credentials \u2014 the Secrets Manager primary (prod/payments/customer-records/token, svc-payments-prod-v2) and the static env fallback (PAYMENTS_API_FALLBACK_TOKEN). Rotating one does NOT invalidate the other.",
+            "evidenceRef": "ev-code-diff",
+            "source": "git_diff.patch + cloudtrail_events.jsonl",
+            "observation": "The fallback is a separate static secret, not a version of the managed secret, so a Secrets Manager rotation leaves the fallback usable, and disabling the fallback leaves the managed secret untouched. Both must be addressed independently at their issuers."
+          },
+          {
+            "claim": "Second risky flag: .env.release also sets CUSTOMER_EXPORT_ENABLED=true, widening the blast radius to the bulk export endpoints the attacker hit.",
+            "evidenceRef": "ev-code-diff",
+            "source": "git_diff.patch",
+            "observation": "The same release file that introduced the fallback token also enabled the customer export capability used for the 5000-row pulls."
+          }
+        ],
+        "rootCauseChange": "ALLOW_FALLBACK_TOKEN fail-open path + committed .env.release (token + CUSTOMER_EXPORT_ENABLED)",
+        "introducedBy": {
+          "release": "release-9814",
+          "changedFile": "services/customer-records/src/auth/service-token.ts",
+          "blob": "61bf8b2->e248d7a",
+          "newFile": "services/customer-records/.env.release",
+          "commitSha": "not present in evidence packet \u2014 confirm with repo owner"
+        },
+        "pushProtection": "Bypassed or absent: secret-1042-001 was high-severity and unresolved, yet the release shipped.",
+        "siblingCredentialHunt": {
+          "principal": "svc-payments-api",
+          "credentialsAuthenticatingPrincipal": [
+            {
+              "name": "svc-payments-prod-v2",
+              "issuer": "AWS Secrets Manager",
+              "ref": "prod/payments/customer-records/token",
+              "rotatingInvalidatesFallback": false
+            },
+            {
+              "name": "svc-payments-fallback-redacted",
+              "issuer": "static env (PAYMENTS_API_FALLBACK_TOKEN)",
+              "ref": ".env.release",
+              "rotatingInvalidatesPrimary": false
+            }
+          ],
+          "legacyOrFallbackPaths": [
+            "ALLOW_FALLBACK_TOKEN fail-open branch in getServiceToken()"
+          ],
+          "mustAlsoCheck": [
+            "Other services / repos / .env files referencing PAYMENTS_API_FALLBACK_TOKEN or ALLOW_FALLBACK_TOKEN",
+            "CI/CD secret stores and built container images that may still carry the fallback value",
+            "Whether the fallback value is reused as a credential anywhere else"
+          ],
+          "warning": "Rotating only the Secrets Manager primary would leave the exposed fallback usable; disabling only the fallback would not rotate the primary. Treat them as independent."
+        },
+        "limitations": [
+          "Token value in the patch is a redacted demo placeholder, not a usable secret.",
+          "No introducing commit SHA, repo name/branch, or image digest in the packet to fully pin propagation."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "changedFiles": [
+            "services/customer-records/src/auth/service-token.ts",
+            "services/customer-records/.env.release"
+          ],
+          "rootCauseKind": "fallback_token_path",
+          "rootCauseSummary": "ALLOW_FALLBACK_TOKEN fail-open path + committed .env.release",
+          "riskyControls": [
+            "ALLOW_FALLBACK_TOKEN fail-open branch",
+            "committed production release env file",
+            "static fallback bearer token"
+          ],
+          "failOpenFallbackAdded": true,
+          "envReleaseAdded": true,
+          "fallbackTokenVariableAdded": true,
+          "customerExportEnabledAdded": true,
+          "unresolvedHighSecretFindings": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-007",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 7,
+    "agentId": "agent-threat-intel",
+    "agentName": "Threat Intel Agent",
+    "type": "finding",
+    "title": "High likelihood of exploitation: fast automated discovery, bulk PII abuse path, attacker persistence",
+    "summary": "Assessing this as active abuse of an exposed customer-records bearer token. The ~18 minutes gap from deploy to first external use fits commodity secret-scanning velocity, the access pattern (canary probe then bulk and VIP export) is a classic enumerate-then-exfiltrate PII monetisation path, and a post-rotation retry by 203.0.113.77 shows the source wanted to keep access. Likelihood of exploitation is HIGH. Indicators are documentation-range demo IPs, so no real-world actor attribution is claimed.",
+    "confidence": 0.74,
+    "severity": "medium",
+    "evidenceIds": [
+      "ev-ip-intel",
+      "ev-api-gateway-logs"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:17Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Raises this from 'a secret leaked' to 'an exposed credential is being actively abused', which should drive urgency on containment and on the breach-notification assessment.",
+    "nextAction": "Risk & Compliance should treat this as active unauthorized use feeding the GDPR/CCPA assessment, not yet as attributed breach.",
+    "correlationId": "trace-inc-1042-007",
+    "payload": {
+      "kind": "finding",
+      "data": {
+        "findings": [
+          {
+            "claim": "Discovery-to-abuse velocity is consistent with automated secret hunting: ~18 minutes from the 2026-06-12T20:47:11Z deploy to first external use at 2026-06-12T21:04:59Z.",
+            "evidenceRef": "ev-api-gateway-logs",
+            "source": "api_gateway_logs.jsonl",
+            "observation": "Leaked tokens committed to env/config files are routinely found and exercised within minutes by commodity scanners and secret-hunting crawlers; the timing here fits opportunistic automation, not a slow targeted operation."
+          },
+          {
+            "claim": "2 off-baseline external IPs used the token; 198.51.100.24 is expected CI/prod egress and must not be miscounted as hostile.",
+            "evidenceRef": "ev-ip-intel",
+            "source": "suspicious_ips.json",
+            "observation": "198.51.100.188, 203.0.113.77 used automation user agents (curl/8.1.2, python-requests/2.31) during the spike; 198.51.100.188 probed a canary path; 198.51.100.24 is the known payments worker egress."
+          },
+          {
+            "claim": "Behavior shows intent to retain access: 203.0.113.77 attempted another request AFTER rotation, raising likelihood this is active abuse rather than incidental exposure.",
+            "evidenceRef": "ev-ip-intel",
+            "source": "suspicious_ips.json",
+            "observation": "Post-rotation retry at 21:12:02Z indicates the source was actively working the token, not a passive scan that moved on."
+          }
+        ],
+        "exposureVelocity": {
+          "deployAt": "2026-06-12T20:47:11Z",
+          "firstAbuseAt": "2026-06-12T21:04:59Z",
+          "minutesToAbuse": 18,
+          "assessment": "Within the minutes-to-hours window typical of automated secret discovery; supports opportunistic-then-hands-on abuse."
+        },
+        "credentialAbusePath": {
+          "credentialType": "customer-records service bearer token (read access to customer PII + payment-methods)",
+          "likelyObjective": "bulk exfiltration of customer PII / payment-method data",
+          "monetisation": [
+            "Resale of customer + payment-method records on data markets",
+            "Account-takeover / payment fraud against affected customers",
+            "Extortion of the platform over the export"
+          ],
+          "observedTradecraft": [
+            "canary/seed-path probing",
+            "bulk paginated export",
+            "targeting the VIP segment",
+            "post-rotation retry"
+          ]
+        },
+        "likelihoodOfExploitation": "high",
+        "strongestSignals": [
+          "confirmed use by unexpected external IPs (not just exposure)",
+          "automation user agents (curl/8.1.2, python-requests/2.31) off the worker baseline",
+          "enumerate-then-export sequence",
+          "post-rotation persistence attempt",
+          "discovery-to-abuse timing consistent with automated scanning"
+        ],
+        "weakSignals": [
+          "raw IP reputation alone",
+          "geo of documentation-range IPs"
+        ],
+        "limitations": [
+          "Documentation-range IPs; do NOT claim real-world threat-actor attribution or geolocation.",
+          "Cannot confirm resale or downstream use; monetisation paths are assessed, not observed."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "unexpectedIps": [
+            "198.51.100.188",
+            "203.0.113.77"
+          ],
+          "expectedIps": [
+            "198.51.100.24"
+          ],
+          "postRotationRetryIps": [
+            "203.0.113.77"
+          ],
+          "canaryProbeIps": [
+            "198.51.100.188"
+          ],
+          "automationUserAgents": [
+            "curl/8.1.2",
+            "python-requests/2.31"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-008",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 8,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "handoff",
+    "title": "Cross-agent review opened before the policy gate",
+    "summary": "Opening a peer-review round before Risk & Compliance is allowed to assess. Forensics must verify the code-root-cause and threat-timing claims against data-plane logs; Code Review must verify containment prerequisites against the observed exposure; Threat Intel must challenge attribution and exfiltration wording. Risk waits for all three verification messages.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-forensics",
+      "agent-code-review",
+      "agent-threat-intel"
+    ],
+    "createdAt": "2026-06-12T21:09:28Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Turns the investigation from parallel reports into an explicit cross-check, so the policy gate sees agreement, dissent, and remaining uncertainty before any human-facing decision.",
+    "nextAction": "Reviewers post verification messages; Band Leader assigns Risk & Compliance only after all three arrive.",
+    "correlationId": "trace-inc-1042-008",
+    "payload": {
+      "kind": "cross_review",
+      "data": {
+        "reviewRoundId": "review-inc-1042-1",
+        "requiredReviewerAgentIds": [
+          "agent-forensics",
+          "agent-code-review",
+          "agent-threat-intel"
+        ],
+        "sourceFindingMessageIds": [
+          "msg-inc-1042-005",
+          "msg-inc-1042-006",
+          "msg-inc-1042-007"
+        ],
+        "blocksRiskGateUntil": "all_required_verifications_posted",
+        "reviewCriteria": [
+          "Does another agent's claim match the source evidence?",
+          "Which conclusion is still unsupported or overclaimed?",
+          "Which containment prerequisite would make the response incomplete?",
+          "Which limitation must be preserved for Legal and the human approver?"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-009",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 9,
+    "agentId": "agent-forensics",
+    "agentName": "Forensics Agent",
+    "type": "verification",
+    "title": "Peer review: data-plane evidence validates root cause and abuse timing",
+    "summary": "Reviewed Code Review and Threat Intel before the policy gate. Gateway/auth logs support the root-cause and exploitation-timing chain for svc-payments-api: first unauthorized use at 2026-06-12T21:04:59Z, 10,227 records returned to 2 unexpected IPs (198.51.100.188, 203.0.113.77), and the active window closing only at issuer verification (2026-06-12T21:12:02Z). I preserve one challenge: these logs prove unauthorized reads, not downstream resale, named-actor attribution, or final notification scope.",
+    "confidence": 0.9,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-cloudtrail-events",
+      "ev-code-diff",
+      "ev-ip-intel"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:39Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Gives Risk & Compliance a cross-checked exposure chain while preserving the line between records returned and downstream misuse.",
+    "nextAction": "Code Review and Threat Intel should post their peer checks; Risk should wait until the review round is complete.",
+    "correlationId": "trace-inc-1042-009",
+    "payload": {
+      "kind": "cross_review_verification",
+      "data": {
+        "reviewRoundId": "review-inc-1042-1",
+        "reviewerAgentId": "agent-forensics",
+        "reviewedAgentIds": [
+          "agent-code-review",
+          "agent-threat-intel"
+        ],
+        "reviewedMessageIds": [
+          "msg-inc-1042-006",
+          "msg-inc-1042-007"
+        ],
+        "verifiedClaims": [
+          "Code Review's fallback-token finding matches the observed data-plane window: the deploy opened the path at 2026-06-12T20:47:11Z, the fallback credential was used by unexpected sources, and issuer deny at 2026-06-12T21:12:02Z is the closure signal.",
+          "Threat Intel's high-likelihood assessment is supported by data-plane behavior: unexpected IPs, automation user agents, bulk export/payment-method reads, and a post-revocation retry."
+        ],
+        "challengesPreserved": [
+          "Do not convert records-returned evidence into a confirmed downstream resale or reuse claim.",
+          "Do not attribute the source to a named actor from documentation-range IP indicators.",
+          "Do not treat code cleanup as the window close; issuer-side denial is the closure evidence."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 10227,
+          "unexpectedIps": [
+            "198.51.100.188",
+            "203.0.113.77"
+          ],
+          "firstUnauthorizedUseAt": "2026-06-12T21:04:59Z",
+          "issuerVerifiedInactiveAt": "2026-06-12T21:12:02Z",
+          "rootCauseKind": "fallback_token_path"
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-010",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 10,
+    "agentId": "agent-code-review",
+    "agentName": "Code Review Agent",
+    "type": "verification",
+    "title": "Peer review: containment is incomplete without fixing the trust/control path",
+    "summary": "Reviewed Forensics and Threat Intel before the policy gate. Their evidence supports urgent containment: 10,227 records were returned through the affected svc-payments-api path and the abuse pattern is active, not theoretical. My challenge is containment scope: Forensics can show the fallback token is issuer-verified inactive, but containment is not complete until the fallback path is disabled and the sibling Secrets Manager primary is independently rotated. Risk should not let approval wording collapse to token rotation alone.",
+    "confidence": 0.89,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-code-diff",
+      "ev-ip-intel",
+      "ev-secret-scan"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:50Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Prevents a narrow containment plan that closes the observed credential but leaves the code, trust, or sibling-credential path capable of reintroducing access.",
+    "nextAction": "Risk should require the approval request to include the full containment scope, not only the observed token/session.",
+    "correlationId": "trace-inc-1042-010",
+    "payload": {
+      "kind": "cross_review_verification",
+      "data": {
+        "reviewRoundId": "review-inc-1042-1",
+        "reviewerAgentId": "agent-code-review",
+        "reviewedAgentIds": [
+          "agent-forensics",
+          "agent-threat-intel"
+        ],
+        "reviewedMessageIds": [
+          "msg-inc-1042-005",
+          "msg-inc-1042-007"
+        ],
+        "verifiedClaims": [
+          "Forensics' 10,227-record exposure estimate is consistent with the root-cause change: ALLOW_FALLBACK_TOKEN fail-open path + committed .env.release.",
+          "Threat Intel's urgency is justified because the observed path is useful for bulk export and had a post-rotation retry."
+        ],
+        "challengesPreserved": [
+          "Forensics can show the fallback token is issuer-verified inactive, but containment is not complete until the fallback path is disabled and the sibling Secrets Manager primary is independently rotated.",
+          "Do not mark the incident contained solely because the observed credential is dead.",
+          "Do not skip prevention controls; the same class can recur on the next deploy or workflow run."
+        ],
+        "requiredContainmentControls": [
+          "Rotate the exposed fallback credential at its issuer",
+          "Disable the ALLOW_FALLBACK_TOKEN branch",
+          "Independently rotate the Secrets Manager primary",
+          "Block production deploys with unresolved high secret-scan findings"
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 10227,
+          "rootCauseKind": "fallback_token_path",
+          "rootCauseSummary": "ALLOW_FALLBACK_TOKEN fail-open path + committed .env.release",
+          "riskyControls": [
+            "ALLOW_FALLBACK_TOKEN fail-open branch",
+            "committed production release env file",
+            "static fallback bearer token"
+          ],
+          "unresolvedHighSecretFindings": 1
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-011",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 11,
+    "agentId": "agent-threat-intel",
+    "agentName": "Threat Intel Agent",
+    "type": "verification",
+    "title": "Peer review: exploitation likelihood is high, attribution remains unsupported",
+    "summary": "Reviewed Forensics and Code Review before the policy gate. Their chain is coherent: svc-payments-api became usable through the root-cause control failure, unexpected IPs (198.51.100.188, 203.0.113.77) used it ~18 minutes after the opening change, 10,227 records were returned, and 203.0.113.77 retried after revocation. I validate high exploitation likelihood, but challenge any named-actor, geolocation, or downstream reuse/resale claim.",
+    "confidence": 0.78,
+    "severity": "medium",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-code-diff",
+      "ev-ip-intel"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:10:01Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Keeps urgency high for containment while preventing the investigation from overstating attribution or downstream impact before Legal/customer-scope review.",
+    "nextAction": "Risk should classify active unauthorized use as high severity while holding attribution and notification scope for human review.",
+    "correlationId": "trace-inc-1042-011",
+    "payload": {
+      "kind": "cross_review_verification",
+      "data": {
+        "reviewRoundId": "review-inc-1042-1",
+        "reviewerAgentId": "agent-threat-intel",
+        "reviewedAgentIds": [
+          "agent-forensics",
+          "agent-code-review"
+        ],
+        "reviewedMessageIds": [
+          "msg-inc-1042-005",
+          "msg-inc-1042-006"
+        ],
+        "verifiedClaims": [
+          "Forensics' record-return evidence supports active unauthorized use, not mere exposure: 10,227 records.",
+          "Code Review's root-cause path explains the observed abuse path: secret-scanner-style token use followed by canary probing, bulk export, and payment-method reads.",
+          "Post-revocation retry supports persistence/active abuse and raises urgency."
+        ],
+        "challengesPreserved": [
+          "Do not claim real-world threat-actor attribution from documentation-range IPs.",
+          "Do not claim downstream resale, fraud, or reuse without external evidence.",
+          "Do not turn high likelihood into certainty; keep confidence below verified until scope review completes."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "unexpectedIps": [
+            "198.51.100.188",
+            "203.0.113.77"
+          ],
+          "expectedIps": [
+            "198.51.100.24"
+          ],
+          "minutesToAbuse": 18,
+          "postRotationRetryIps": [
+            "203.0.113.77"
+          ],
+          "rootCauseKind": "fallback_token_path"
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-012",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 12,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Risk & Compliance",
+    "summary": "Assigning Risk & Compliance to: Rule on severity and required approvals per the incident policy. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-risk-compliance"
+    ],
+    "createdAt": "2026-06-12T21:10:12Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Risk & Compliance.",
+    "correlationId": "trace-inc-1042-012",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-risk-compliance",
+        "assignedToAgentId": "agent-risk-compliance",
+        "objective": "Rule on severity and required approvals per the incident policy.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ],
+        "policyId": "SEC-IR-API-KEY-001"
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-013",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 13,
+    "agentId": "agent-risk-compliance",
+    "agentName": "Risk & Compliance Agent",
+    "type": "challenge",
+    "title": "Policy gate: challenge the 'confirmed exfiltration' framing; hold notification",
+    "summary": "The peer-review gate is satisfied: Forensics, Code Review, and Threat Intel each cross-checked the others before this policy call. Two findings must be separated. (1) The GDPR personal-data-breach threshold is about unauthorised ACCESS to personal data, not actor identification: gateway logs show 10,227 customer records (including payment-methods) returned to unexpected external IPs (198.51.100.188, 203.0.113.77), so a confidentiality breach is likely already established and the 72h assessment clock should be treated as running from awareness. (2) I still CHALLENGE any 'confirmed exfiltration / misuse' claim \u2014 downstream resale or reuse is unproven, and actor identity is unresolved, so under our incident policy the case classification stays suspected_exposure. Customer notification stays HELD for the human Security Lead + Legal until scope, residency, and the controller/processor question are verified.",
+    "confidence": 0.88,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-incident-policy",
+      "ev-api-gateway-logs",
+      "ev-code-diff"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:10:23Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Stops two opposite errors: under-reacting ('just a leaked secret, no breach') and over-claiming ('confirmed mass exfiltration'). Forces a human + Legal gate before any notification.",
+    "nextAction": "Approve issuer-first token containment.",
+    "correlationId": "trace-inc-1042-013",
+    "payload": {
+      "kind": "risk_assessment",
+      "data": {
+        "policyGate": {
+          "decision": "containment_only",
+          "classification": "suspected_exposure",
+          "recommendedSeverity": "high",
+          "customerNotification": "hold_pending_legal_scope",
+          "challenge": "Gateway logs show 10,227 records returned to unexpected IPs, so containment is urgent, but downstream misuse, actor identity, residency scope, and Legal wording are not proven.",
+          "requiredApprovals": [
+            "rotate_or_revoke_production_credentials",
+            "disable_customer_export_endpoint",
+            "external_customer_notification"
+          ],
+          "nextActions": [
+            "Approve issuer-first token containment.",
+            "Hold customer notification pending Legal and customer-scope mapping.",
+            "Verify sibling Secrets Manager credential rotation.",
+            "Map exported records to jurisdiction and controller/processor duties."
+          ],
+          "unsupportedClaims": [
+            "Confirmed named threat actor.",
+            "Confirmed downstream resale or misuse.",
+            "Customer notification ready without Legal scope review."
+          ],
+          "openQuestions": [
+            "Which exact customers and jurisdictions are in the returned records?",
+            "Did downstream systems cache, forward, or expose the returned rows?",
+            "Is the sibling managed credential fully rotated and verified dead?"
+          ],
+          "evidenceIds": [
+            "ev-incident-policy",
+            "ev-api-gateway-logs",
+            "ev-code-diff",
+            "ev-auth-events"
+          ],
+          "confidence": 0.88,
+          "reasoningSummary": "The evidence supports active unauthorized access and high-severity containment, while policy blocks notification and closure until scope is verified."
+        },
+        "partnerTool": {
+          "provider": "AI/ML API",
+          "label": "risk_policy_gate",
+          "usedLiveApi": false,
+          "status": "disabled_fallback",
+          "model": "gpt-4o-mini",
+          "baseUrl": "https://api.aimlapi.com/v1",
+          "error": null
+        },
+        "recommendedSeverity": "high",
+        "classification": "suspected_exposure",
+        "crossReviewGate": {
+          "requiredReviewerAgentIds": [
+            "agent-forensics",
+            "agent-code-review",
+            "agent-threat-intel"
+          ],
+          "receivedVerificationMessageIds": [
+            "msg-inc-1042-009",
+            "msg-inc-1042-010",
+            "msg-inc-1042-011"
+          ],
+          "gateSatisfied": true,
+          "blocksApprovalIfIncomplete": true,
+          "preservedChallenges": [
+            "Do not convert records-returned evidence into a confirmed downstream resale or reuse claim.",
+            "Do not attribute the source to a named actor from documentation-range IP indicators.",
+            "Do not treat code cleanup as the window close; issuer-side denial is the closure evidence.",
+            "Forensics can show the fallback token is issuer-verified inactive, but containment is not complete until the fallback path is disabled and the sibling Secrets Manager primary is independently rotated.",
+            "Do not mark the incident contained solely because the observed credential is dead.",
+            "Do not skip prevention controls; the same class can recur on the next deploy or workflow run."
+          ]
+        },
+        "breachThresholdAssessment": {
+          "gdprPersonalDataBreach": "likely_met",
+          "basis": "Unauthorised access to personal data (customer records + payment-methods returned to external IPs) is a confidentiality breach under GDPR Art 4(12); it does not require identifying the actor.",
+          "confirmedExfiltration": "unproven",
+          "policyClassificationReason": "Per SEC-IR-API-KEY-001, records were returned but actor identity is unresolved -> classify as suspected exposure and keep collecting evidence."
+        },
+        "challenges": [
+          "Do NOT state 'confirmed breach with exfiltration' \u2014 logs prove unauthorised access, not downstream misuse or resale.",
+          "Do NOT attribute to a named actor \u2014 indicators are documentation-range IPs (per Threat Intel).",
+          "Do NOT send external customer notification without Legal sign-off on scope and wording.",
+          "Do NOT call the incident closed until the credential is issuer-verified dead AND sibling credentials are confirmed handled (per Code Review)."
+        ],
+        "notificationClocks": {
+          "note": "Clocks are flagged as likely-triggered; the human + Legal confirm the trigger and start time. Counts/residency not yet verified.",
+          "gdpr": "72h to the supervisory authority from awareness (Art 33); Art 34 notice to individuals if high risk \u2014 payment-method data points to high risk.",
+          "controllerVsProcessor": "If Payments Platform is a processor here, Art 33(2) requires notifying the controller without undue delay; DPAs often impose stricter/shorter contractual windows than statute.",
+          "california": "CCPA/CPRA: notify affected residents without unreasonable delay; if >500 CA residents, sample to the CA AG (treat ~30-day / 15-day expectations as planning targets pending Legal).",
+          "ccpaPrivateRight": "Cal. Civ. Code 1798.150 private right of action exposure for unauthorised access/exfiltration of personal information due to failure to maintain reasonable security."
+        },
+        "openScopeQuestions": [
+          "How many of the 10,227 records belong to EU vs California vs other residents?",
+          "Is Payments Platform controller or processor for these records, and what does the DPA notification matrix require?",
+          "Which exact customers/payment-methods are in the exported rows?"
+        ],
+        "policyRefs": [
+          "SEC-IR-API-KEY-001"
+        ],
+        "humanApprovalRequired": [
+          "rotate_or_revoke_production_credentials",
+          "disable_customer_export_endpoint",
+          "external_customer_notification"
+        ],
+        "deferredPendingHuman": [
+          "external_customer_notification",
+          "incident_closure"
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 10227,
+          "unexpectedIps": [
+            "198.51.100.188",
+            "203.0.113.77"
+          ],
+          "policyId": "SEC-IR-API-KEY-001",
+          "highSeverityCondition": "Sensitive customer endpoints were accessed with a likely exposed production credential.",
+          "criticalSeverityCondition": "Confirmed unauthorized exfiltration, active abuse, or inability to contain the credential."
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-014",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 14,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "approval_request",
+    "title": "Human approval requested for issuer-first containment",
+    "summary": "Requesting Security Lead approval for issuer-first containment in order: (1) confirm the exposed fallback token is revoked/dead at its issuer, (2) two-key rotate the sibling Secrets Manager primary, (3) disable the ALLOW_FALLBACK_TOKEN path and remove .env.release. External customer notification and incident closure are explicitly NOT requested \u2014 those are irreversible/disclosure decisions held for the human and Legal pending verified scope.",
+    "confidence": 0.94,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-incident-policy",
+      "ev-code-diff"
+    ],
+    "targetAgentIds": [
+      "agent-human-approver"
+    ],
+    "createdAt": "2026-06-12T21:10:34Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Ensures production-impacting and irreversible actions are not taken autonomously.",
+    "nextAction": "Wait for the human Security Lead decision.",
+    "correlationId": "trace-inc-1042-014",
+    "payload": {
+      "kind": "approval_request",
+      "data": {
+        "approvalRequestId": "appr-1042-1",
+        "requiredApprover": "Security Lead",
+        "containmentSequence": [
+          "Verify exposed fallback token revoked at issuer",
+          "Two-key rotate sibling Secrets Manager primary (svc-payments-prod-v2)",
+          "Disable ALLOW_FALLBACK_TOKEN path and remove .env.release"
+        ],
+        "requestedActions": [
+          "Rotate fallback token",
+          "Disable fallback token path",
+          "Patch config"
+        ],
+        "notRequestedActions": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "routedToHumanBecauseIrreversible": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "riskIfApproved": "May briefly disrupt the service depending on the credential, but stops ongoing exposure.",
+        "riskIfRejected": "Exposed fallback token and its sibling may remain usable while investigation continues."
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-015",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 15,
+    "agentId": "agent-human-approver",
+    "agentName": "Human Security Lead",
+    "type": "approval_decision",
+    "title": "Containment approved, customer notification held",
+    "summary": "Approved immediate containment: rotate the fallback token, disable the fallback path, and patch config. External customer notification remains held until record-access scope is verified with Legal.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-incident-policy"
+    ],
+    "targetAgentIds": [
+      "agent-commander",
+      "agent-risk-compliance"
+    ],
+    "createdAt": "2026-06-12T21:10:45Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Unlocks remediation while keeping disclosure decisions under human control.",
+    "nextAction": "Remediation should execute the approved scope only.",
+    "correlationId": "trace-inc-1042-015",
+    "payload": {
+      "kind": "approval_decision",
+      "data": {
+        "approvalRequestId": "appr-1042-1",
+        "decision": "approved",
+        "decidedBy": "Human Security Lead",
+        "approvedScope": [
+          "Rotate fallback token",
+          "Disable fallback token path",
+          "Patch config"
+        ],
+        "explicitlyNotApproved": [
+          "External customer notification",
+          "Incident closure"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-016",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 16,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Remediation",
+    "summary": "Assigning Remediation to: Execute the approved containment scope only. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-remediation"
+    ],
+    "createdAt": "2026-06-12T21:10:56Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Remediation.",
+    "correlationId": "trace-inc-1042-016",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-remediation",
+        "assignedToAgentId": "agent-remediation",
+        "objective": "Execute the approved containment scope only.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ],
+        "approvedScope": [
+          "Rotate fallback token",
+          "Disable fallback token path",
+          "Patch config"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-017",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 17,
+    "agentId": "agent-remediation",
+    "agentName": "Remediation Agent",
+    "type": "remediation_task",
+    "title": "Issuer-first containment executed; sibling-credential rotation and federation queued",
+    "summary": "Within the approved scope: the exposed fallback token is issuer-verified dead at 2026-06-12T21:12:02Z and the fail-open path is being disabled. Flagging that containment is NOT complete on rotation alone \u2014 the sibling Secrets Manager primary needs an independent two-key rotation, the fallback value must be purged from CI/deploy/images to prevent recontamination, and the incident class should be collapsed by moving to short-lived federated credentials. The exposure window stays 'closed' only because the issuer denies the old token. External customer notification is intentionally excluded \u2014 not approved.",
+    "confidence": 0.92,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-code-diff",
+      "ev-auth-events"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:11:07Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Moves the case into controlled, approval-bounded remediation while preventing the rotate-one-leave-a-sibling failure.",
+    "nextAction": "Commander can generate the final audit report; notification decisions remain with the human + Legal.",
+    "correlationId": "trace-inc-1042-017",
+    "payload": {
+      "kind": "remediation_task",
+      "data": {
+        "approvedScope": [
+          "Rotate fallback token",
+          "Disable fallback token path",
+          "Patch config"
+        ],
+        "containmentOrder": "issuer-first (revoke/rotate at provider) before code and history cleanup; cleanup alone can recontaminate from old clones",
+        "windowClosedCriterion": "Old credential issuer-verified inactive at 2026-06-12T21:12:02Z (auth deny + gateway 401); window is only 'closed' because of this, not because of code deletion.",
+        "siblingCredentialsToAddress": [
+          {
+            "name": "svc-payments-fallback-redacted",
+            "issuer": "static env (PAYMENTS_API_FALLBACK_TOKEN)",
+            "state": "issuer-verified dead"
+          },
+          {
+            "name": "svc-payments-prod-v2",
+            "issuer": "AWS Secrets Manager",
+            "ref": "prod/payments/customer-records/token",
+            "state": "two-key rotation in progress"
+          }
+        ],
+        "excludedPendingApproval": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "tasks": [
+          {
+            "id": "rem-001",
+            "title": "Invalidate the exposed fallback token at its issuer (issuer-first containment)",
+            "status": "done",
+            "severity": "high",
+            "rationale": "The fallback bearer token svc-payments-fallback-redacted for svc-payments-api was used by external IPs. Issuer-side revocation \u2014 not code cleanup \u2014 is what stops access. Issuer logs confirm it is now dead.",
+            "evidenceIds": [
+              "ev-auth-events"
+            ],
+            "acceptanceCriteria": [
+              "Old fallback token returns 401/deny at the issuer (CONFIRMED: auth deny + gateway 401 at 2026-06-12T21:12:02Z)",
+              "No further 200s on the fallback token after 2026-06-12T21:12:02Z"
+            ],
+            "rollbackPlan": "Do not re-enable the fallback token; if a service breaks, restore from the Secrets Manager primary, never the static fallback."
+          },
+          {
+            "id": "rem-002",
+            "title": "Two-key rotate the Secrets Manager primary (svc-payments-prod-v2) \u2014 sibling credential",
+            "status": "in_progress",
+            "severity": "high",
+            "rationale": "Same identity (svc-payments-api) is authenticated by the managed primary too. Per Code Review, rotating one credential leaves the sibling alive, so the primary must be rotated independently: create new version, cut services over, verify health and logs, THEN disable the old version.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "New primary version live and serving svc-payments-api with no errors",
+              "Old primary version disabled and failing auth",
+              "Dependent services healthy on the new version before old is cut"
+            ],
+            "rollbackPlan": "Keep the previous primary version staged-disabled (not deleted) until the new version is verified, then destroy."
+          },
+          {
+            "id": "rem-003",
+            "title": "Disable ALLOW_FALLBACK_TOKEN fail-open path and remove .env.release",
+            "status": "in_progress",
+            "severity": "high",
+            "rationale": "The fail-open fallback branch plus committed .env.release is the root-cause exposure mechanism; the auth path must fail closed.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "getServiceToken() fails closed on Secrets Manager error",
+              ".env.release removed from repo and build",
+              "Secret-pattern unit test added"
+            ],
+            "rollbackPlan": "Never restore the token-like fallback; revert only surrounding config if the deploy breaks."
+          },
+          {
+            "id": "rem-004",
+            "title": "Purge the fallback value from CI/CD secrets, deploy env, and built images",
+            "status": "todo",
+            "severity": "high",
+            "rationale": "Old clones, CI secret stores, and container image layers can recontaminate after rotation; code/history cleanup is secondary to issuer revocation but still required to prevent reuse.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "No PAYMENTS_API_FALLBACK_TOKEN / ALLOW_FALLBACK_TOKEN in CI variables, deploy config, or image layers",
+              "Deploy system no longer sources the fallback value"
+            ],
+            "rollbackPlan": "Manual security override only with an audit-log entry."
+          },
+          {
+            "id": "rem-005",
+            "title": "Collapse the incident class: move to short-lived federated credentials",
+            "status": "todo",
+            "severity": "medium",
+            "rationale": "Static long-lived service tokens are the root incident class. Federated short-lived credentials remove the standing secret entirely.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "CI uses AWS OIDC for GitHub Actions (no long-lived secret in CI)",
+              "Runtime uses Workload Identity Federation / short-lived tokens; no static fallback token exists to leak"
+            ],
+            "rollbackPlan": "Phase in behind a flag; fall back to the rotated Secrets Manager primary (never the static token) if federation has issues."
+          },
+          {
+            "id": "rem-006",
+            "title": "Add deploy-time secret-scan guardrail in CI",
+            "status": "todo",
+            "severity": "medium",
+            "rationale": "secret-1042-001 was high-severity but UNRESOLVED and the release shipped anyway; block token-like values before deploy.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "CI fails on unresolved high secret findings",
+              "Safe placeholder passes"
+            ],
+            "rollbackPlan": "Manual security override only with an audit-log entry."
+          }
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "issuerVerifiedInactiveAt": "2026-06-12T21:12:02Z",
+          "managedSecretId": "prod/payments/customer-records/token",
+          "fallbackTokenId": "svc-payments-fallback-redacted",
+          "primaryTokenIds": [
+            "svc-payments-prod-v2"
+          ],
+          "rootCauseKind": "fallback_token_path"
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1042-018",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1042",
+    "roomId": "band-room-inc-1042",
+    "sequence": 18,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "report_section",
+    "title": "Audit-ready synthesis for INC-1042 (with surfaced agent disagreement)",
+    "summary": "Band-coordinated agents traced an exposed fallback service token to a Friday deploy, measured 10,227 customer records returned to unexpected IPs (198.51.100.188, 203.0.113.77), and bounded the exposure window from 2026-06-12T20:47:11Z to issuer-verified denial at 2026-06-12T21:12:02Z. Risk kept the case at suspected exposure, approved containment only, and held notification for Legal scope review.",
+    "confidence": 0.92,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-cloudtrail-events",
+      "ev-code-diff",
+      "ev-incident-policy",
+      "ev-ip-intel",
+      "ev-secret-scan"
+    ],
+    "targetAgentIds": [],
+    "createdAt": "2026-06-12T21:11:18Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Produces the judge-facing proof of traceable, mention-driven multi-agent coordination.",
+    "nextAction": "Complete sibling credential rotation.",
+    "correlationId": "trace-inc-1042-018",
+    "payload": {
+      "kind": "report_section",
+      "data": {
+        "synthesis": {
+          "executiveSummary": "Band-coordinated agents traced an exposed fallback service token to a Friday deploy, measured 10,227 customer records returned to unexpected IPs (198.51.100.188, 203.0.113.77), and bounded the exposure window from 2026-06-12T20:47:11Z to issuer-verified denial at 2026-06-12T21:12:02Z. Risk kept the case at suspected exposure, approved containment only, and held notification for Legal scope review.",
+          "recommendedDecision": "Proceed with approved containment and evidence preservation; keep notification and closure behind Legal and human approval.",
+          "severity": "high",
+          "confidence": 0.92,
+          "evidenceIds": [
+            "ev-api-gateway-logs",
+            "ev-auth-events",
+            "ev-cloudtrail-events",
+            "ev-code-diff",
+            "ev-secret-scan",
+            "ev-incident-policy"
+          ],
+          "nextActions": [
+            "Complete sibling credential rotation.",
+            "Disable fail-open fallback path and purge release env secret sprawl.",
+            "Map returned records to customer and jurisdiction scope.",
+            "Prepare Legal-reviewed notification recommendation."
+          ],
+          "openQuestions": [
+            "Which exact customer rows and jurisdictions were returned?",
+            "Did downstream systems cache or forward the data?",
+            "Are all CI, deploy, clone, and image copies purged?"
+          ],
+          "bandCoordinationValue": "Band preserved assignments, specialist findings, Risk challenge, human approval, remediation, and final synthesis as one auditable room trail.",
+          "dissentToPreserve": [
+            "Forensics proves records returned; Risk refuses to call downstream misuse proven.",
+            "Threat Intel says exploitation likely; no real-world actor attribution is supported.",
+            "Remediation says fallback is dead; Code Review still requires sibling credential rotation."
+          ],
+          "judgeDemoMoment": "The strongest moment is the Risk gate: enough evidence for urgent containment, not enough for autonomous customer notification."
+        },
+        "partnerTool": {
+          "provider": "AI/ML API",
+          "label": "band_leader_synthesis",
+          "usedLiveApi": false,
+          "status": "disabled_fallback",
+          "model": "gpt-4o-mini",
+          "baseUrl": "https://api.aimlapi.com/v1",
+          "error": null
+        },
+        "reportId": "report-inc-1042",
+        "severity": "high",
+        "executiveSummary": "Agents coordinated through Band to investigate an exposed fallback service token for svc-payments-api introduced by the Friday deploy. Forensics confirmed 10,227 customer records were read by 2 external IPs (198.51.100.188, 203.0.113.77) across a window that opened at the 2026-06-12T20:47:11Z deploy and is issuer-verified closed at 2026-06-12T21:12:02Z. Risk & Compliance challenged the breach framing down to suspected_exposure under policy while flagging the GDPR personal-data-breach threshold as likely met. Human approval authorised issuer-first containment; notification was held for Legal.",
+        "rootCause": "Friday deploy added an ALLOW_FALLBACK_TOKEN fail-open path plus a token-bearing .env.release (also enabling CUSTOMER_EXPORT_ENABLED); a Secrets Manager throttle triggered fallback use.",
+        "exposureWindow": {
+          "openedAt": "2026-06-12T20:47:11Z",
+          "issuerVerifiedClosedAt": "2026-06-12T21:12:02Z",
+          "closedBy": "issuer deny, not code deletion"
+        },
+        "riskAssessment": "High severity, suspected_exposure under policy; unauthorised access to personal data is confirmed, downstream exfiltration/misuse is not.",
+        "crossAgentReview": {
+          "status": "complete",
+          "requiredReviewerAgentIds": [
+            "agent-forensics",
+            "agent-code-review",
+            "agent-threat-intel"
+          ],
+          "verificationMessageIds": [
+            "msg-inc-1042-009",
+            "msg-inc-1042-010",
+            "msg-inc-1042-011"
+          ],
+          "value": "Specialists reviewed each other's claims before Risk & Compliance classified the case."
+        },
+        "surfacedDisagreements": [
+          "Forensics proves records returned; Risk refuses to call downstream misuse proven.",
+          "Threat Intel says exploitation likely; no real-world actor attribution is supported.",
+          "Remediation says fallback is dead; Code Review still requires sibling credential rotation."
+        ],
+        "approvedActions": [
+          "Rotate fallback token",
+          "Disable fallback path",
+          "Patch config"
+        ],
+        "heldActions": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "openQuestions": [
+          "Which exact customer rows and jurisdictions were returned?",
+          "Did downstream systems cache or forward the data?",
+          "Are all CI, deploy, clone, and image copies purged?"
+        ],
+        "auditTrailMessageIds": [
+          "msg-inc-1042-001",
+          "msg-inc-1042-002",
+          "msg-inc-1042-003",
+          "msg-inc-1042-004",
+          "msg-inc-1042-005",
+          "msg-inc-1042-006",
+          "msg-inc-1042-007",
+          "msg-inc-1042-008",
+          "msg-inc-1042-009",
+          "msg-inc-1042-010",
+          "msg-inc-1042-011",
+          "msg-inc-1042-012",
+          "msg-inc-1042-013",
+          "msg-inc-1042-014",
+          "msg-inc-1042-015",
+          "msg-inc-1042-016",
+          "msg-inc-1042-017"
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 10227,
+          "unexpectedIps": [
+            "198.51.100.188",
+            "203.0.113.77"
+          ],
+          "unresolvedHighSecretFindings": 1,
+          "policyApprovalActions": [
+            "rotate_or_revoke_production_credentials",
+            "disable_customer_export_endpoint",
+            "external_customer_notification"
+          ]
+        }
+      }
+    }
+  }
+]

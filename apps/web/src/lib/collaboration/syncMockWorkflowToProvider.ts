@@ -9,20 +9,34 @@ export type SyncMockWorkflowResult = {
 };
 
 /**
- * Replays the deterministic demo step into the active collaboration provider.
+ * Sends only the messages that are new at this workflow step.
  *
- * In Mock Mode this gives the War Room a true provider-backed event stream.
- * In Band Mode this will become the adapter handoff point in Step 8.
+ * In Mock Mode the provider is in-memory so a full reset+replay is fine.
+ * In Band Mode we send each message exactly once as the user advances steps,
+ * so Band sees a natural flowing conversation rather than a flood of resets.
  */
 export async function syncMockWorkflowToProvider(
   provider: CollaborationProvider,
   roomId: string,
   workflow: WorkflowViewModel,
 ): Promise<SyncMockWorkflowResult> {
-  await provider.resetRoom(roomId);
+  const isMock = provider.mode === "mock";
 
-  for (const message of workflow.messages) {
-    await provider.sendMessage(roomId, message);
+  if (isMock) {
+    // Mock provider is in-memory — full reset+replay keeps it consistent.
+    await provider.resetRoom(roomId);
+
+    for (const message of workflow.messages) {
+      await provider.sendMessage(roomId, message);
+    }
+  } else {
+    // Band provider — send only the message introduced at this step.
+    const currentMessage = workflow.messages.find(
+      (m) => m.sequence === workflow.stepIndex,
+    );
+    if (currentMessage) {
+      await provider.sendMessage(roomId, currentMessage);
+    }
   }
 
   if (workflow.approvalRequest) {

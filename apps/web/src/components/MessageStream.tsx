@@ -50,16 +50,29 @@ function payloadSummary(message: AgentMessage): string | undefined {
   if (!message.payload) return undefined;
 
   switch (message.payload.kind) {
-    case "finding":
-      return `Claim: ${message.payload.data.claim}`;
-    case "challenge":
-      return `Challenge: ${message.payload.data.reason}`;
-    case "risk_assessment":
-      return `Risk: ${message.payload.data.rationale}`;
-    case "task_assignment":
-      return `Task: ${message.payload.data.objective}`;
-    case "handoff":
-      return `Handoff: ${message.payload.data.contextSummary}`;
+    case "finding": {
+      const data = message.payload.data as Record<string, unknown>;
+      const claim = data.claim as string | undefined;
+      const findings = data.findings as string[] | undefined;
+      const text = claim ?? (Array.isArray(findings) ? findings[0] : undefined);
+      return text ? `Claim: ${text}` : undefined;
+    }
+    case "challenge": {
+      const d = message.payload.data as Record<string, unknown>;
+      return d.reason ? `Challenge: ${d.reason}` : undefined;
+    }
+    case "risk_assessment": {
+      const d = message.payload.data as Record<string, unknown>;
+      return d.rationale ? `Risk: ${d.rationale}` : undefined;
+    }
+    case "task_assignment": {
+      const d = message.payload.data as Record<string, unknown>;
+      return d.objective ? `Task: ${d.objective}` : undefined;
+    }
+    case "handoff": {
+      const d = message.payload.data as Record<string, unknown>;
+      return d.contextSummary ? `Handoff: ${d.contextSummary}` : undefined;
+    }
     case "generic":
       return undefined;
     default:
@@ -73,29 +86,37 @@ function payloadDetails(message: AgentMessage): string[] {
   switch (message.payload.kind) {
     case "finding":
       return [
-        ...message.payload.data.limitations.map((item) => `Limitation: ${item}`),
-        ...message.payload.data.requestedVerifications.map((item) => `Verify: ${item}`),
+        ...(message.payload.data.limitations ?? []).map((item) => `Limitation: ${item}`),
+        ...(message.payload.data.requestedVerifications ?? []).map((item) => `Verify: ${item}`),
       ];
-    case "challenge":
+    case "challenge": {
+      const d = message.payload.data as Record<string, unknown>;
       return [
-        `Blocking: ${message.payload.data.blocking ? "yes" : "no"}`,
-        `Required next step: ${message.payload.data.requiredNextStep}`,
+        `Blocking: ${d.blocking ? "yes" : "no"}`,
+        ...(d.requiredNextStep ? [`Required next step: ${d.requiredNextStep}`] : []),
       ];
-    case "risk_assessment":
+    }
+    case "risk_assessment": {
+      const d = message.payload.data as Record<string, unknown>;
       return [
-        `Recommended severity: ${message.payload.data.recommendedSeverity}`,
-        `Escalation required: ${message.payload.data.escalationRequired ? "yes" : "no"}`,
-        ...message.payload.data.requiredApprovals.map((item) => `Approval: ${item}`),
+        ...(d.recommendedSeverity ? [`Recommended severity: ${d.recommendedSeverity}`] : []),
+        ...(d.escalationRequired !== undefined ? [`Escalation required: ${d.escalationRequired ? "yes" : "no"}`] : []),
+        ...((d.requiredApprovals as string[] | undefined) ?? []).map((item) => `Approval: ${item}`),
       ];
-    case "task_assignment":
+    }
+    case "task_assignment": {
+      const d = message.payload.data as Record<string, unknown>;
       return [
-        `Expected output: ${message.payload.data.expectedOutput}`,
-        ...message.payload.data.acceptanceCriteria.map((item) => `Criteria: ${item}`),
+        ...(d.expectedOutput ? [`Expected output: ${d.expectedOutput}`] : []),
+        ...((d.acceptanceCriteria as string[] | undefined) ?? []).map((item) => `Criteria: ${item}`),
       ];
-    case "handoff":
-      return [`Reason: ${message.payload.data.reason}`];
+    }
+    case "handoff": {
+      const d = message.payload.data as Record<string, unknown>;
+      return d.reason ? [`Reason: ${d.reason}`] : [];
+    }
     case "generic":
-      return Object.entries(message.payload.data)
+      return Object.entries(message.payload.data as Record<string, unknown>)
         .slice(0, 3)
         .map(([key, value]) => `${key}: ${Array.isArray(value) ? value.join(", ") : String(value)}`);
     default:
@@ -124,7 +145,7 @@ export function MessageStream({
 
       {messages.length === 0 ? (
         <div className="mt-5 rounded-2xl border border-dashed border-slate-700 bg-slate-950/20 p-5 text-sm leading-6 text-slate-400">
-          Start the incident to open the shared room and begin the Band-style coordination stream.
+          Start the incident to open the shared room and begin the coordination stream.
         </div>
       ) : (
         <div className="mt-5 space-y-4">
@@ -164,7 +185,6 @@ export function MessageStream({
                       {formatSeverity(message.severity)}
                     </Badge>
                     <Badge>{asPercent(message.confidence)} confidence</Badge>
-                    <Badge>{message.visibility}</Badge>
                   </div>
                 </div>
 

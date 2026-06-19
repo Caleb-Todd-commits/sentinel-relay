@@ -22,18 +22,29 @@ const categoryTone: Record<WorkflowViewModel["currentStep"]["category"], "neutra
   report: "success",
 };
 
+const categoryLabel: Record<WorkflowViewModel["currentStep"]["category"], string> = {
+  setup: "Pre-triage",
+  room: "Room open",
+  assignment: "Tasks assigned",
+  evidence: "Evidence",
+  verification: "Verification",
+  challenge: "Challenge",
+  approval: "Approval gate",
+  remediation: "Remediation",
+  report: "Report ready",
+};
+
 export function WorkflowControls({ workflow, onStart, onAdvance, onApprove, onReplay, onComplete }: WorkflowControlsProps) {
-  const primaryLabel = workflow.isAtStart ? "Start incident" : workflow.isAtApprovalGate ? "Approval required" : "Run next step";
+  const primaryLabel = workflow.isAtStart ? "Start incident" : "Run next step";
 
   return (
     <section className="relay-card relay-control-card space-y-5" aria-labelledby="workflow-controls-heading">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="max-w-5xl">
           <div className="flex flex-wrap gap-2">
-            <Badge tone="accent">{workflow.modeLabel}</Badge>
-            <Badge tone={categoryTone[workflow.currentStep.category]}>{workflow.currentStep.category}</Badge>
+            <Badge tone={categoryTone[workflow.currentStep.category]}>{categoryLabel[workflow.currentStep.category]}</Badge>
             <Badge>{workflow.progressPercent}% complete</Badge>
-            {workflow.isAtApprovalGate ? <Badge tone="warning">human decision required</Badge> : null}
+            {workflow.isAtApprovalGate ? <Badge tone="warning">awaiting human decision</Badge> : null}
           </div>
           <h2 id="workflow-controls-heading" className="mt-3 text-xl font-semibold tracking-tight">{workflow.currentStep.title}</h2>
           <p className="mt-2 text-sm leading-6 text-slate-300">{workflow.currentStep.description}</p>
@@ -49,8 +60,8 @@ export function WorkflowControls({ workflow, onStart, onAdvance, onApprove, onRe
           <div className="h-full rounded-full bg-gradient-to-r from-sky-300 via-violet-300 to-emerald-300 transition-all" style={{ width: `${workflow.progressPercent}%` }} />
         </div>
         <div className="grid grid-cols-11 gap-1">
-          {Array.from({ length: workflow.totalSteps + 1 }).map((_, index) => (
-            <span key={index} className={`h-1.5 rounded-full ${index <= workflow.stepIndex ? "bg-sky-300" : "bg-slate-800"}`} />
+          {Array.from({ length: workflow.totalSteps + 1 }, (_, i) => (
+            <span key={`pip-${i}`} className={`h-1.5 rounded-full ${i <= workflow.stepIndex ? "bg-sky-300" : "bg-slate-800"}`} />
           ))}
         </div>
       </div>
@@ -70,17 +81,17 @@ export function WorkflowControls({ workflow, onStart, onAdvance, onApprove, onRe
           </button>
         ) : null}
 
-        <button type="button" onClick={onComplete} disabled={!workflow.canComplete} className="relay-button-secondary disabled:cursor-not-allowed disabled:opacity-50">Complete demo</button>
+        <button type="button" onClick={onComplete} disabled={!workflow.canComplete} className="relay-button-secondary disabled:cursor-not-allowed disabled:opacity-50">Jump to end</button>
         <button type="button" onClick={onReplay} disabled={!workflow.canReplay} className="relay-button-secondary disabled:cursor-not-allowed disabled:opacity-50">Replay from start</button>
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
         <div className="rounded-2xl border border-sky-400/20 bg-sky-400/5 p-4">
-          <p className="relay-label text-sky-200">Judge callout</p>
+          <p className="relay-label text-sky-200">What's happening</p>
           <p className="mt-2 text-sm leading-6 text-slate-300">{workflow.currentStep.judgeCallout}</p>
         </div>
         <div className="rounded-2xl border border-violet-400/20 bg-violet-400/5 p-4">
-          <p className="relay-label text-violet-200">Band proof</p>
+          <p className="relay-label text-violet-200">Band coordination</p>
           <p className="mt-2 text-sm leading-6 text-slate-300">{workflow.currentStep.bandProof}</p>
         </div>
       </div>

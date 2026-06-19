@@ -587,7 +587,7 @@ export const sentinelRelayDemo: DemoIncident = {
       "targetAgentIds": [],
       "createdAt": "2026-06-12T21:17:48Z",
       "visibility": "judge_demo",
-      "decisionImpact": "Creates the judge-facing proof of traceable multi-agent coordination.",
+      "decisionImpact": "Provides a complete traceable record of multi-agent coordination across the incident.",
       "nextAction": "Use replay mode to demonstrate how the decision was reached through Band.",
       "correlationId": "trace-inc-1042-010",
       "payload": {

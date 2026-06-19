@@ -68,8 +68,8 @@ export class MockCollaborationProvider implements CollaborationProvider {
         "This mode proves the collaboration contract before live Band credentials are connected.",
       ],
       nextSteps: [
-        "Keep Mock Mode available as the fallback demo path.",
-        "Connect the Band provider in Step 8 through server-side API routes.",
+        "Keep Mock Mode available as the demo fallback path.",
+        "Connect the Band provider through server-side API routes when live credentials are available.",
       ],
     };
   }

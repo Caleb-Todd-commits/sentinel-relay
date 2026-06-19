@@ -75,8 +75,7 @@ export function ApprovalGate({ request, decision, approved, onApprove }: Approva
       ) : (
         <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-amber-400/30 bg-amber-400/10 p-4">
           <p className="flex-1 text-sm leading-6 text-slate-300">
-            Remediation stays blocked until this decision is recorded. This is the safety gate that keeps the
-            demo enterprise-ready.
+            Remediation stays blocked until this decision is recorded. High-impact production actions require explicit human approval.
           </p>
           {onApprove ? (
             <button

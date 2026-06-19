@@ -10,16 +10,15 @@ export function IncidentHeader({ incident, visibleMessages, totalMessages }: { i
         <div className="max-w-3xl">
           <div className="flex flex-wrap gap-2">
             <Badge tone="accent">{incident.id}</Badge>
-            <Badge tone="warning">Track 3 high-stakes workflow</Badge>
             <Badge>Room: {incident.roomId}</Badge>
           </div>
           <h1 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl">{incident.title}</h1>
           <p className="mt-3 text-sm leading-6 text-slate-300 md:text-base">{incident.summary}</p>
         </div>
         <div className="rounded-2xl border border-sky-400/30 bg-sky-400/10 p-4 text-right">
-          <p className="relay-label">Demo progress</p>
+          <p className="relay-label">Workflow progress</p>
           <p className="mt-2 text-2xl font-bold">{visibleMessages}/{totalMessages}</p>
-          <p className="mt-1 text-xs text-slate-400">Band messages visible</p>
+          <p className="mt-1 text-xs text-slate-400">coordination events</p>
         </div>
       </div>
       <div className="grid gap-3 md:grid-cols-4">

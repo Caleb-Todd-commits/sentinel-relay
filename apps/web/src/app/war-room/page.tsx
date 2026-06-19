@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { AgentRoster } from "@/components/AgentRoster";
 import { ApprovalGate } from "@/components/ApprovalGate";
 import { EvidenceBoard } from "@/components/EvidenceBoard";
@@ -16,7 +15,6 @@ import { HandoffPanel } from "@/components/war-room/HandoffPanel";
 import { IncidentHeader } from "@/components/war-room/IncidentHeader";
 import { JudgeBriefingPanel } from "@/components/war-room/JudgeBriefingPanel";
 import { RemediationList } from "@/components/war-room/RemediationList";
-import { ProviderStatusPanel } from "@/components/war-room/ProviderStatusPanel";
 import { StateMachinePanel } from "@/components/war-room/StateMachinePanel";
 import { WarRoomCommandBar } from "@/components/war-room/WarRoomCommandBar";
 import { WarRoomSectionHeader } from "@/components/war-room/WarRoomSectionHeader";
@@ -30,14 +28,6 @@ export default function WarRoomPage() {
     <main className="relay-page">
       <SiteHeader />
       <section className="relay-shell space-y-6 py-5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <Link href="/demo" className="text-sm text-slate-400 transition hover:text-white">← Demo setup</Link>
-          <div className="flex flex-wrap gap-2">
-            <Link href="/status" className="relay-button-secondary">Status</Link>
-            <Link href="/report" className="relay-button-secondary">Report</Link>
-          </div>
-        </div>
-
         <WarRoomCommandBar workflow={workflow} />
 
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_430px]">
@@ -54,7 +44,6 @@ export default function WarRoomPage() {
           onComplete={workflow.actions.completeDemo}
         />
 
-        <ProviderStatusPanel collaboration={workflow.collaboration} />
         <CriticalMomentCard workflow={workflow} />
         <CollaborationMap agents={workflow.agents} handoffs={workflow.handoffs} currentStep={workflow.currentStep} />
 

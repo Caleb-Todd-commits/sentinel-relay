@@ -8,7 +8,7 @@ export function OpenQuestionsCard({ questions, limitations }: { questions: strin
           <h2 id="open-questions-heading" className="font-semibold">Open Questions and Limitations</h2>
           <p className="mt-1 text-sm leading-6 text-slate-400">The report should clearly state what is known, what is likely, and what still needs verification.</p>
         </div>
-        <Badge tone="warning">not closed</Badge>
+        <Badge tone="warning">requires follow-up</Badge>
       </div>
       <div className="mt-5 grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-amber-400/20 bg-amber-400/5 p-4">

@@ -4,9 +4,9 @@ export const mockWorkflowSteps: WorkflowStepDefinition[] = [
   {
     stepIndex: 0,
     category: "setup",
-    title: "Demo staged and ready",
+    title: "Incident received — awaiting triage",
     shortLabel: "Ready",
-    description: "The incident packet is loaded, but no agent has posted into the shared room yet.",
+    description: "The incident packet is loaded. No agent has posted into the shared room yet.",
     phase: "intake",
     status: "open",
     severity: "medium",
@@ -19,7 +19,7 @@ export const mockWorkflowSteps: WorkflowStepDefinition[] = [
     visibleTaskIds: [],
     unresolvedChallengeIds: [],
     openApprovalRequestIds: [],
-    judgeCallout: "This is the pre-run state: the app is demoable before any live API dependency is connected.",
+    judgeCallout: "All agents are registered and the incident packet is loaded. No messages have been posted yet.",
     bandProof: "The next step creates the shared incident room that all agents coordinate through.",
   },
   {
@@ -63,7 +63,7 @@ export const mockWorkflowSteps: WorkflowStepDefinition[] = [
     visibleTaskIds: [],
     unresolvedChallengeIds: [],
     openApprovalRequestIds: [],
-    judgeCallout: "This is where single-agent demos start to fall apart; Sentinel Relay splits responsibility explicitly.",
+    judgeCallout: "Each specialist receives a structured task with defined scope — forensics, code review, threat intel, and policy review run in parallel.",
     bandProof: "The task assignment message becomes the shared contract each specialist responds to.",
   },
   {
@@ -129,7 +129,7 @@ export const mockWorkflowSteps: WorkflowStepDefinition[] = [
     visibleTaskIds: [],
     unresolvedChallengeIds: [],
     openApprovalRequestIds: [],
-    judgeCallout: "This is the Track 2 value inside Track 3: software review supports the regulated decision.",
+    judgeCallout: "Code Review connects a Friday deployment diff to the runtime anomaly, giving Risk & Compliance concrete root-cause evidence.",
     bandProof: "Code Review hands root-cause evidence to Risk & Compliance instead of acting on production alone.",
   },
   {
@@ -151,7 +151,7 @@ export const mockWorkflowSteps: WorkflowStepDefinition[] = [
     visibleTaskIds: [],
     unresolvedChallengeIds: ["msg-006"],
     openApprovalRequestIds: [],
-    judgeCallout: "This is the key winning moment: agents do not simply agree; one agent challenges the conclusion.",
+    judgeCallout: "Risk & Compliance blocks the unsupported customer-notification claim rather than rubber-stamping it — the system can disagree.",
     bandProof: "The challenge is preserved as structured coordination state, not buried in chat text.",
   },
   {
@@ -318,7 +318,7 @@ export const mockWorkflowDecisions: WorkflowDecision[] = [
   {
     id: "decision-003",
     title: "Should customers be notified now?",
-    summary: "Customer notification is explicitly deferred because the demo has not proven customer data scope.",
+    summary: "Customer notification is explicitly deferred because the data scope has not yet been confirmed.",
     owner: "Human Security Lead + Risk & Compliance",
     status: "locked",
     visibleAtStep: 8,

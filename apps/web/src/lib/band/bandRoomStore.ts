@@ -95,6 +95,10 @@ export function resetRoomRecord(roomId: string): BandLocalRoomRecord {
     taskStatuses: [],
     auditEvents: [...record.auditEvents],
     room: { ...record.room, updatedAt: nowIso() },
+    remotePostedMessageIds: [],
+    remotePostedApprovalRequestIds: [],
+    remotePostedApprovalDecisionIds: [],
+    remotePostedTaskStatusKeys: [],
   };
   updated.auditEvents.push(makeAuditEvent(updated, "room_reset", "band-adapter", "Local room mirror reset", "Reset local Sentinel Relay mirror while preserving the remote Band chat.", {}));
   setRoomRecord(roomId, updated);

@@ -1,0 +1,1422 @@
+[
+  {
+    "id": "msg-inc-1043-001",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 1,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "case_opened",
+    "title": "INC-1043 opened: treat as active credential compromise (svc-analytics-exporter)",
+    "summary": "Opened the Band room for INC-1043 and framing it as an active credential compromise until proven otherwise: A suspicious Customer Records export spike followed an IAM trust-policy change that widened GitHub OIDC access from the protected main branch to a repo-wide wildcard. Specialist agents must decide what was accessed, whether the token is contained, and which irreversible decisions require human approval. Registered forensics, threat intel, code review, risk/compliance, and remediation. Working hypothesis to confirm/refute: GitHub OIDC trust widened from protected main to repo-wide wildcard exposed a credential for subject svc-analytics-exporter and it is being used from external sources.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-forensics",
+      "agent-threat-intel",
+      "agent-code-review",
+      "agent-risk-compliance",
+      "agent-remediation"
+    ],
+    "createdAt": "2026-06-12T21:08:11Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Creates the shared coordination space and the case file every specialist anchors to.",
+    "nextAction": "Assign evidence-review tasks; forensics establishes the exposure window first.",
+    "correlationId": "trace-inc-1043-001",
+    "payload": {
+      "kind": "case_opened",
+      "data": {
+        "roomCreated": true,
+        "registeredAgentIds": [
+          "agent-forensics",
+          "agent-threat-intel",
+          "agent-code-review",
+          "agent-risk-compliance",
+          "agent-remediation"
+        ],
+        "caseFile": {
+          "detectionSource": "Customer Records API export spike after an IAM/GitHub OIDC trust-policy change",
+          "secretType": "federated OIDC service token for subject svc-analytics-exporter",
+          "affectedIdentity": "svc-analytics-exporter (reaches customer summary, bulk export, payment-methods)",
+          "repoBranch": "to confirm with repo owner (not in evidence packet)",
+          "introducingCommitSha": "to confirm \u2014 diff blobs 2b8a1c0->a91f3d7",
+          "deployImageId": "release-1007 (ci-release-role) / IAM customer-records-github-oidc-exporter",
+          "owner": "Human Security Lead",
+          "earliestExposureTime": "2026-06-14T16:18:02Z (OIDC trust widened to unprotected refs)",
+          "firstObservedUnauthorizedUse": "2026-06-14T16:24:39Z",
+          "issuerVerifiedInactiveAt": "2026-06-14T16:31:08Z",
+          "stillLive": "to be answered by issuer logs; do not assume rotation == dead",
+          "logsToPreserve": [
+            "ev-api-gateway-logs",
+            "ev-auth-events",
+            "ev-cloudtrail-events",
+            "ev-secret-scan",
+            "ev-code-diff",
+            "Lambda config history"
+          ]
+        },
+        "containmentDoctrine": "Issuer-first: revoke active federated sessions before trust-policy cleanup, then prevent minting new sessions."
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-002",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 2,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Forensics",
+    "summary": "Assigning Forensics to: Quantify exposure from gateway, auth, and CloudTrail logs. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-forensics"
+    ],
+    "createdAt": "2026-06-12T21:08:22Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Forensics.",
+    "correlationId": "trace-inc-1043-002",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-forensics",
+        "assignedToAgentId": "agent-forensics",
+        "objective": "Quantify exposure from gateway, auth, and CloudTrail logs.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-003",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 3,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Code Review",
+    "summary": "Assigning Code Review to: Identify the deploy change that introduced the exposure path. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-code-review"
+    ],
+    "createdAt": "2026-06-12T21:08:33Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Code Review.",
+    "correlationId": "trace-inc-1043-003",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-code-review",
+        "assignedToAgentId": "agent-code-review",
+        "objective": "Identify the deploy change that introduced the exposure path.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-004",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 4,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Threat Intel",
+    "summary": "Assigning Threat Intel to: Assess the external source IPs without overstating attribution. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-threat-intel"
+    ],
+    "createdAt": "2026-06-12T21:08:44Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Threat Intel.",
+    "correlationId": "trace-inc-1043-004",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-threat-intel",
+        "assignedToAgentId": "agent-threat-intel",
+        "objective": "Assess the external source IPs without overstating attribution.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-005",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 5,
+    "agentId": "agent-forensics",
+    "agentName": "Forensics Agent",
+    "type": "finding",
+    "title": "svc-analytics-exporter federated token: 3,636 records read across a verified-closed window",
+    "summary": "Treating this as an active credential compromise: an overbroad GitHub OIDC trust issued svc-analytics-exporter-oidc-redacted for subject svc-analytics-exporter at 2026-06-14T16:20:11Z; it was then used by 2 off-baseline external IPs (198.51.100.221, 203.0.113.142) to read 3,636 customer records until the issuer verified the token dead at 2026-06-14T16:31:08Z. The exposure window opened at the 2026-06-14T16:18:02Z IAM trust-policy change, not at first abuse; rotation started 2026-06-14T16:30:42Z but the window only closes on the issuer deny. Records were returned to unauthorized sources, but actor identity and downstream reuse are unproven.",
+    "confidence": 0.86,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-cloudtrail-events"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:08:55Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Quantifies confirmed unauthorized data-plane access and fixes the exposure window for the legal clock, but does not by itself prove actor identity or downstream misuse.",
+    "nextAction": "Risk & Compliance should classify severity and the breach-notification posture; Code Review should hunt for sibling credentials that survive rotation. Do not yet claim confirmed exfiltration.",
+    "correlationId": "trace-inc-1043-005",
+    "payload": {
+      "kind": "finding",
+      "data": {
+        "findings": [
+          {
+            "claim": "Exposure window opened with the IAM trust-policy change at 2026-06-14T16:18:02Z and is issuer-verified closed at 2026-06-14T16:31:08Z; revocation, not policy cleanup alone, is what closed the active token.",
+            "evidenceRef": "ev-cloudtrail-events",
+            "source": "cloudtrail_events.jsonl",
+            "observation": "UpdateAssumeRolePolicy widened customer-records-github-oidc-exporter at 2026-06-14T16:18:02Z; STS then issued svc-analytics-exporter-oidc-redacted at 2026-06-14T16:20:11Z from an untrusted workflow."
+          },
+          {
+            "claim": "Compromised principal is svc-analytics-exporter via overbroad GitHub OIDC trust; this is a federated credential control failure, not a committed static secret.",
+            "evidenceRef": "ev-auth-events",
+            "source": "auth_events.jsonl",
+            "observation": "federated_token_issued at 2026-06-14T16:20:11Z issued token label svc-analytics-exporter-oidc-redacted; the normal production credential is svc-analytics-exporter-prod."
+          },
+          {
+            "claim": "The federated token was actively USED by 2 off-baseline external sources for export and payment-method reads.",
+            "evidenceRef": "ev-auth-events",
+            "source": "auth_events.jsonl",
+            "observation": "198.51.100.221, 203.0.113.142 used svc-analytics-exporter-oidc-redacted starting at 2026-06-14T16:24:39Z. A post-revocation retry at 2026-06-14T16:31:08Z was DENIED (token_revoked, post_rotation_attempt)."
+          },
+          {
+            "claim": "Gateway data-plane logs quantify 3,636 customer records returned to unauthorized IPs; expected analytics-worker traffic is excluded.",
+            "evidenceRef": "ev-api-gateway-logs",
+            "source": "api_gateway_logs.jsonl",
+            "observation": "3 successful federated-token responses returned records from us-east-2/us-west-2; denied scopes: /v1/admin/audit/export."
+          }
+        ],
+        "compromisedIdentity": {
+          "subject": "svc-analytics-exporter",
+          "credentialType": "federated service token minted through overbroad GitHub OIDC trust",
+          "credentialLabel": "svc-analytics-exporter-oidc-redacted",
+          "notAnIamOrCloudKey": false,
+          "reachableScope": [
+            "/v1/customers/summary",
+            "/v1/customers/export (bulk)",
+            "/v1/customers/{id}/payment-methods (sensitive)"
+          ],
+          "deniedScope": [
+            "/v1/billing/events/export (403 \u2014 outside this subject's grant)"
+          ]
+        },
+        "exposureWindow": {
+          "openedAt": "2026-06-14T16:18:02Z",
+          "openedBy": "IAM trust-policy update: UpdateAssumeRolePolicy on customer-records-github-oidc-exporter",
+          "fallbackFirstLoadedAt": "unknown",
+          "credentialFirstObservedAt": "2026-06-14T16:20:11Z",
+          "firstUnauthorizedUseAt": "2026-06-14T16:24:39Z",
+          "rotationStartedAt": "2026-06-14T16:30:42Z",
+          "issuerVerifiedInactiveAt": "2026-06-14T16:31:08Z",
+          "status": "verified_closed",
+          "note": "A later code deletion would NOT close the window; only the issuer-side deny does."
+        },
+        "recordsExportedEstimate": 3636,
+        "exportBreakdown": [
+          {
+            "requestId": "req-1043-0002",
+            "ip": "203.0.113.142",
+            "endpoint": "/v1/customers/export?segment=trial&limit=2000",
+            "records": 2000,
+            "status": 200
+          },
+          {
+            "requestId": "req-1043-0003",
+            "ip": "203.0.113.142",
+            "endpoint": "/v1/customers/export?segment=trial&cursor=2000",
+            "records": 1632,
+            "status": 200
+          },
+          {
+            "requestId": "req-1043-0004",
+            "ip": "198.51.100.221",
+            "endpoint": "/v1/customers/891/payment-methods",
+            "records": 4,
+            "status": 200
+          }
+        ],
+        "exposedVsUsed": {
+          "exposed": "OIDC trust widened to unprotected refs and allowed a preview workflow to mint a production-scoped federated token.",
+          "actuallyUsed": "Confirmed used: new_ip_for_token + untrusted_workflow, then bulk_access_pattern and canary/payment-method probing.",
+          "offBaseline": "github-actions-preview/2.0, python-requests/2.31 from us-east-2/us-west-2 vs baseline IP(s) 198.51.100.44."
+        },
+        "loggingGap": "Control-plane (CloudTrail) and data-plane (API gateway) logging are separate. Here the gateway data-plane captured records_returned, so we can quantify what was read. If data-plane logging had been off, CloudTrail would still show the throttle, fallback load, and Lambda invokes \u2014 i.e. suspicious admin activity \u2014 but we could NOT prove customer records were actually returned. Absence of data-plane logs is not evidence of no access.",
+        "chainOfCustody": {
+          "preservedEvidence": [
+            "ev-api-gateway-logs",
+            "ev-auth-events",
+            "ev-cloudtrail-events"
+          ],
+          "alsoPreserve": [
+            "ev-secret-scan",
+            "ev-code-diff",
+            "Lambda config history for customer-records-api"
+          ],
+          "collectionNote": "Evidence IDs are immutable references collected with deterministic timestamps; do not mutate source logs."
+        },
+        "limitations": [
+          "No actor attribution from logs alone (see Threat Intel).",
+          "Downstream reuse, resale, or caching of the 3,636 records is unverified.",
+          "Exact customer-row identities behind the export counts still need data mapping."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "unauthorizedSourceIps": [
+            "198.51.100.221",
+            "203.0.113.142"
+          ],
+          "unauthorizedSuccessCount": 3,
+          "bulkExportRecords": 3632,
+          "vipExportRecords": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-006",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 6,
+    "agentId": "agent-code-review",
+    "agentName": "Code Review Agent",
+    "type": "finding",
+    "title": "Root cause: OIDC trust wildcard let an untrusted workflow mint an exporter token",
+    "summary": "The deploy diff touched infra/iam/github-oidc-trust.json, services/customer-records/config/export-policy.json and widened GitHub OIDC trust from the protected main branch to a repo-wide wildcard. That allowed an untrusted preview workflow to mint svc-analytics-exporter-oidc-redacted for subject svc-analytics-exporter; no committed secret was required and the scanner correctly shows 0 unresolved high finding(s). Containment must revoke active federated sessions, restore protected-ref trust conditions, and remove export/payment-method scope from untrusted refs.",
+    "confidence": 0.91,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-code-diff",
+      "ev-secret-scan"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:06Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Establishes the root-cause trust-policy change and warns that token revocation alone is incomplete while the wildcard can mint new sessions.",
+    "nextAction": "Remediation must revoke active federated sessions, restore protected-ref OIDC trust, remove export scope from untrusted refs, and add policy-as-code guardrails.",
+    "correlationId": "trace-inc-1043-006",
+    "payload": {
+      "kind": "finding",
+      "data": {
+        "findings": [
+          {
+            "claim": "Introducing change: the IAM trust policy widened GitHub OIDC from protected main to a repo-wide wildcard.",
+            "evidenceRef": "ev-code-diff",
+            "source": "git_diff.patch",
+            "observation": "infra/iam/github-oidc-trust.json (blob 2b8a1c0->a91f3d7): token.actions.githubusercontent.com:sub changed from the protected main ref to repo:acme/payments:*."
+          },
+          {
+            "claim": "No static secret was committed; the credential was minted dynamically through the widened trust policy.",
+            "evidenceRef": "ev-secret-scan",
+            "source": "secret_scan.json",
+            "observation": "The scanner reported 0 unresolved high finding(s). This incident class would bypass traditional secret scanning because the risky value is the trust boundary, not a literal token."
+          },
+          {
+            "claim": "FEDERATED-CREDENTIAL RISK: subject svc-analytics-exporter can now be assumed by untrusted preview refs, so revoking one issued token is incomplete unless the trust policy is tightened.",
+            "evidenceRef": "ev-code-diff",
+            "source": "git_diff.patch + cloudtrail_events.jsonl",
+            "observation": "The role can mint fresh sessions while the wildcard remains. Containment must revoke active sessions and restore protected-ref conditions before considering the window closed."
+          },
+          {
+            "claim": "Export scope was expanded to customer records and payment-method reads for the federated role.",
+            "evidenceRef": "ev-code-diff",
+            "source": "git_diff.patch",
+            "observation": "services/customer-records/config/export-policy.json adds customer:records:export and customer:payment-methods:read."
+          }
+        ],
+        "rootCauseChange": "GitHub OIDC trust widened from protected main to repo-wide wildcard",
+        "introducedBy": {
+          "release": "release-1007",
+          "changedFile": "infra/iam/github-oidc-trust.json",
+          "blob": "2b8a1c0->a91f3d7",
+          "newFile": "services/customer-records/config/export-policy.json",
+          "commitSha": "not present in evidence packet \u2014 confirm with repo owner"
+        },
+        "pushProtection": "Not applicable: no static secret was committed; policy-as-code guardrails should catch the trust regression.",
+        "siblingCredentialHunt": {
+          "principal": "svc-analytics-exporter",
+          "credentialsAuthenticatingPrincipal": [
+            {
+              "name": "svc-analytics-exporter-oidc-redacted",
+              "issuer": "GitHub OIDC / AWS STS",
+              "ref": "customer-records-github-oidc-exporter",
+              "revokingOneSessionFixesTrust": false
+            },
+            {
+              "name": "svc-analytics-exporter-prod",
+              "issuer": "production workload identity",
+              "ref": "protected main deployment",
+              "requiresIndependentReview": true
+            }
+          ],
+          "legacyOrFallbackPaths": [
+            "repo-wide OIDC subject wildcard",
+            "untrusted preview workflow can mint production token",
+            "export scope allowed outside protected branch"
+          ],
+          "mustAlsoCheck": [
+            "Other roles using repo-wide token.actions.githubusercontent.com:sub wildcards",
+            "Preview workflows that can request customer export scopes",
+            "Active STS sessions minted before trust policy rollback"
+          ],
+          "warning": "Revoking the observed token is not enough while the OIDC wildcard can mint another session."
+        },
+        "limitations": [
+          "The token label is redacted synthetic evidence; no usable federated credential is present.",
+          "No introducing commit SHA, repo name/branch, or image digest in the packet to fully pin propagation."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "changedFiles": [
+            "infra/iam/github-oidc-trust.json",
+            "services/customer-records/config/export-policy.json"
+          ],
+          "rootCauseKind": "oidc_trust_wildcard",
+          "rootCauseSummary": "GitHub OIDC trust widened from protected main to repo-wide wildcard",
+          "riskyControls": [
+            "repo-wide OIDC subject wildcard",
+            "untrusted preview workflow can mint production token",
+            "export scope allowed outside protected branch"
+          ],
+          "failOpenFallbackAdded": false,
+          "envReleaseAdded": false,
+          "fallbackTokenVariableAdded": false,
+          "customerExportEnabledAdded": true,
+          "unresolvedHighSecretFindings": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-007",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 7,
+    "agentId": "agent-threat-intel",
+    "agentName": "Threat Intel Agent",
+    "type": "finding",
+    "title": "High likelihood of exploitation: fast OIDC minting, bulk export path, retry after revocation",
+    "summary": "Assessing this as active abuse of a federated Customer Records exporter token. The ~7 minutes gap from trust-policy change to first external use fits fast OIDC mint-and-use behavior after a CI permission regression; the access pattern (bulk export, payment-method read, canary probe) shows a useful data-abuse path, and a post-revocation retry by an external source shows the source wanted to keep access. Likelihood of exploitation is HIGH. Indicators are documentation-range demo IPs, so no real-world actor attribution is claimed.",
+    "confidence": 0.74,
+    "severity": "medium",
+    "evidenceIds": [
+      "ev-ip-intel",
+      "ev-api-gateway-logs"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:17Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Raises this from 'a secret leaked' to 'an exposed credential is being actively abused', which should drive urgency on containment and on the breach-notification assessment.",
+    "nextAction": "Risk & Compliance should treat this as active unauthorized use feeding the GDPR/CCPA assessment, not yet as attributed breach.",
+    "correlationId": "trace-inc-1043-007",
+    "payload": {
+      "kind": "finding",
+      "data": {
+        "findings": [
+          {
+            "claim": "Discovery-to-abuse velocity is consistent with automated secret hunting: ~7 minutes from the 2026-06-14T16:18:02Z deploy to first external use at 2026-06-14T16:24:39Z.",
+            "evidenceRef": "ev-api-gateway-logs",
+            "source": "api_gateway_logs.jsonl",
+            "observation": "Fast mint-to-use timing is consistent with an untrusted workflow exercising newly broadened OIDC trust."
+          },
+          {
+            "claim": "2 off-baseline external IPs used the token; 198.51.100.44 is expected CI/prod egress and must not be miscounted as hostile.",
+            "evidenceRef": "ev-ip-intel",
+            "source": "suspicious_ips.json",
+            "observation": "198.51.100.221, 203.0.113.142 used automation user agents (python-requests/2.31) during the spike; 198.51.100.221 probed a canary path; 198.51.100.44 is the known payments worker egress."
+          },
+          {
+            "claim": "Behavior shows intent to retain access: an external source attempted another request AFTER rotation, raising likelihood this is active abuse rather than incidental exposure.",
+            "evidenceRef": "ev-ip-intel",
+            "source": "suspicious_ips.json",
+            "observation": "Post-rotation retry at 21:12:02Z indicates the source was actively working the token, not a passive scan that moved on."
+          }
+        ],
+        "exposureVelocity": {
+          "deployAt": "2026-06-14T16:18:02Z",
+          "firstAbuseAt": "2026-06-14T16:24:39Z",
+          "minutesToAbuse": 7,
+          "assessment": "Within the minutes-to-hours window typical of automated secret discovery; supports opportunistic-then-hands-on abuse."
+        },
+        "credentialAbusePath": {
+          "credentialType": "OIDC-issued customer-records exporter token (read access to customer export + payment-methods)",
+          "likelyObjective": "bulk export through a federated CI credential that should have been limited to protected refs",
+          "monetisation": [
+            "Resale of customer + payment-method records on data markets",
+            "Account-takeover / payment fraud against affected customers",
+            "Extortion of the platform over the export"
+          ],
+          "observedTradecraft": [
+            "OIDC token minting from untrusted ref",
+            "bulk paginated export",
+            "payment-method read",
+            "post-revocation retry"
+          ]
+        },
+        "likelihoodOfExploitation": "high",
+        "strongestSignals": [
+          "confirmed use by unexpected external IPs (not just exposure)",
+          "automation user agents (python-requests/2.31) off the worker baseline",
+          "enumerate-then-export sequence",
+          "post-rotation persistence attempt",
+          "discovery-to-abuse timing consistent with automated scanning"
+        ],
+        "weakSignals": [
+          "raw IP reputation alone",
+          "geo of documentation-range IPs"
+        ],
+        "limitations": [
+          "Documentation-range IPs; do NOT claim real-world threat-actor attribution or geolocation.",
+          "Cannot confirm resale or downstream use; monetisation paths are assessed, not observed."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "unexpectedIps": [
+            "198.51.100.221",
+            "203.0.113.142"
+          ],
+          "expectedIps": [
+            "198.51.100.44"
+          ],
+          "postRotationRetryIps": [],
+          "canaryProbeIps": [
+            "198.51.100.221"
+          ],
+          "automationUserAgents": [
+            "python-requests/2.31"
+          ]
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-008",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 8,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "handoff",
+    "title": "Cross-agent review opened before the policy gate",
+    "summary": "Opening a peer-review round before Risk & Compliance is allowed to assess. Forensics must verify the code-root-cause and threat-timing claims against data-plane logs; Code Review must verify containment prerequisites against the observed exposure; Threat Intel must challenge attribution and exfiltration wording. Risk waits for all three verification messages.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-forensics",
+      "agent-code-review",
+      "agent-threat-intel"
+    ],
+    "createdAt": "2026-06-12T21:09:28Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Turns the investigation from parallel reports into an explicit cross-check, so the policy gate sees agreement, dissent, and remaining uncertainty before any human-facing decision.",
+    "nextAction": "Reviewers post verification messages; Band Leader assigns Risk & Compliance only after all three arrive.",
+    "correlationId": "trace-inc-1043-008",
+    "payload": {
+      "kind": "cross_review",
+      "data": {
+        "reviewRoundId": "review-inc-1043-1",
+        "requiredReviewerAgentIds": [
+          "agent-forensics",
+          "agent-code-review",
+          "agent-threat-intel"
+        ],
+        "sourceFindingMessageIds": [
+          "msg-inc-1043-005",
+          "msg-inc-1043-006",
+          "msg-inc-1043-007"
+        ],
+        "blocksRiskGateUntil": "all_required_verifications_posted",
+        "reviewCriteria": [
+          "Does another agent's claim match the source evidence?",
+          "Which conclusion is still unsupported or overclaimed?",
+          "Which containment prerequisite would make the response incomplete?",
+          "Which limitation must be preserved for Legal and the human approver?"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-009",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 9,
+    "agentId": "agent-forensics",
+    "agentName": "Forensics Agent",
+    "type": "verification",
+    "title": "Peer review: data-plane evidence validates root cause and abuse timing",
+    "summary": "Reviewed Code Review and Threat Intel before the policy gate. Gateway/auth logs support the root-cause and exploitation-timing chain for svc-analytics-exporter: first unauthorized use at 2026-06-14T16:24:39Z, 3,636 records returned to 2 unexpected IPs (198.51.100.221, 203.0.113.142), and the active window closing only at issuer verification (2026-06-14T16:31:08Z). I preserve one challenge: these logs prove unauthorized reads, not downstream resale, named-actor attribution, or final notification scope.",
+    "confidence": 0.9,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-cloudtrail-events",
+      "ev-code-diff",
+      "ev-ip-intel"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:39Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Gives Risk & Compliance a cross-checked exposure chain while preserving the line between records returned and downstream misuse.",
+    "nextAction": "Code Review and Threat Intel should post their peer checks; Risk should wait until the review round is complete.",
+    "correlationId": "trace-inc-1043-009",
+    "payload": {
+      "kind": "cross_review_verification",
+      "data": {
+        "reviewRoundId": "review-inc-1043-1",
+        "reviewerAgentId": "agent-forensics",
+        "reviewedAgentIds": [
+          "agent-code-review",
+          "agent-threat-intel"
+        ],
+        "reviewedMessageIds": [
+          "msg-inc-1043-006",
+          "msg-inc-1043-007"
+        ],
+        "verifiedClaims": [
+          "Code Review's OIDC trust-policy finding matches the observed data-plane window: the trust change opened at 2026-06-14T16:18:02Z, svc-analytics-exporter-oidc-redacted was used by unexpected sources, and issuer revocation at 2026-06-14T16:31:08Z is the closure signal.",
+          "Threat Intel's high-likelihood assessment is supported by data-plane behavior: unexpected IPs, automation user agents, bulk export/payment-method reads, and a post-revocation retry."
+        ],
+        "challengesPreserved": [
+          "Do not convert records-returned evidence into a confirmed downstream resale or reuse claim.",
+          "Do not attribute the source to a named actor from documentation-range IP indicators.",
+          "Do not treat code cleanup as the window close; issuer-side denial is the closure evidence."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 3636,
+          "unexpectedIps": [
+            "198.51.100.221",
+            "203.0.113.142"
+          ],
+          "firstUnauthorizedUseAt": "2026-06-14T16:24:39Z",
+          "issuerVerifiedInactiveAt": "2026-06-14T16:31:08Z",
+          "rootCauseKind": "oidc_trust_wildcard"
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-010",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 10,
+    "agentId": "agent-code-review",
+    "agentName": "Code Review Agent",
+    "type": "verification",
+    "title": "Peer review: containment is incomplete without fixing the trust/control path",
+    "summary": "Reviewed Forensics and Threat Intel before the policy gate. Their evidence supports urgent containment: 3,636 records were returned through the affected svc-analytics-exporter path and the abuse pattern is active, not theoretical. My challenge is containment scope: Forensics can show the observed token/session is issuer-verified inactive, but containment is not complete until the GitHub OIDC trust condition is restored to protected refs and export scope is removed from untrusted workflow paths. Risk should not let approval wording collapse to token rotation alone.",
+    "confidence": 0.89,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-code-diff",
+      "ev-ip-intel",
+      "ev-secret-scan"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:09:50Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Prevents a narrow containment plan that closes the observed credential but leaves the code, trust, or sibling-credential path capable of reintroducing access.",
+    "nextAction": "Risk should require the approval request to include the full containment scope, not only the observed token/session.",
+    "correlationId": "trace-inc-1043-010",
+    "payload": {
+      "kind": "cross_review_verification",
+      "data": {
+        "reviewRoundId": "review-inc-1043-1",
+        "reviewerAgentId": "agent-code-review",
+        "reviewedAgentIds": [
+          "agent-forensics",
+          "agent-threat-intel"
+        ],
+        "reviewedMessageIds": [
+          "msg-inc-1043-005",
+          "msg-inc-1043-007"
+        ],
+        "verifiedClaims": [
+          "Forensics' 3,636-record exposure estimate is consistent with the root-cause change: GitHub OIDC trust widened from protected main to repo-wide wildcard.",
+          "Threat Intel's urgency is justified because the observed path is useful for bulk export and had a post-rotation retry."
+        ],
+        "challengesPreserved": [
+          "Forensics can show the observed token/session is issuer-verified inactive, but containment is not complete until the GitHub OIDC trust condition is restored to protected refs and export scope is removed from untrusted workflow paths.",
+          "Do not mark the incident contained solely because the observed credential is dead.",
+          "Do not skip prevention controls; the same class can recur on the next deploy or workflow run."
+        ],
+        "requiredContainmentControls": [
+          "Revoke active federated sessions",
+          "Restore protected-ref OIDC trust conditions",
+          "Remove customer export/payment-method scope from untrusted refs",
+          "Add policy-as-code checks for repo-wide OIDC subject wildcards"
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 3636,
+          "rootCauseKind": "oidc_trust_wildcard",
+          "rootCauseSummary": "GitHub OIDC trust widened from protected main to repo-wide wildcard",
+          "riskyControls": [
+            "repo-wide OIDC subject wildcard",
+            "untrusted preview workflow can mint production token",
+            "export scope allowed outside protected branch"
+          ],
+          "unresolvedHighSecretFindings": 0
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-011",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 11,
+    "agentId": "agent-threat-intel",
+    "agentName": "Threat Intel Agent",
+    "type": "verification",
+    "title": "Peer review: exploitation likelihood is high, attribution remains unsupported",
+    "summary": "Reviewed Forensics and Code Review before the policy gate. Their chain is coherent: svc-analytics-exporter became usable through the root-cause control failure, unexpected IPs (198.51.100.221, 203.0.113.142) used it ~7 minutes after the opening change, 3,636 records were returned, and an external source retried after revocation. I validate high exploitation likelihood, but challenge any named-actor, geolocation, or downstream reuse/resale claim.",
+    "confidence": 0.78,
+    "severity": "medium",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-code-diff",
+      "ev-ip-intel"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:10:01Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Keeps urgency high for containment while preventing the investigation from overstating attribution or downstream impact before Legal/customer-scope review.",
+    "nextAction": "Risk should classify active unauthorized use as high severity while holding attribution and notification scope for human review.",
+    "correlationId": "trace-inc-1043-011",
+    "payload": {
+      "kind": "cross_review_verification",
+      "data": {
+        "reviewRoundId": "review-inc-1043-1",
+        "reviewerAgentId": "agent-threat-intel",
+        "reviewedAgentIds": [
+          "agent-forensics",
+          "agent-code-review"
+        ],
+        "reviewedMessageIds": [
+          "msg-inc-1043-005",
+          "msg-inc-1043-006"
+        ],
+        "verifiedClaims": [
+          "Forensics' record-return evidence supports active unauthorized use, not mere exposure: 3,636 records.",
+          "Code Review's root-cause path explains the observed abuse path: OIDC minting from an untrusted workflow followed by bulk export and payment-method reads.",
+          "Post-revocation retry supports persistence/active abuse and raises urgency."
+        ],
+        "challengesPreserved": [
+          "Do not claim real-world threat-actor attribution from documentation-range IPs.",
+          "Do not claim downstream resale, fraud, or reuse without external evidence.",
+          "Do not turn high likelihood into certainty; keep confidence below verified until scope review completes."
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "unexpectedIps": [
+            "198.51.100.221",
+            "203.0.113.142"
+          ],
+          "expectedIps": [
+            "198.51.100.44"
+          ],
+          "minutesToAbuse": 7,
+          "postRotationRetryIps": [],
+          "rootCauseKind": "oidc_trust_wildcard"
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-012",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 12,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Risk & Compliance",
+    "summary": "Assigning Risk & Compliance to: Rule on severity and required approvals per the incident policy. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-risk-compliance"
+    ],
+    "createdAt": "2026-06-12T21:10:12Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Risk & Compliance.",
+    "correlationId": "trace-inc-1043-012",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-risk-compliance",
+        "assignedToAgentId": "agent-risk-compliance",
+        "objective": "Rule on severity and required approvals per the incident policy.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ],
+        "policyId": "SEC-IR-OIDC-002"
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-013",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 13,
+    "agentId": "agent-risk-compliance",
+    "agentName": "Risk & Compliance Agent",
+    "type": "challenge",
+    "title": "Policy gate: challenge the 'confirmed exfiltration' framing; hold notification",
+    "summary": "The peer-review gate is satisfied: Forensics, Code Review, and Threat Intel each cross-checked the others before this policy call. Two findings must be separated. (1) The GDPR personal-data-breach threshold is about unauthorised ACCESS to personal data, not actor identification: gateway logs show 3,636 customer records (including payment-methods) returned to unexpected external IPs (198.51.100.221, 203.0.113.142), so a confidentiality breach is likely already established and the 72h assessment clock should be treated as running from awareness. (2) I still CHALLENGE any 'confirmed exfiltration / misuse' claim \u2014 downstream resale or reuse is unproven, and actor identity is unresolved, so under our incident policy the case classification stays suspected_exposure. Customer notification stays HELD for the human Security Lead + Legal until scope, residency, and the controller/processor question are verified.",
+    "confidence": 0.88,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-incident-policy",
+      "ev-api-gateway-logs",
+      "ev-code-diff"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:10:23Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Stops two opposite errors: under-reacting ('just a leaked secret, no breach') and over-claiming ('confirmed mass exfiltration'). Forces a human + Legal gate before any notification.",
+    "nextAction": "Approve issuer-first federated-session containment.",
+    "correlationId": "trace-inc-1043-013",
+    "payload": {
+      "kind": "risk_assessment",
+      "data": {
+        "policyGate": {
+          "decision": "containment_only",
+          "classification": "suspected_exposure",
+          "recommendedSeverity": "high",
+          "customerNotification": "hold_pending_legal_scope",
+          "challenge": "Gateway logs show 3,636 records returned to unexpected IPs, so containment is urgent, but downstream misuse, actor identity, residency scope, and Legal wording are not proven.",
+          "requiredApprovals": [
+            "revoke_federated_sessions",
+            "tighten_oidc_trust_policy",
+            "external_customer_notification"
+          ],
+          "nextActions": [
+            "Approve issuer-first federated-session containment.",
+            "Hold customer notification pending Legal and customer-scope mapping.",
+            "Restore OIDC trust to protected refs and remove export scope from untrusted workflows.",
+            "Map exported records to jurisdiction and controller/processor duties."
+          ],
+          "unsupportedClaims": [
+            "Confirmed named threat actor.",
+            "Confirmed downstream resale or misuse.",
+            "Customer notification ready without Legal scope review."
+          ],
+          "openQuestions": [
+            "Which exact customers and jurisdictions are in the returned records?",
+            "Did downstream systems cache, forward, or expose the returned rows?",
+            "Is the OIDC trust boundary fixed and active sessions revoked?"
+          ],
+          "evidenceIds": [
+            "ev-incident-policy",
+            "ev-api-gateway-logs",
+            "ev-code-diff",
+            "ev-auth-events"
+          ],
+          "confidence": 0.88,
+          "reasoningSummary": "The evidence supports active unauthorized access and high-severity containment, while policy blocks notification and closure until scope is verified."
+        },
+        "partnerTool": {
+          "provider": "AI/ML API",
+          "label": "risk_policy_gate",
+          "usedLiveApi": false,
+          "status": "disabled_fallback",
+          "model": "gpt-4o-mini",
+          "baseUrl": "https://api.aimlapi.com/v1",
+          "error": null
+        },
+        "recommendedSeverity": "high",
+        "classification": "suspected_exposure",
+        "crossReviewGate": {
+          "requiredReviewerAgentIds": [
+            "agent-forensics",
+            "agent-code-review",
+            "agent-threat-intel"
+          ],
+          "receivedVerificationMessageIds": [
+            "msg-inc-1043-009",
+            "msg-inc-1043-010",
+            "msg-inc-1043-011"
+          ],
+          "gateSatisfied": true,
+          "blocksApprovalIfIncomplete": true,
+          "preservedChallenges": [
+            "Do not convert records-returned evidence into a confirmed downstream resale or reuse claim.",
+            "Do not attribute the source to a named actor from documentation-range IP indicators.",
+            "Do not treat code cleanup as the window close; issuer-side denial is the closure evidence.",
+            "Forensics can show the observed token/session is issuer-verified inactive, but containment is not complete until the GitHub OIDC trust condition is restored to protected refs and export scope is removed from untrusted workflow paths.",
+            "Do not mark the incident contained solely because the observed credential is dead.",
+            "Do not skip prevention controls; the same class can recur on the next deploy or workflow run."
+          ]
+        },
+        "breachThresholdAssessment": {
+          "gdprPersonalDataBreach": "likely_met",
+          "basis": "Unauthorised access to personal data (customer records + payment-methods returned to external IPs) is a confidentiality breach under GDPR Art 4(12); it does not require identifying the actor.",
+          "confirmedExfiltration": "unproven",
+          "policyClassificationReason": "Per SEC-IR-API-KEY-001, records were returned but actor identity is unresolved -> classify as suspected exposure and keep collecting evidence."
+        },
+        "challenges": [
+          "Do NOT state 'confirmed breach with exfiltration' \u2014 logs prove unauthorised access, not downstream misuse or resale.",
+          "Do NOT attribute to a named actor \u2014 indicators are documentation-range IPs (per Threat Intel).",
+          "Do NOT send external customer notification without Legal sign-off on scope and wording.",
+          "Do NOT call the incident closed until the credential is issuer-verified dead AND sibling credentials are confirmed handled (per Code Review)."
+        ],
+        "notificationClocks": {
+          "note": "Clocks are flagged as likely-triggered; the human + Legal confirm the trigger and start time. Counts/residency not yet verified.",
+          "gdpr": "72h to the supervisory authority from awareness (Art 33); Art 34 notice to individuals if high risk \u2014 payment-method data points to high risk.",
+          "controllerVsProcessor": "If Payments Platform is a processor here, Art 33(2) requires notifying the controller without undue delay; DPAs often impose stricter/shorter contractual windows than statute.",
+          "california": "CCPA/CPRA: notify affected residents without unreasonable delay; if >500 CA residents, sample to the CA AG (treat ~30-day / 15-day expectations as planning targets pending Legal).",
+          "ccpaPrivateRight": "Cal. Civ. Code 1798.150 private right of action exposure for unauthorised access/exfiltration of personal information due to failure to maintain reasonable security."
+        },
+        "openScopeQuestions": [
+          "How many of the 3,636 records belong to EU vs California vs other residents?",
+          "Is Payments Platform controller or processor for these records, and what does the DPA notification matrix require?",
+          "Which exact customers/payment-methods are in the exported rows?"
+        ],
+        "policyRefs": [
+          "SEC-IR-OIDC-002"
+        ],
+        "humanApprovalRequired": [
+          "revoke_federated_sessions",
+          "tighten_oidc_trust_policy",
+          "external_customer_notification"
+        ],
+        "deferredPendingHuman": [
+          "external_customer_notification",
+          "incident_closure"
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 3636,
+          "unexpectedIps": [
+            "198.51.100.221",
+            "203.0.113.142"
+          ],
+          "policyId": "SEC-IR-OIDC-002",
+          "highSeverityCondition": "Sensitive customer endpoints were accessed with a federated production credential from an untrusted workflow.",
+          "criticalSeverityCondition": "Confirmed unauthorized exfiltration, active abuse, or inability to contain the federated credential."
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-014",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 14,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "approval_request",
+    "title": "Human approval requested for issuer-first containment",
+    "summary": "Requesting Security Lead approval for issuer-first containment in order: (1) confirm the OIDC-issued session is revoked/dead at its issuer, (2) restore GitHub OIDC trust to protected refs only, (3) remove export/payment-method scope from untrusted workflow paths. External customer notification and incident closure are explicitly NOT requested \u2014 those are irreversible/disclosure decisions held for the human and Legal pending verified scope.",
+    "confidence": 0.94,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-incident-policy",
+      "ev-code-diff"
+    ],
+    "targetAgentIds": [
+      "agent-human-approver"
+    ],
+    "createdAt": "2026-06-12T21:10:34Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Ensures production-impacting and irreversible actions are not taken autonomously.",
+    "nextAction": "Wait for the human Security Lead decision.",
+    "correlationId": "trace-inc-1043-014",
+    "payload": {
+      "kind": "approval_request",
+      "data": {
+        "approvalRequestId": "appr-1043-1",
+        "requiredApprover": "Security Lead",
+        "containmentSequence": [
+          "Verify OIDC-issued token/session revoked at issuer",
+          "Restore GitHub OIDC trust to protected refs only",
+          "Remove export/payment-method scope from untrusted workflow paths"
+        ],
+        "requestedActions": [
+          "Revoke federated sessions",
+          "Tighten OIDC trust policy",
+          "Patch export scope"
+        ],
+        "notRequestedActions": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "routedToHumanBecauseIrreversible": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "riskIfApproved": "May briefly disrupt the service depending on the credential, but stops ongoing exposure.",
+        "riskIfRejected": "OIDC wildcard can continue minting production-scoped sessions while investigation continues."
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-015",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 15,
+    "agentId": "agent-human-approver",
+    "agentName": "Human Security Lead",
+    "type": "approval_decision",
+    "title": "Containment approved, customer notification held",
+    "summary": "Approved immediate containment: revoke federated sessions, tighten the OIDC trust policy, and patch export scope. External customer notification remains held until record-access scope is verified with Legal.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-incident-policy"
+    ],
+    "targetAgentIds": [
+      "agent-commander",
+      "agent-risk-compliance"
+    ],
+    "createdAt": "2026-06-12T21:10:45Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Unlocks remediation while keeping disclosure decisions under human control.",
+    "nextAction": "Remediation should execute the approved scope only.",
+    "correlationId": "trace-inc-1043-015",
+    "payload": {
+      "kind": "approval_decision",
+      "data": {
+        "approvalRequestId": "appr-1043-1",
+        "decision": "approved",
+        "decidedBy": "Human Security Lead",
+        "approvedScope": [
+          "Revoke federated sessions",
+          "Tighten OIDC trust policy",
+          "Patch export scope"
+        ],
+        "explicitlyNotApproved": [
+          "External customer notification",
+          "Incident closure"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-016",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 16,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "task_assignment",
+    "title": "Task assigned to Remediation",
+    "summary": "Assigning Remediation to: Execute the approved containment scope only. Cite evidence IDs, name the affected identity and its reach, and assign a confidence.",
+    "confidence": 1.0,
+    "severity": "high",
+    "evidenceIds": [],
+    "targetAgentIds": [
+      "agent-remediation"
+    ],
+    "createdAt": "2026-06-12T21:10:56Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Distributes the investigation so no single agent decides alone.",
+    "nextAction": "Wait for an evidence-backed report from Remediation.",
+    "correlationId": "trace-inc-1043-016",
+    "payload": {
+      "kind": "task_assignment",
+      "data": {
+        "taskId": "task-agent-remediation",
+        "assignedToAgentId": "agent-remediation",
+        "objective": "Execute the approved containment scope only.",
+        "acceptanceCriteria": [
+          "Cite evidence IDs",
+          "Name the affected identity and its permissions/reach",
+          "Assign confidence",
+          "State limitations"
+        ],
+        "approvedScope": [
+          "Revoke federated sessions",
+          "Tighten OIDC trust policy",
+          "Patch export scope"
+        ]
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-017",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 17,
+    "agentId": "agent-remediation",
+    "agentName": "Remediation Agent",
+    "type": "remediation_task",
+    "title": "Issuer-first containment executed; OIDC trust rollback and scope reduction queued",
+    "summary": "Within the approved scope: the OIDC-issued token is issuer-verified dead at 2026-06-14T16:31:08Z and the GitHub OIDC trust policy is being restored to protected refs only. Flagging that containment is NOT complete on token revocation alone \u2014 the wildcard trust can mint another session until it is rolled back, export/payment-method scope must be removed from untrusted refs, and preview and production identities should be split. External customer notification is intentionally excluded \u2014 not approved.",
+    "confidence": 0.92,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-code-diff",
+      "ev-auth-events"
+    ],
+    "targetAgentIds": [
+      "agent-commander"
+    ],
+    "createdAt": "2026-06-12T21:11:07Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Moves the case into controlled, approval-bounded remediation while preventing the rotate-one-leave-a-sibling failure.",
+    "nextAction": "Commander can generate the final audit report; notification decisions remain with the human + Legal.",
+    "correlationId": "trace-inc-1043-017",
+    "payload": {
+      "kind": "remediation_task",
+      "data": {
+        "approvedScope": [
+          "Revoke federated sessions",
+          "Tighten OIDC trust policy",
+          "Patch export scope"
+        ],
+        "containmentOrder": "issuer-first (revoke active federated sessions) before policy cleanup; trust rollback prevents minting new sessions",
+        "windowClosedCriterion": "Old federated credential issuer-verified inactive at 2026-06-14T16:31:08Z (auth deny + gateway 401); window is only 'closed' because active sessions are denied and trust is being tightened.",
+        "siblingCredentialsToAddress": [
+          {
+            "name": "svc-analytics-exporter-oidc-redacted",
+            "issuer": "GitHub OIDC / AWS STS",
+            "ref": "customer-records-github-oidc-exporter",
+            "state": "issuer-verified dead"
+          },
+          {
+            "name": "svc-analytics-exporter-prod",
+            "issuer": "production workload identity",
+            "ref": "protected main deployment",
+            "state": "review for scope parity"
+          }
+        ],
+        "excludedPendingApproval": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "tasks": [
+          {
+            "id": "rem-001",
+            "title": "Revoke active federated sessions for the exporter role",
+            "status": "done",
+            "severity": "high",
+            "rationale": "The OIDC-issued token svc-analytics-exporter-oidc-redacted for svc-analytics-exporter was used by external IPs. Issuer-side session invalidation is what stops active access.",
+            "evidenceIds": [
+              "ev-auth-events"
+            ],
+            "acceptanceCriteria": [
+              "Old federated token returns 401/deny at the issuer (CONFIRMED: auth deny + gateway 401 at 2026-06-14T16:31:08Z)",
+              "No further 200s on the federated token after 2026-06-14T16:31:08Z"
+            ],
+            "rollbackPlan": "Do not restore the wildcard trust; if deploys break, issue a protected-ref-only emergency role."
+          },
+          {
+            "id": "rem-002",
+            "title": "Restore GitHub OIDC trust to protected refs only",
+            "status": "in_progress",
+            "severity": "high",
+            "rationale": "The repo-wide subject wildcard can mint new production-scoped sessions until the trust policy is tightened.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "token.actions.githubusercontent.com:sub is limited to protected main/release refs",
+              "Pull request and preview refs cannot assume the exporter role",
+              "CloudTrail shows denied AssumeRoleWithWebIdentity for the prior untrusted ref"
+            ],
+            "rollbackPlan": "Use a separate least-privilege preview role instead of widening the production exporter role."
+          },
+          {
+            "id": "rem-003",
+            "title": "Remove export/payment-method scope from untrusted workflow paths",
+            "status": "in_progress",
+            "severity": "high",
+            "rationale": "The federated role gained customer:records:export and customer:payment-methods:read outside protected branches.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "Untrusted refs have no customer:records:export permission",
+              "Payment-method reads require protected deployment identity",
+              "Policy test proves preview workflows receive least-privilege scope"
+            ],
+            "rollbackPlan": "Temporarily disable preview exports rather than granting production data scope."
+          },
+          {
+            "id": "rem-004",
+            "title": "Scan IAM trust policies for repo-wide OIDC wildcards",
+            "status": "todo",
+            "severity": "medium",
+            "rationale": "This was a policy boundary failure; traditional secret scanning found no high secret finding.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "CI fails on repo:* OIDC subjects for production roles",
+              "Exceptions require Security Lead approval and expiry"
+            ],
+            "rollbackPlan": "Manual security override only with an audit-log entry."
+          },
+          {
+            "id": "rem-005",
+            "title": "Split preview and production workload identities",
+            "status": "todo",
+            "severity": "medium",
+            "rationale": "Federation is still the right direction; the fix is least-privilege trust boundaries, not static fallback tokens.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "Preview workflows use a separate no-customer-data role",
+              "Production exporter role only trusts protected refs"
+            ],
+            "rollbackPlan": "Disable preview export jobs until the split is complete."
+          },
+          {
+            "id": "rem-006",
+            "title": "Add deploy-time OIDC trust-policy regression tests",
+            "status": "todo",
+            "severity": "medium",
+            "rationale": "The release changed trust from StringEquals protected ref to StringLike wildcard; policy tests should block that.",
+            "evidenceIds": [
+              "ev-code-diff"
+            ],
+            "acceptanceCriteria": [
+              "CI fails on protected-ref downgrade",
+              "Safe protected-ref trust policy passes"
+            ],
+            "rollbackPlan": "Manual security override only with Security Lead and IAM owner sign-off."
+          }
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "issuerVerifiedInactiveAt": "2026-06-14T16:31:08Z",
+          "managedSecretId": "customer-records-github-oidc-exporter",
+          "fallbackTokenId": "svc-analytics-exporter-oidc-redacted",
+          "primaryTokenIds": [
+            "svc-analytics-exporter-prod"
+          ],
+          "rootCauseKind": "oidc_trust_wildcard"
+        }
+      }
+    }
+  },
+  {
+    "id": "msg-inc-1043-018",
+    "schemaVersion": "0.4.0",
+    "caseId": "INC-1043",
+    "roomId": "band-room-inc-1043",
+    "sequence": 18,
+    "agentId": "agent-commander",
+    "agentName": "Band Leader",
+    "type": "report_section",
+    "title": "Audit-ready synthesis for INC-1043 (with surfaced agent disagreement)",
+    "summary": "Band-coordinated agents traced an OIDC trust-policy regression to a repo-wide wildcard, measured 3,636 customer records returned to unexpected IPs (198.51.100.221, 203.0.113.142), and bounded the exposure window from 2026-06-14T16:18:02Z to issuer-verified denial at 2026-06-14T16:31:08Z. Risk kept the case at suspected exposure, approved containment only, and held notification for Legal scope review.",
+    "confidence": 0.92,
+    "severity": "high",
+    "evidenceIds": [
+      "ev-api-gateway-logs",
+      "ev-auth-events",
+      "ev-cloudtrail-events",
+      "ev-code-diff",
+      "ev-incident-policy",
+      "ev-ip-intel",
+      "ev-secret-scan"
+    ],
+    "targetAgentIds": [],
+    "createdAt": "2026-06-12T21:11:18Z",
+    "visibility": "judge_demo",
+    "decisionImpact": "Produces the judge-facing proof of traceable, mention-driven multi-agent coordination.",
+    "nextAction": "Complete OIDC trust-policy rollback.",
+    "correlationId": "trace-inc-1043-018",
+    "payload": {
+      "kind": "report_section",
+      "data": {
+        "synthesis": {
+          "executiveSummary": "Band-coordinated agents traced an OIDC trust-policy regression to a repo-wide wildcard, measured 3,636 customer records returned to unexpected IPs (198.51.100.221, 203.0.113.142), and bounded the exposure window from 2026-06-14T16:18:02Z to issuer-verified denial at 2026-06-14T16:31:08Z. Risk kept the case at suspected exposure, approved containment only, and held notification for Legal scope review.",
+          "recommendedDecision": "Proceed with approved containment and evidence preservation; keep notification and closure behind Legal and human approval.",
+          "severity": "high",
+          "confidence": 0.92,
+          "evidenceIds": [
+            "ev-api-gateway-logs",
+            "ev-auth-events",
+            "ev-cloudtrail-events",
+            "ev-code-diff",
+            "ev-secret-scan",
+            "ev-incident-policy"
+          ],
+          "nextActions": [
+            "Complete OIDC trust-policy rollback.",
+            "Revoke active federated sessions and remove export scope from untrusted refs.",
+            "Map returned records to customer and jurisdiction scope.",
+            "Prepare Legal-reviewed notification recommendation."
+          ],
+          "openQuestions": [
+            "Which exact customer rows and jurisdictions were returned?",
+            "Did downstream systems cache or forward the data?",
+            "Are all OIDC trust policies limited to protected refs?"
+          ],
+          "bandCoordinationValue": "Band preserved assignments, specialist findings, Risk challenge, human approval, remediation, and final synthesis as one auditable room trail.",
+          "dissentToPreserve": [
+            "Forensics proves records returned; Risk refuses to call downstream misuse proven.",
+            "Threat Intel says exploitation likely; no real-world actor attribution is supported.",
+            "Remediation says the observed token is dead; Code Review still requires OIDC trust rollback."
+          ],
+          "judgeDemoMoment": "The strongest moment is the Risk gate: enough evidence for urgent containment, not enough for autonomous customer notification."
+        },
+        "partnerTool": {
+          "provider": "AI/ML API",
+          "label": "band_leader_synthesis",
+          "usedLiveApi": false,
+          "status": "disabled_fallback",
+          "model": "gpt-4o-mini",
+          "baseUrl": "https://api.aimlapi.com/v1",
+          "error": null
+        },
+        "reportId": "report-inc-1043",
+        "severity": "high",
+        "executiveSummary": "Agents coordinated through Band to investigate an OIDC trust-policy regression for svc-analytics-exporter. Forensics confirmed 3,636 customer records were read by 2 external IPs (198.51.100.221, 203.0.113.142) across a window that opened at the 2026-06-14T16:18:02Z IAM trust-policy change and is issuer-verified closed at 2026-06-14T16:31:08Z. Risk & Compliance challenged the breach framing down to suspected_exposure while holding customer notification for Legal scope review.",
+        "rootCause": "GitHub OIDC trust widened from protected main to repo-wide wildcard",
+        "exposureWindow": {
+          "openedAt": "2026-06-14T16:18:02Z",
+          "issuerVerifiedClosedAt": "2026-06-14T16:31:08Z",
+          "closedBy": "issuer deny, not code deletion"
+        },
+        "riskAssessment": "High severity, suspected_exposure under policy; unauthorised access to personal data is confirmed, downstream exfiltration/misuse is not.",
+        "crossAgentReview": {
+          "status": "complete",
+          "requiredReviewerAgentIds": [
+            "agent-forensics",
+            "agent-code-review",
+            "agent-threat-intel"
+          ],
+          "verificationMessageIds": [
+            "msg-inc-1043-009",
+            "msg-inc-1043-010",
+            "msg-inc-1043-011"
+          ],
+          "value": "Specialists reviewed each other's claims before Risk & Compliance classified the case."
+        },
+        "surfacedDisagreements": [
+          "Forensics proves records returned; Risk refuses to call downstream misuse proven.",
+          "Threat Intel says exploitation likely; no real-world actor attribution is supported.",
+          "Remediation says the observed token is dead; Code Review still requires OIDC trust rollback."
+        ],
+        "approvedActions": [
+          "Revoke federated sessions",
+          "Tighten OIDC trust policy",
+          "Patch export scope"
+        ],
+        "heldActions": [
+          "External customer notification",
+          "Incident closure"
+        ],
+        "openQuestions": [
+          "Which exact customer rows and jurisdictions were returned?",
+          "Did downstream systems cache or forward the data?",
+          "Are all OIDC trust policies limited to protected refs?"
+        ],
+        "auditTrailMessageIds": [
+          "msg-inc-1043-001",
+          "msg-inc-1043-002",
+          "msg-inc-1043-003",
+          "msg-inc-1043-004",
+          "msg-inc-1043-005",
+          "msg-inc-1043-006",
+          "msg-inc-1043-007",
+          "msg-inc-1043-008",
+          "msg-inc-1043-009",
+          "msg-inc-1043-010",
+          "msg-inc-1043-011",
+          "msg-inc-1043-012",
+          "msg-inc-1043-013",
+          "msg-inc-1043-014",
+          "msg-inc-1043-015",
+          "msg-inc-1043-016",
+          "msg-inc-1043-017"
+        ],
+        "derivedFacts": {
+          "source": "common.evidence_analysis.analyze_incident_evidence",
+          "recordsReturnedToUnexpectedIps": 3636,
+          "unexpectedIps": [
+            "198.51.100.221",
+            "203.0.113.142"
+          ],
+          "unresolvedHighSecretFindings": 0,
+          "policyApprovalActions": [
+            "revoke_federated_sessions",
+            "tighten_oidc_trust_policy",
+            "external_customer_notification"
+          ]
+        }
+      }
+    }
+  }
+]

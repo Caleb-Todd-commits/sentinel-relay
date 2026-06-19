@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     "multi-agent",
     "cybersecurity",
     "incident response",
-    "hackathon",
     "AI agents",
+    "enterprise security",
   ],
 };
 

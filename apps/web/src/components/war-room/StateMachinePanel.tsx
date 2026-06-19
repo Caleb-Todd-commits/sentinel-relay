@@ -40,7 +40,7 @@ export function StateMachinePanel({ workflow }: { workflow: WorkflowViewModel })
       ) : (
         <div className="mt-4 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3">
           <p className="text-sm font-semibold text-emerald-100">Workflow complete</p>
-          <p className="mt-1 text-xs leading-5 text-slate-300">The report is ready and the audit trail can be replayed from the Band-style message stream.</p>
+          <p className="mt-1 text-xs leading-5 text-slate-300">The report is ready and the full audit trail is available for replay.</p>
         </div>
       )}
     </section>

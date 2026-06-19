@@ -28,8 +28,8 @@ export function ReportHero({ caseFile, model }: { caseFile: IncidentCase; model:
           <Link href="/war-room" className="relay-button-secondary">
             Back to War Room
           </Link>
-          <Link href="/demo" className="relay-button-primary">
-            Restart Demo
+          <Link href="/war-room" className="relay-button-primary">
+            Run Again
           </Link>
         </div>
       </div>
