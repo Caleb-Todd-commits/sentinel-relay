@@ -1,8 +1,268 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useCallback } from "react";
 import { SCENARIOS, type ScenarioId } from "@/lib/scenarios";
 import type { AgentMessage } from "@/lib/types";
+
+// ─── Custom incident types ────────────────────────────────────────────────────
+
+type CustomAgentMessage = {
+  agentId: string;
+  agentName: string;
+  type: string;
+  title: string;
+  summary: string;
+  confidence: number;
+  severity: string;
+  responded: boolean;
+  requiresApproval?: boolean;
+  decisionImpact?: string;
+  nextAction?: string;
+};
+
+type CustomEvent =
+  | { type: "agent_thinking"; agentId: string; agentName: string }
+  | { type: "agent_message"; message: CustomAgentMessage }
+  | { type: "agent_skipped"; agentId: string; agentName: string }
+  | { type: "needs_more_detail"; agentId: string; agentName: string; question: string }
+  | { type: "complete"; respondedCount: number }
+  | { type: "error"; code: string; message: string };
+
+type CustomPhase = "idle" | "running" | "done" | "needs_detail" | "error";
+
+const ALL_AGENTS = [
+  { id: "agent-commander", name: "Band Leader" },
+  { id: "agent-forensics", name: "Forensics" },
+  { id: "agent-code-review", name: "Code Review" },
+  { id: "agent-threat-intel", name: "Threat Intel" },
+  { id: "agent-risk-compliance", name: "Risk" },
+  { id: "agent-remediation", name: "Remediation" },
+] as const;
+
+const SEVERITY_COLOR: Record<string, string> = {
+  critical: "text-red-300",
+  high: "text-amber-300",
+  medium: "text-sky-300",
+  low: "text-slate-300",
+  informational: "text-slate-400",
+};
+
+const MESSAGE_TYPE_LABEL: Record<string, string> = {
+  case_opened: "Opening",
+  finding: "Finding",
+  verification: "Assessment",
+  challenge: "Challenge",
+  risk_assessment: "Risk",
+  remediation_task: "Remediation",
+};
+
+
+function CustomIncidentSection() {
+  const [description, setDescription] = useState("");
+  const [phase, setPhase] = useState<CustomPhase>("idle");
+  const [messages, setMessages] = useState<CustomAgentMessage[]>([]);
+  const [skippedAgents, setSkippedAgents] = useState<string[]>([]);
+  const [thinkingAgent, setThinkingAgent] = useState<string | null>(null);
+  const [clarifyQuestion, setClarifyQuestion] = useState("");
+  const [respondedCount, setRespondedCount] = useState(0);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const reset = useCallback(() => {
+    setMessages([]);
+    setSkippedAgents([]);
+    setThinkingAgent(null);
+    setClarifyQuestion("");
+    setRespondedCount(0);
+    setErrorMsg("");
+  }, []);
+
+  const run = useCallback(async () => {
+    if (!description.trim() || phase === "running") return;
+    setPhase("running");
+    reset();
+
+    let wantsMoreDetail = false;
+    try {
+      const response = await fetch("/api/custom-incident", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description }),
+      });
+
+      await streamEvents<CustomEvent>(response, (event) => {
+        if (event.type === "agent_thinking") {
+          setThinkingAgent(event.agentName);
+        } else if (event.type === "agent_message") {
+          setMessages((prev) => [...prev, event.message]);
+          setThinkingAgent(null);
+        } else if (event.type === "agent_skipped") {
+          setSkippedAgents((prev) => [...prev, event.agentName]);
+          setThinkingAgent(null);
+        } else if (event.type === "needs_more_detail") {
+          setClarifyQuestion(event.question);
+          setThinkingAgent(null);
+          wantsMoreDetail = true;
+        } else if (event.type === "complete") {
+          setRespondedCount(event.respondedCount);
+          setThinkingAgent(null);
+        } else if (event.type === "error") {
+          setErrorMsg(event.message);
+        }
+      });
+
+      setPhase(wantsMoreDetail ? "needs_detail" : "done");
+    } catch (err) {
+      setErrorMsg(err instanceof Error ? err.message : "Request failed.");
+      setPhase("error");
+    }
+  }, [description, phase, reset]);
+
+  const hasApprovalGate = messages.some((m) => m.requiresApproval);
+
+  return (
+    <section className="relay-card border-violet-400/20 bg-gradient-to-br from-violet-400/5 to-transparent space-y-5" aria-labelledby="custom-heading">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <p className="relay-label text-violet-300">Try your own scenario</p>
+          <h2 id="custom-heading" className="mt-2 text-lg font-semibold">Describe a security problem</h2>
+          <p className="mt-1 text-sm leading-6 text-slate-400">
+            Write 2–3 sentences. Agents read each other's findings before responding — only those with something specific to add will.
+          </p>
+        </div>
+        {phase === "done" && (
+          <div className="flex flex-wrap gap-1.5">
+            {ALL_AGENTS.map((a) => {
+              const responded = messages.some((m) => m.agentId === a.id);
+              const skipped = skippedAgents.includes(a.name);
+              return (
+                <span
+                  key={a.id}
+                  title={responded ? `${a.name} responded` : skipped ? `${a.name} had nothing to add` : ""}
+                  className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                    responded
+                      ? "bg-emerald-400/15 text-emerald-200 border border-emerald-400/25"
+                      : "bg-slate-950/40 text-slate-600 border border-slate-800"
+                  }`}
+                >
+                  {a.name}
+                </span>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      <div className="space-y-3">
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          disabled={phase === "running"}
+          placeholder="e.g. We noticed unusual API traffic after pushing a config change on Friday. Logs show requests from IPs we don't recognise accessing our customer export endpoint. We rotated the API key but aren't sure if data was accessed."
+          rows={3}
+          className="w-full rounded-2xl border border-slate-700/80 bg-slate-950/40 px-4 py-3 text-sm leading-6 text-slate-200 placeholder-slate-600 outline-none transition focus:border-violet-400/40 focus:ring-1 focus:ring-violet-400/15 disabled:cursor-not-allowed disabled:opacity-50 resize-none"
+        />
+        <div className="flex flex-wrap items-center gap-3">
+          <button
+            type="button"
+            onClick={run}
+            disabled={!description.trim() || phase === "running"}
+            className="relay-button-primary disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {phase === "running" ? "Agents working…" : phase === "done" || phase === "needs_detail" ? "Run again" : "Investigate"}
+          </button>
+          {phase === "running" && thinkingAgent && (
+            <span className="flex items-center gap-2 text-sm text-sky-300">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sky-300" />
+              {thinkingAgent} is reading the room…
+            </span>
+          )}
+          {phase === "done" && (
+            <span className="text-sm text-slate-500">
+              {respondedCount} of {ALL_AGENTS.length} agents responded
+            </span>
+          )}
+        </div>
+      </div>
+
+      {phase === "needs_detail" && clarifyQuestion && (
+        <div className="rounded-2xl border border-violet-400/30 bg-violet-400/10 p-4 space-y-2">
+          <p className="text-sm font-semibold text-violet-100">Band Leader needs more information</p>
+          <p className="text-sm leading-6 text-slate-300">{clarifyQuestion}</p>
+          <p className="text-xs text-slate-500">Add this detail to your description and run again.</p>
+        </div>
+      )}
+
+      {errorMsg && (
+        <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-4 text-sm text-red-200">
+          {errorMsg}
+        </div>
+      )}
+
+      {hasApprovalGate && (
+        <div className="rounded-2xl border border-amber-400/30 bg-amber-400/8 p-4">
+          <p className="text-sm font-semibold text-amber-100">Human approval required</p>
+          <p className="mt-1 text-sm leading-6 text-slate-300">
+            One or more agents flagged actions that cannot proceed without explicit human sign-off. These are marked below.
+          </p>
+        </div>
+      )}
+
+      {messages.length > 0 && (
+        <div className="space-y-3">
+          {messages.map((msg, i) => {
+            const borderClass =
+              msg.type === "challenge" ? "border-amber-400/35 bg-amber-400/5"
+              : msg.type === "case_opened" ? "border-sky-400/25 bg-sky-400/5"
+              : msg.type === "remediation_task" ? "border-emerald-400/25 bg-emerald-400/5"
+              : "border-slate-700/70 bg-slate-950/25";
+
+            return (
+              <article key={i} className={`rounded-2xl border p-4 ${borderClass}`}>
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-xs font-semibold text-sky-200">{msg.agentName}</span>
+                    <span className="rounded-full border border-slate-700/80 px-2 py-0.5 text-[11px] text-slate-400">
+                      {MESSAGE_TYPE_LABEL[msg.type] ?? msg.type}
+                    </span>
+                    {msg.requiresApproval && (
+                      <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[11px] font-semibold text-amber-200">
+                        approval required
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className={`text-xs font-semibold ${SEVERITY_COLOR[msg.severity] ?? "text-slate-300"}`}>
+                      {msg.severity}
+                    </span>
+                    <span className="text-xs text-slate-600">{Math.round(msg.confidence * 100)}%</span>
+                  </div>
+                </div>
+                <h3 className="mt-3 text-sm font-semibold leading-5 text-slate-100">{msg.title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-300">{msg.summary}</p>
+                {msg.decisionImpact && (
+                  <p className="mt-3 border-l-2 border-sky-300/30 pl-3 text-sm leading-6 text-slate-400">
+                    {msg.decisionImpact}
+                  </p>
+                )}
+                {msg.nextAction && (
+                  <p className="mt-3 rounded-lg bg-slate-950/40 px-3 py-2 text-xs text-slate-400">
+                    <span className="font-semibold text-slate-300">Next: </span>{msg.nextAction}
+                  </p>
+                )}
+              </article>
+            );
+          })}
+
+          {phase === "done" && respondedCount === 0 && (
+            <div className="rounded-xl border border-slate-700/60 bg-slate-950/20 p-4 text-sm text-slate-400">
+              No agent had a specific perspective. Try adding more detail — what system was affected, what changed, what was observed.
+            </div>
+          )}
+        </div>
+      )}
+    </section>
+  );
+}
 
 type Phase = "idle" | "running" | "approval" | "resolving" | "complete";
 type ResultTab = "summary" | "evidence" | "audit";
@@ -70,27 +330,30 @@ function approvalActions(message: AgentMessage | undefined): string[] {
   return Array.isArray(data.requestedActions) ? data.requestedActions.map(String) : [];
 }
 
-async function readEvents(response: Response): Promise<RunEvent[]> {
+async function streamEvents<T>(
+  response: Response,
+  onEvent: (event: T) => void,
+): Promise<void> {
   if (!response.ok) throw new Error(`Agent runtime returned ${response.status}`);
   if (!response.body) throw new Error("Agent runtime returned no stream");
-
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
-  const events: RunEvent[] = [];
   let buffer = "";
-
   while (true) {
     const { value, done } = await reader.read();
     buffer += decoder.decode(value ?? new Uint8Array(), { stream: !done });
     const lines = buffer.split("\n");
     buffer = lines.pop() ?? "";
     for (const line of lines) {
-      if (line.trim()) events.push(JSON.parse(line) as RunEvent);
+      if (line.trim()) {
+        try { onEvent(JSON.parse(line) as T); } catch { /* skip malformed */ }
+      }
     }
     if (done) break;
   }
-  if (buffer.trim()) events.push(JSON.parse(buffer) as RunEvent);
-  return events;
+  if (buffer.trim()) {
+    try { onEvent(JSON.parse(buffer) as T); } catch { /* skip */ }
+  }
 }
 
 export function LiveInvestigationWorkspace() {
@@ -125,15 +388,6 @@ export function LiveInvestigationWorkspace() {
     setResultTab("summary");
   }
 
-  async function animateMessages(nextMessages: AgentMessage[], version: number, delayMs: number) {
-    for (const message of nextMessages) {
-      if (runVersion.current !== version) return;
-      setCurrentMessage(message);
-      setMessages((existing) => [...existing.filter((item) => item.id !== message.id), message].sort((a, b) => a.sequence - b.sequence));
-      await wait(delayMs);
-    }
-  }
-
   async function startInvestigation() {
     const version = runVersion.current + 1;
     runVersion.current = version;
@@ -144,62 +398,94 @@ export function LiveInvestigationWorkspace() {
     setMode("connecting");
     setResultTab("summary");
 
-    let events: RunEvent[];
+    let gateEvent: Extract<RunEvent, { type: "approval_required" }> | undefined;
+
+    const handleEvent = (event: RunEvent) => {
+      if (runVersion.current !== version) return;
+      if (event.type === "integration_status") {
+        setMode(event.mode);
+      } else if (event.type === "fallback") {
+        setMode("verified_replay");
+      } else if (event.type === "agent_message") {
+        const msg = event.message;
+        setCurrentMessage(msg);
+        setMessages((prev) =>
+          [...prev.filter((m) => m.id !== msg.id), msg].sort((a, b) => a.sequence - b.sequence),
+        );
+      } else if (event.type === "approval_required") {
+        gateEvent = event;
+      }
+    };
+
     try {
       const response = await fetch("/api/agent_run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "investigate", scenarioId }),
       });
-      events = await readEvents(response);
+      await streamEvents<RunEvent>(response, handleEvent);
     } catch {
-      events = [
-        { type: "fallback", mode: "verified_replay", reasonCode: "runtime_unavailable" },
-        ...scenario.messages.slice(0, 14).map((message) => ({ type: "agent_message" as const, message, mode: "verified_replay" as const })),
-        {
-          type: "approval_required",
-          continuation: "replay",
-          request: scenario.messages[13]!,
-          mode: "verified_replay",
-        },
-      ];
+      // Fallback: stream the pre-computed transcript progressively
+      if (runVersion.current !== version) return;
+      setMode("verified_replay");
+      for (const message of scenario.messages.slice(0, 14)) {
+        if (runVersion.current !== version) return;
+        setCurrentMessage(message);
+        setMessages((prev) =>
+          [...prev.filter((m) => m.id !== message.id), message].sort((a, b) => a.sequence - b.sequence),
+        );
+        await wait(80);
+      }
+      gateEvent = {
+        type: "approval_required",
+        continuation: "replay",
+        request: scenario.messages[13]!,
+        mode: "verified_replay",
+      };
     }
 
-    const streamedMessages = events.filter((event): event is Extract<RunEvent, { type: "agent_message" }> => event.type === "agent_message");
-    const fallback = events.find((event) => event.type === "fallback");
-    const status = events.find((event): event is Extract<RunEvent, { type: "integration_status" }> => event.type === "integration_status");
-    const gate = events.find((event): event is Extract<RunEvent, { type: "approval_required" }> => event.type === "approval_required");
-    setMode(fallback ? "verified_replay" : status?.mode ?? gate?.mode ?? "live_local");
-    await animateMessages(streamedMessages.map((event) => event.message), version, 850);
     if (runVersion.current !== version) return;
-    setContinuation(gate?.continuation ?? "replay");
+    setContinuation(gateEvent?.continuation ?? "replay");
     setPhase("approval");
   }
 
   async function approveContainment() {
     const version = runVersion.current;
     setPhase("resolving");
-    let events: RunEvent[];
+
+    const handleEvent = (event: RunEvent) => {
+      if (runVersion.current !== version) return;
+      if (event.type === "fallback") setMode("verified_replay");
+      if (event.type === "agent_message") {
+        const msg = event.message;
+        setCurrentMessage(msg);
+        setMessages((prev) =>
+          [...prev.filter((m) => m.id !== msg.id), msg].sort((a, b) => a.sequence - b.sequence),
+        );
+      }
+    };
+
     try {
-      if (continuation === "replay") throw new Error("Replay continuation");
+      if (continuation === "replay") throw new Error("replay");
       const response = await fetch("/api/agent_run", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "approve", continuation, decision: "approved" }),
       });
-      events = await readEvents(response);
-      if (events.some((event) => event.type === "error")) throw new Error("Approval continuation failed");
+      await streamEvents<RunEvent>(response, handleEvent);
     } catch {
-      events = [
-        { type: "fallback", mode: "verified_replay", reasonCode: "resolution_unavailable" },
-        ...scenario.messages.slice(14).map((message) => ({ type: "agent_message" as const, message, mode: "verified_replay" as const })),
-      ];
+      if (runVersion.current !== version) return;
+      setMode("verified_replay");
+      for (const message of scenario.messages.slice(14)) {
+        if (runVersion.current !== version) return;
+        setCurrentMessage(message);
+        setMessages((prev) =>
+          [...prev.filter((m) => m.id !== message.id), message].sort((a, b) => a.sequence - b.sequence),
+        );
+        await wait(80);
+      }
     }
 
-    const fallback = events.find((event) => event.type === "fallback");
-    if (fallback) setMode("verified_replay");
-    const streamedMessages = events.filter((event): event is Extract<RunEvent, { type: "agent_message" }> => event.type === "agent_message");
-    await animateMessages(streamedMessages.map((event) => event.message), version, 1500);
     if (runVersion.current === version) setPhase("complete");
   }
 
@@ -252,6 +538,25 @@ export function LiveInvestigationWorkspace() {
           </div>
         </section>
 
+        {phase === "approval" && (
+          <div className="relay-card border-amber-400/50 bg-amber-400/10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest text-amber-300">Human decision required</p>
+              <p className="mt-1 text-lg font-bold text-white">Approve scoped containment</p>
+              <p className="mt-1 text-sm leading-6 text-slate-300">
+                Agents have completed their investigation. Containment cannot proceed until you approve the specific actions listed in the Decision panel.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={approveContainment}
+              className="shrink-0 rounded-xl bg-emerald-300 px-6 py-3 text-sm font-bold text-slate-950 shadow-[0_0_24px_rgba(52,211,153,0.4)] transition hover:bg-emerald-200 hover:shadow-[0_0_32px_rgba(52,211,153,0.6)]"
+            >
+              Approve containment →
+            </button>
+          </div>
+        )}
+
         <div className="grid gap-4 xl:grid-cols-[1.08fr_0.92fr]">
           <section className="relay-card flex max-h-[610px] min-h-[520px] flex-col" data-product-panel="agents" aria-labelledby="agents-heading">
             <div className="flex items-start justify-between gap-3">
@@ -302,12 +607,14 @@ export function LiveInvestigationWorkspace() {
                 </div>
               </>
             ) : phase === "approval" ? (
-              <div className="flex h-full flex-col"><div><p className="relay-label text-amber-200">Human decision</p><h2 id="decision-heading" className="mt-2 text-xl font-semibold">Approve scoped containment</h2><p className="mt-3 text-sm leading-6 text-slate-300">The agents agree immediate containment is justified, but external notification still lacks verified scope.</p></div><div className="my-5 flex-1 overflow-y-auto"><p className="relay-label">Requested actions</p><ul className="mt-3 space-y-3 text-sm text-slate-200">{approvalActions(approvalRequest).map((action) => <li key={action}>• {action}</li>)}</ul><p className="mt-5 border-l-2 border-amber-300/50 pl-3 text-sm leading-6 text-slate-400">Remediation cannot continue until this decision is recorded.</p></div><button type="button" onClick={approveContainment} className="relay-button-primary justify-center bg-emerald-300 text-slate-950 hover:bg-emerald-200">Approve containment</button></div>
+              <div className="flex h-full flex-col"><div><p className="relay-label text-amber-200">Awaiting your decision</p><h2 id="decision-heading" className="mt-2 text-xl font-semibold">Requested actions</h2></div><div className="mt-4 flex-1 overflow-y-auto space-y-2">{approvalActions(approvalRequest).map((action) => <div key={action} className="rounded-xl border border-slate-700/70 bg-slate-950/30 px-3 py-2.5 text-sm text-slate-200">• {action}</div>)}<p className="mt-4 border-l-2 border-amber-300/50 pl-3 text-sm leading-6 text-slate-400">Customer notification and incident closure are explicitly not included in this request.</p></div></div>
             ) : (
               <div className="flex h-full flex-col"><div><p className="relay-label text-sky-200">Decision</p><h2 id="decision-heading" className="mt-2 text-lg font-semibold">{phase === "idle" ? "No conclusion yet" : phase === "resolving" ? "Executing approved scope" : "Evidence is changing the assessment"}</h2></div><div className="flex flex-1 items-center"><div><p className="text-base leading-7 text-slate-200">{currentMessage?.decisionImpact ?? (phase === "idle" ? "The system will separate verified facts from assumptions, then stop before high-impact action." : "Specialists are correlating logs, code changes, policy, and threat behavior.")}</p><p className="mt-5 text-sm leading-6 text-slate-500">{phase === "resolving" ? "Remediation and report agents are finishing the controlled response." : "Unresolved risk: customer-impact scope must be verified before notification."}</p></div></div></div>
             )}
           </section>
         </div>
+
+        <CustomIncidentSection />
       </div>
     </main>
   );
