@@ -24,7 +24,6 @@ AUTHORITATIVE = [
     "docs/57_EVIDENCE_DRIVEN_AI_ML_API_WORKFLOW.md",
     "submission/README.md",
     "submission/submission-copy.md",
-    "submission/demo-narration-script.md",
 ]
 FORBIDDEN = {
     r"\b7 specialist agents\b": "Use six specialized agents plus a human Security Lead.",
