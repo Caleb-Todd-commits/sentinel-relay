@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Badge } from "@/components/ui/Badge";
@@ -58,7 +58,7 @@ const AGENT_PROFILES: AgentProfile[] = [
   { id: "agent-human-approver", name: "Human Security Lead", shortName: "Security Lead", kind: "human_actor", role: "Approval authority", responsibility: "High-impact approval decisions", capability: "human_approval", status: "complete", allowedDecisions: [], requiresHumanApprovalFor: [], createdAt: "" },
 ];
 
-export default function ScenarioRoomPage() {
+function ScenarioRoomContent() {
   const params = useSearchParams();
   const roomId = params.get("room");
   const incidentId = params.get("incident") ?? "INC-1042";
@@ -136,5 +136,26 @@ export default function ScenarioRoomPage() {
         </div>
       </section>
     </main>
+  );
+}
+
+function ScenarioRoomFallback() {
+  return (
+    <main className="relay-page">
+      <SiteHeader />
+      <section className="relay-shell py-10">
+        <div className="relay-card">
+          <p className="text-sm text-slate-400">Loading incident room…</p>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+export default function ScenarioRoomPage() {
+  return (
+    <Suspense fallback={<ScenarioRoomFallback />}>
+      <ScenarioRoomContent />
+    </Suspense>
   );
 }

@@ -5,6 +5,7 @@ import { BandRestClient } from "@/lib/band/bandRestClient";
 import { getBandRuntimeConfig, getConfiguredAgentForProfile, getBandConfigurationSummary } from "@/lib/band/bandConfig";
 import { addRemoteWarning, createLocalRoomRecord, getRoomSnapshot, hydrateRoomRecord, registerAgentInRoom, resetRoomRecord, toSnapshot } from "@/lib/band/bandRoomStore";
 import { requireBandReady, routeErrorResponse } from "@/lib/band/routeResponses";
+import { getScenarioSnapshot } from "@/lib/scenarios";
 
 type RoomPostBody =
   | { action: "createIncidentRoom"; input: { caseId: string; title?: string; requestedBy?: string } }
@@ -20,7 +21,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ health: getBandConfigurationSummary() });
   }
 
-  const snapshot = getRoomSnapshot(roomId);
+  const snapshot = getRoomSnapshot(roomId) ?? getScenarioSnapshot(roomId);
   if (!snapshot) {
     return NextResponse.json({ code: "BAND_ROOM_NOT_FOUND", error: `No local Band room mirror found for ${roomId}.`, recoverable: true }, { status: 404 });
   }

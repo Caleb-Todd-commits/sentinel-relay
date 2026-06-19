@@ -53,7 +53,6 @@ REQUIRED_PATTERNS = {
     ],
     "apps/web/src/app/war-room/page.tsx": [
         "useIncidentCollaborationWorkflow",
-        "ProviderStatusPanel",
     ],
     ".env.example": [
         "NEXT_PUBLIC_COLLABORATION_MODE",

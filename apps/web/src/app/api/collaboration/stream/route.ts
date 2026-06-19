@@ -1,4 +1,5 @@
 import { getRoomSnapshot } from "@/lib/band/bandRoomStore";
+import { getScenarioSnapshot } from "@/lib/scenarios";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ export async function GET(request: Request) {
   const stream = new ReadableStream<Uint8Array>({
     start(controller) {
       const sendSnapshot = () => {
-        const snapshot = getRoomSnapshot(roomId);
+        const snapshot = getRoomSnapshot(roomId) ?? getScenarioSnapshot(roomId);
         if (snapshot) {
           controller.enqueue(encoder.encode(eventBlock("snapshot", { snapshot })));
         } else {

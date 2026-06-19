@@ -1,3 +1,4 @@
+import type { CollaborationRoomSnapshot } from "@/lib/collaboration/types";
 import type { AgentMessage, ApprovalDecision, ApprovalRequest, TaskStatus } from "@/lib/types";
 import inc1042Messages from "./inc-1042-transcript.json";
 import inc1043Messages from "./inc-1043-transcript.json";
@@ -116,4 +117,49 @@ export const SCENARIOS: Record<ScenarioId, ScenarioMeta> = {
 
 export function getScenario(id: string): ScenarioMeta | undefined {
   return SCENARIOS[id as ScenarioId];
+}
+
+export function getScenarioSnapshot(roomId: string): CollaborationRoomSnapshot | undefined {
+  const prefix = "scenario-room-";
+  if (!roomId.startsWith(prefix)) return undefined;
+
+  const scenario = getScenario(roomId.slice(prefix.length).toUpperCase());
+  if (!scenario) return undefined;
+
+  const fallbackTimestamp = "2026-06-12T00:00:00.000Z";
+  const createdAt = scenario.messages[0]?.createdAt ?? scenario.approvalRequest.createdAt ?? fallbackTimestamp;
+  const updatedAt = scenario.messages.at(-1)?.createdAt ?? scenario.approvalDecision.decidedAt ?? createdAt;
+
+  return {
+    room: {
+      id: roomId,
+      caseId: scenario.caseId,
+      title: scenario.title,
+      createdAt,
+      updatedAt,
+      mode: "band",
+      participantAgentIds: Array.from(new Set(scenario.messages.map((message) => message.agentId))),
+    },
+    messages: scenario.messages,
+    registeredAgents: [],
+    approvalRequests: [scenario.approvalRequest],
+    approvalDecisions: [scenario.approvalDecision],
+    taskStatuses: scenario.remediationTaskStatuses.map(({ taskId, status }) => ({
+      roomId,
+      taskId,
+      status,
+      updatedAt,
+    })),
+    auditEvents: scenario.messages.map((message) => ({
+      id: `scenario-audit-${message.id}`,
+      roomId,
+      caseId: scenario.caseId,
+      type: "message_sent" as const,
+      actorId: message.agentId,
+      title: message.title,
+      summary: message.summary,
+      createdAt: message.createdAt,
+      metadata: { messageId: message.id, sequence: message.sequence },
+    })),
+  };
 }
