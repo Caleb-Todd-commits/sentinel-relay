@@ -54,7 +54,7 @@ type StreamEvent =
   | { type: "agent_thinking"; agentId: AgentId; agentName: string }
   | { type: "agent_message"; message: CustomAgentMessage }
   | { type: "agent_skipped"; agentId: AgentId; agentName: string }
-  | { type: "needs_more_detail"; agentId: AgentId; agentName: string; question: string }
+  | { type: "needs_more_detail"; agentId: AgentId; agentName: string; question: string; suggestions: string[] }
   | { type: "complete"; respondedCount: number }
   | { type: "error"; code: string; message: string };
 
@@ -80,13 +80,14 @@ const AGENTS: Array<{ id: AgentId; shortName: string; systemPrompt: string }> = 
 
 Your job: given a security incident description, produce a crisp case opening. Be an analyst, not a summarizer — reframe what the user said into what it means operationally. Identify: what is actually at risk, what the highest-priority unknown is, and what needs to happen first.
 
-If the description is too vague to frame meaningfully (e.g. "website is slow", "something seems off"), set "responded": false and instead set "needsMoreDetail": true with a "question" field containing the single most important clarifying question.
+If the description is too vague to frame meaningfully (e.g. "website is slow", "something seems off", single words, or nonsense), set "responded": false, "needsMoreDetail": true, a "question" field with the single most important clarifying question, and a "suggestions" array with exactly 3 realistic security incident descriptions the user could try instead. Make suggestions specific and varied — one credential/API incident, one data exposure incident, one access/authentication incident.
 
 Respond with JSON:
 {
   "responded": true | false,
   "needsMoreDetail": true | false,
-  "question": "<clarifying question if needsMoreDetail>",
+  "question": "<clarifying question if needsMoreDetail, otherwise omit>",
+  "suggestions": ["<suggestion 1>", "<suggestion 2>", "<suggestion 3>"],
   "type": "case_opened",
   "title": "<8 words max — incident type and affected system>",
   "summary": "<2 sentences: what is happening and what is the most urgent unknown>",
@@ -317,7 +318,9 @@ export async function POST(request: Request): Promise<Response> {
   ): Promise<CustomAgentMessage | null> {
     try {
       const result = await callAimlApi(agent.systemPrompt, userContent);
-      if (!result || result.responded === false) return null;
+      if (!result) return null;
+      const isClarification = agent.id === "agent-commander" && result.needsMoreDetail === true;
+      if (result.responded === false && !isClarification) return null;
       return {
         agentId: agent.id,
         agentName: agent.shortName,
@@ -332,7 +335,10 @@ export async function POST(request: Request): Promise<Response> {
         nextAction: result.nextAction ? String(result.nextAction) : undefined,
         _needsMoreDetail: agent.id === "agent-commander" && result.needsMoreDetail === true
           ? String(result.question ?? "") : undefined,
-      } as CustomAgentMessage & { _needsMoreDetail?: string };
+        _suggestions: agent.id === "agent-commander" && Array.isArray(result.suggestions)
+          ? (result.suggestions as unknown[]).slice(0, 3).map(String).filter(Boolean)
+          : undefined,
+      } as CustomAgentMessage & { _needsMoreDetail?: string; _suggestions?: string[] };
     } catch {
       return null;
     }
@@ -345,16 +351,20 @@ export async function POST(request: Request): Promise<Response> {
     // ── Stage 1: Band Leader alone (frames the incident, may ask for more detail)
     await writer.write(encode({ type: "agent_thinking", agentId: "agent-commander", agentName: "Band Leader" }));
     const commanderAgent = AGENTS[0]!;
-    const commanderResult = await runAgent(commanderAgent, baseContent) as (CustomAgentMessage & { _needsMoreDetail?: string }) | null;
+    const commanderResult = await runAgent(commanderAgent, baseContent) as (CustomAgentMessage & { _needsMoreDetail?: string; _suggestions?: string[] }) | null;
+
+    const fallbackSuggestions = [
+      "An API key was accidentally committed to a public GitHub repository and was live for about 30 minutes before we caught it and rotated it.",
+      "We detected unusual login activity from an unfamiliar country on a senior engineer's account. MFA was enabled but we're unsure if the session was compromised.",
+      "Our cloud storage bucket containing customer export files was misconfigured as public for several hours. We've since locked it down but don't know if anything was accessed.",
+    ];
 
     if (!commanderResult) {
-      await writer.write(encode({ type: "agent_skipped", agentId: "agent-commander", agentName: "Band Leader" }));
       await writer.write(encode({
         type: "error",
         code: "provider_unavailable",
-        message: "The analysis provider did not return a usable response. Please try again.",
+        message: "Custom analysis is temporarily unavailable. Please try again.",
       }));
-      await writer.write(encode({ type: "complete", respondedCount: 0 }));
       return;
     }
 
@@ -364,6 +374,7 @@ export async function POST(request: Request): Promise<Response> {
         agentId: "agent-commander",
         agentName: "Band Leader",
         question: commanderResult._needsMoreDetail,
+        suggestions: commanderResult._suggestions ?? fallbackSuggestions,
       }));
       await writer.write(encode({ type: "complete", respondedCount: 0 }));
       return;
@@ -426,8 +437,12 @@ export async function POST(request: Request): Promise<Response> {
   };
 
   run()
-    .catch(async (err) => {
-      await writer.write(encode({ type: "error", code: "runtime_error", message: String(err) })).catch(() => {});
+    .catch(async () => {
+      await writer.write(encode({
+        type: "error",
+        code: "runtime_error",
+        message: "Custom analysis is temporarily unavailable. Please try again.",
+      })).catch(() => {});
     })
     .finally(() => { writer.close().catch(() => {}); });
 

@@ -42,7 +42,7 @@ Target runtime: 2:35–2:55. Read naturally; the timings include short visual pa
 
 ### 2:20–2:45 — Open-ended analysis
 
-“Sentinel Relay is not limited to the two bundled incidents. Here I can enter a fictional, sanitized security problem. The Band Leader frames it, specialist agents add only relevant perspectives, and later agents react to the shared findings. This generalization path uses server-side AI/ML API orchestration and never asks the visitor for a provider key.”
+“Sentinel Relay is not limited to the two bundled incidents. Band powers the evidence- and file-backed workflow you just saw, where agents coordinate around shared artifacts. Try your own scenario accepts text without files, so that input is best routed through server-side AI/ML API orchestration. The Band Leader frames it, specialists add only relevant perspectives, and the visitor never has to provide a key.”
 
 ### 2:45–2:55 — Close
 

@@ -24,7 +24,7 @@ type CustomEvent =
   | { type: "agent_thinking"; agentId: string; agentName: string }
   | { type: "agent_message"; message: CustomAgentMessage }
   | { type: "agent_skipped"; agentId: string; agentName: string }
-  | { type: "needs_more_detail"; agentId: string; agentName: string; question: string }
+  | { type: "needs_more_detail"; agentId: string; agentName: string; question: string; suggestions: string[] }
   | { type: "complete"; respondedCount: number }
   | { type: "error"; code: string; message: string };
 
@@ -64,14 +64,17 @@ function CustomIncidentSection() {
   const [skippedAgents, setSkippedAgents] = useState<string[]>([]);
   const [thinkingAgent, setThinkingAgent] = useState<string | null>(null);
   const [clarifyQuestion, setClarifyQuestion] = useState("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [respondedCount, setRespondedCount] = useState(0);
   const [errorMsg, setErrorMsg] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const reset = useCallback(() => {
     setMessages([]);
     setSkippedAgents([]);
     setThinkingAgent(null);
     setClarifyQuestion("");
+    setSuggestions([]);
     setRespondedCount(0);
     setErrorMsg("");
   }, []);
@@ -101,6 +104,7 @@ function CustomIncidentSection() {
           setThinkingAgent(null);
         } else if (event.type === "needs_more_detail") {
           setClarifyQuestion(event.question);
+          setSuggestions(event.suggestions ?? []);
           setThinkingAgent(null);
           wantsMoreDetail = true;
         } else if (event.type === "complete") {
@@ -130,6 +134,9 @@ function CustomIncidentSection() {
           <p className="mt-1 text-sm leading-6 text-slate-400">
             Write 2–3 sentences. Agents read each other's findings before responding — only those with something specific to add will.
           </p>
+          <p className="mt-2 max-w-3xl text-xs leading-5 text-slate-500">
+            This text-only input is routed through AI/ML API. Band powers the evidence- and file-backed incident workflow above, where agents coordinate around shared artifacts.
+          </p>
         </div>
         {phase === "done" && (
           <div className="flex flex-wrap gap-1.5">
@@ -154,8 +161,42 @@ function CustomIncidentSection() {
         )}
       </div>
 
+      {phase === "needs_detail" && clarifyQuestion && (
+        <div className="rounded-2xl border border-violet-400/30 bg-violet-400/10 p-4 space-y-3">
+          <p className="text-sm font-semibold text-violet-100">Band Leader needs more detail</p>
+          <p className="text-sm leading-6 text-slate-300">{clarifyQuestion}</p>
+          {suggestions.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs text-slate-500">Or try one of these:</p>
+              {suggestions.map((s, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => {
+                    setDescription(s);
+                    setPhase("idle");
+                    reset();
+                    setTimeout(() => textareaRef.current?.focus(), 50);
+                  }}
+                  className="block w-full rounded-xl border border-violet-400/20 bg-slate-950/40 px-3 py-2.5 text-left text-xs leading-5 text-slate-300 transition hover:border-violet-400/40 hover:bg-violet-400/10 hover:text-slate-100"
+                >
+                  {s}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {errorMsg && (
+        <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-4 text-sm text-red-200" role="alert">
+          {errorMsg}
+        </div>
+      )}
+
       <div className="space-y-3">
         <textarea
+          ref={textareaRef}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           disabled={phase === "running"}
@@ -185,20 +226,6 @@ function CustomIncidentSection() {
           )}
         </div>
       </div>
-
-      {phase === "needs_detail" && clarifyQuestion && (
-        <div className="rounded-2xl border border-violet-400/30 bg-violet-400/10 p-4 space-y-2">
-          <p className="text-sm font-semibold text-violet-100">Band Leader needs more information</p>
-          <p className="text-sm leading-6 text-slate-300">{clarifyQuestion}</p>
-          <p className="text-xs text-slate-500">Add this detail to your description and run again.</p>
-        </div>
-      )}
-
-      {errorMsg && (
-        <div className="rounded-xl border border-red-400/30 bg-red-400/5 p-4 text-sm text-red-200">
-          {errorMsg}
-        </div>
-      )}
 
       {hasApprovalGate && (
         <div className="rounded-2xl border border-amber-400/30 bg-amber-400/8 p-4">

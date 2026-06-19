@@ -14,7 +14,7 @@ Security incidents are not single-prompt problems. Investigation, engineering re
 
 Sentinel Relay makes that process visible in one workspace. A Band Leader coordinates Forensics, Code Review, Threat Intel, Risk & Compliance, and Remediation. Seeded scenarios stream evidence-backed findings, expose integration mode, and stop before high-impact action until a human Security Lead approves a precise containment scope. The final Summary, Evidence, and Audit views remain traceable to the collaboration trail.
 
-The production application includes two verified evidence scenarios and an open-ended field for fictional or sanitized security problems. On the open-ended path, only agents with a useful perspective respond; later agents receive prior findings so they can challenge or extend them. This route uses server-side AI/ML API orchestration and is not represented as a Band room.
+The production application includes two verified evidence scenarios and an open-ended field for fictional or sanitized security problems. Band powers the evidence- and file-backed scenarios, giving agents shared artifacts and a durable collaboration trail. **Try your own scenario** accepts text without files, so that input is best routed through server-side AI/ML API orchestration. Only agents with a useful perspective respond, and later agents receive prior findings so they can challenge or extend them. The text-only route is not represented as a Band room.
 
 Band is the coordination layer for live seeded execution—not a notification wrapper. Verified replay remains available and is labeled honestly when the live path cannot complete.
 

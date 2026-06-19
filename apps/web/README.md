@@ -26,8 +26,8 @@ Then open [http://localhost:3000](http://localhost:3000).
 
 ## Runtime behavior
 
-- Seeded scenarios attempt live Band execution and use verified replay when the integration cannot complete.
-- Open-ended incident descriptions use AI/ML API through a server route.
+- Seeded, evidence- and file-backed scenarios attempt live Band execution and use verified replay when the integration cannot complete.
+- **Try your own scenario** is text-only, so open-ended incident descriptions are routed through AI/ML API via a server route. Band remains the collaboration layer for workflows with shared evidence files.
 - Provider keys remain server-side.
 - The UI never asks visitors to supply credentials.
 - Remediation and final reporting remain blocked until explicit approval in the seeded workflow.

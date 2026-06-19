@@ -24,7 +24,7 @@ Use Summary, Evidence, and Audit tabs. Emphasize that the outcome is traceable t
 
 ## 6. Ask an open-ended question
 
-Scroll to **Try your own scenario** and enter a fictional, sanitized problem. Explain that only agents with a specific contribution respond and that this route uses server-side AI/ML API analysis; it is not represented as a Band room.
+Scroll to **Try your own scenario** and enter a fictional, sanitized problem. Explain that only agents with a specific contribution respond. This field contains text but no evidence files, so it is best routed through server-side AI/ML API analysis. Band powers the file-backed workflow above, where agents coordinate around shared evidence artifacts; the custom text route is not represented as a Band room.
 
 ## Closing line
 

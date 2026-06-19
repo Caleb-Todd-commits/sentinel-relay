@@ -12,7 +12,7 @@ The current interface is one focused workspace:
 2. **Agents** — watch the active specialist’s finding and handoff.
 3. **Decision / Result** — review the evolving conclusion, approve scoped containment, then inspect Summary, Evidence, and Audit tabs.
 
-Below the seeded workflow, **Try your own scenario** accepts a short security problem and asks only the agents with a useful perspective to respond.
+Below the seeded workflow, **Try your own scenario** accepts a short, text-only security problem and asks only the agents with a useful perspective to respond. Because this input does not include evidence files, it is routed through AI/ML API; Band powers the file- and evidence-backed workflow above.
 
 ![Sentinel Relay workspace](submission/screenshots/workspace.png)
 
@@ -42,7 +42,7 @@ Below the seeded workflow, **Try your own scenario** accepts a short security pr
 
 Seeded investigations use `/api/agent_run`. The server attempts the configured Band workflow and streams NDJSON events to the workspace. If that integration cannot complete, the same evidence-verified transcript is replayed so the approval boundary and final result remain usable.
 
-Open-ended questions use `/api/custom-incident`. The Band Leader frames the problem first, Forensics/Code Review/Threat Intel assess it in parallel, and Risk/Remediation react to the shared findings. This path uses server-side AI/ML API credentials and does not expose keys to visitors.
+Open-ended questions use `/api/custom-incident`. The Band Leader frames the problem first, Forensics/Code Review/Threat Intel assess it in parallel, and Risk/Remediation react to the shared findings. This text-only path is best routed through AI/ML API because no files are supplied. Band is used for the seeded investigations, where agents coordinate around shared evidence files and preserve the collaboration trail. Both integrations keep credentials server-side.
 
 ## Run locally
 
