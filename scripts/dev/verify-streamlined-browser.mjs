@@ -133,12 +133,14 @@ async function main() {
     if (panelCount !== 3) throw new Error(`Expected 3 visible product panels, found ${panelCount}`);
     const banned = await evaluate(`['judge','hackathon','band-style','how it works'].filter((term) => document.body.innerText.toLowerCase().includes(term))`);
     if (banned.length) throw new Error(`Found banned visible terms: ${banned.join(", ")}`);
+    const customQuestionVisible = await evaluate(`document.body.innerText.includes('Describe a security problem') && Boolean(document.querySelector('textarea'))`);
+    if (!customQuestionVisible) throw new Error("The custom incident question workspace is not accessible.");
     await capture("idle.png");
 
     await click("Start investigation");
     await waitForText("Approve scoped containment");
     await capture("approval.png");
-    await click("Approve containment");
+    await click("Approve containment →");
     await waitForText("Accountable response");
     await capture("complete.png");
     await click("evidence");

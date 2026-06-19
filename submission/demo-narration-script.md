@@ -1,75 +1,62 @@
-# Sentinel Relay — Three-Minute Demo Script
+# Sentinel Relay — presentation and voiceover script
 
-Target runtime: 2:50–3:00
+Target runtime: 2:35–2:55. Read naturally; the timings include short visual pauses.
 
-## 0:00–0:18 — The problem
+## Recording order
 
-**Visual:** Cover, then landing page.
+| Time | Visual | Action |
+|---|---|---|
+| 0:00–0:20 | `cover.png` | Hold on title |
+| 0:20–0:50 | `screenshots/workspace.png` | Show the full workspace and seeded scenario |
+| 0:50–1:25 | Live application | Start `INC-1042`; let agent findings advance |
+| 1:25–1:55 | `screenshots/approval.png` | Pause on requested scope before approving |
+| 1:55–2:20 | `screenshots/result.png` | Show Summary, then briefly select Evidence and Audit |
+| 2:20–2:45 | `screenshots/custom-question.png` | Show the open-ended question and specialist responses |
+| 2:45–2:55 | `cover.png` | Closing line |
 
-**Narration:**
+## Read-aloud script
 
-“Security incidents are not single-prompt problems. Investigation, engineering review, risk judgment, approval, remediation, and reporting all need different specialists—and every handoff can lose context.”
+### 0:00–0:20 — Problem
 
-## 0:18–0:36 — The product
+“Security incidents are not single-prompt problems. Investigation, engineering review, threat assessment, compliance judgment, approval, remediation, and reporting belong to different specialists—and every handoff can lose evidence or accountability.”
 
-**Visual:** Landing page and demo case.
+### 0:20–0:50 — Product
 
-**Narration:**
+“Sentinel Relay is a Band-powered multi-agent incident workspace. One screen keeps the incident, the active agent, and the current decision visible. Six specialized agents investigate, challenge one another, and stop before high-impact action until a human Security Lead approves a precise scope.”
 
-“Sentinel Relay is a Band-powered incident command center. Specialized agents coordinate in one shared room, exchange structured evidence, challenge weak conclusions, request human approval, and preserve an audit trail.”
+### 0:50–1:25 — Investigation
 
-## 0:36–1:05 — Band opens the workflow
+“I’ll start incident INC-1042, a possible API-key exposure after a Friday deployment. The Band Leader coordinates Forensics, Code Review, Threat Intel, and Risk and Compliance. Their messages remain role-specific: logs establish the access window, code review finds the unsafe fallback path, and threat analysis calibrates confidence without inventing attribution.”
 
-**Visual:** War Room at steps 0, 1, and 3.
+“The key behavior is disagreement. Risk accepts the evidence for urgent containment but rejects the stronger claim of confirmed downstream exfiltration. Customer notification stays held until scope and Legal review are complete.”
 
-**Narration:**
+### 1:25–1:55 — Human approval
 
-“The Band Leader opens incident INC-1042 and assigns Forensics, Code Review, and Threat Intelligence. Their findings are not isolated model outputs. Each message carries role identity, evidence references, task state, and explicit routing through the shared Band workflow.”
+“The workflow now stops. Remediation cannot continue until a human reviews the exact request: rotate the fallback token, disable the fallback path, and patch configuration. Notification and incident closure are explicitly outside this approval.”
 
-## 1:05–1:35 — Evidence becomes shared context
+“I’ll approve only that containment scope.”
 
-**Visual:** War Room at step 5; highlight message stream, evidence board, and collaboration map.
+### 1:55–2:20 — Result
 
-**Narration:**
+“After approval, Remediation and the Band Leader complete the accountable response. Summary states the conclusion and root cause. Evidence lists the supporting artifacts. Audit preserves the ordered agent trail. The execution badge also tells us whether this was live Band execution or verified replay—degradation is never hidden.”
 
-“The agents correlate synthetic API logs, authentication events, code changes, and policy evidence. Forensics confirms unauthorized reads. Code Review identifies the unsafe fallback credential path. Threat Intelligence assesses exploitation likelihood without inventing attribution.”
+### 2:20–2:45 — Open-ended analysis
 
-## 1:35–2:00 — The differentiator: disagreement
+“Sentinel Relay is not limited to the two bundled incidents. Here I can enter a fictional, sanitized security problem. The Band Leader frames it, specialist agents add only relevant perspectives, and later agents react to the shared findings. This generalization path uses server-side AI/ML API orchestration and never asks the visitor for a provider key.”
 
-**Visual:** War Room at step 7.
+### 2:45–2:55 — Close
 
-**Narration:**
-
-“Then the system does something most agent demos avoid: it disagrees. Risk & Compliance challenges the phrase ‘confirmed exfiltration.’ The evidence proves unauthorized access, but not downstream misuse. The workflow holds notification and blocks high-impact action until the decision is properly scoped.”
-
-## 2:00–2:22 — Human control
-
-**Visual:** Approval gate, then step 8.
-
-**Narration:**
-
-“A human Security Lead approves issuer-first containment: revoke the token, rotate secrets, and fix the unsafe path. Customer notification is explicitly not approved until record scope is verified. Approval is part of the shared state—not a checkbox added afterward.”
-
-## 2:22–2:43 — Remediation and report
-
-**Visual:** Final War Room state, then report page.
-
-**Narration:**
-
-“Remediation receives the approved scope, records the control plan, and closes the handoff. Sentinel Relay generates an audit-ready report from the collaboration trail: messages, evidence, challenges, approval, and tasks.”
-
-## 2:43–2:58 — Why Band matters
-
-**Visual:** Architecture slide and closing slide.
-
-**Narration:**
-
-“Without Band, these are disconnected assistants. With Band, they become an accountable response team that carries context forward, challenges itself, keeps humans in control, and leaves behind a report the company can trust.”
+“Sentinel Relay turns specialist AI outputs into an accountable incident decision: evidence first, disagreement visible, and high-impact action human-controlled.”
 
 ## Recording notes
 
-- Keep the pointer still unless highlighting one proof object.
-- Pause for one beat on the challenge and approval states.
-- Do not describe deterministic replay as unfinished integration.
-- Say “shared Band workflow” at least twice.
-- End at or before 3:00.
+- Use the stable URL: https://sentinel-relay-alpha.vercel.app
+- Record signed out.
+- Never type real incident data into the open-ended field.
+- Pause for one beat before pressing **Approve containment →**.
+- If the execution badge says `Verified replay`, describe it exactly that way.
+- The four screenshots can be regenerated with:
+
+```bash
+node scripts/submission/capture-demo.mjs https://sentinel-relay-alpha.vercel.app submission/screenshots
+```

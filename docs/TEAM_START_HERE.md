@@ -1,233 +1,48 @@
-# Team Start Here — Sentinel Relay
+# Team start here
 
-This is the first file every teammate should read.
+Sentinel Relay is a Band-powered multi-agent cybersecurity incident workspace. The deployed product combines a seeded, evidence-backed approval workflow with an open-ended security-problem field.
 
-Sentinel Relay is a **Band-powered multi-agent cybersecurity incident command center**. A company receives a suspicious security alert, and specialized agents coordinate through Band to investigate evidence, challenge weak conclusions, request human approval, create remediation tasks, and generate an audit-ready report.
+## Current product
 
----
+- One public workspace at `/`.
+- Three primary panels: Incident, Agents, and Decision/Result.
+- Two verified scenarios: `INC-1042` and `INC-1043`.
+- Six specialized AI roles and one human approval role.
+- Live Band execution when available, labeled honestly in the interface.
+- Verified replay when the live seeded workflow cannot complete.
+- Open-ended incident analysis through `/api/custom-incident` and AI/ML API.
 
-## Current Locked Direction
+Legacy product routes redirect to the current workspace. Do not build new features against the retired multi-page interface.
 
-- **Primary track:** Track 3 — Regulated & High-Stakes Workflows
-- **Secondary influence:** Track 2 — Multi-Agent Software Development
-- **Main scenario:** Possible API Key Exposure After Friday Deploy
-- **Core demo surface:** War Room dashboard
-- **Core technical proof:** Agents coordinate through Band using structured messages, handoffs, challenges, approvals, and audit trail events.
+## Non-negotiable behavior
 
----
+1. Evidence and uncertainty stay visible.
+2. Risk & Compliance may challenge other agents.
+3. High-impact seeded actions require a human decision.
+4. Remediation cannot appear before approval.
+5. Provider secrets stay server-side.
+6. Integration degradation must be labeled; it must not masquerade as live execution.
+7. Custom incident descriptions must be fictional or sanitized.
 
-## Read These in Order
+## Read next
 
-1. `docs/01_PROJECT_VISION_LOCK.md`
-2. `docs/02_PROJECT_CHARTER.md`
-3. `docs/03_JUDGE_PITCH_AND_POSITIONING.md`
-4. `docs/04_PRODUCT_BOUNDARIES_AND_NON_GOALS.md`
-5. `docs/05_TERMINOLOGY.md`
-6. `docs/06_DECISION_LOG.md`
-7. `docs/07_TEAM_ONBOARDING_CHECKLIST.md`
-8. `docs/01_BIGGEST_10_FIRST.md`
-9. `docs/56_TEAM_BRANCHING_BASELINE.md`
+1. [README.md](../README.md)
+2. [architecture.md](architecture.md)
+3. [05_TERMINOLOGY.md](05_TERMINOLOGY.md)
+4. [SECURITY.md](../SECURITY.md)
+5. [57_EVIDENCE_DRIVEN_AI_ML_API_WORKFLOW.md](57_EVIDENCE_DRIVEN_AI_ML_API_WORKFLOW.md)
 
----
+The older numbered step documents are retained as build history. See [docs/README.md](README.md) before relying on them.
 
-## Short Team Explanation
-
-Sentinel Relay is a cybersecurity incident war room where multiple specialized agents coordinate through Band. The agents investigate logs, review code changes, assess threat indicators, challenge unsupported claims, request human approval, and generate a final audit-ready report.
-
-The point is not just that agents talk. The point is that they coordinate serious enterprise work through Band.
-
----
-
-## Main Demo Scenario
-
-**Possible API Key Exposure After Friday Deploy**
-
-A suspicious API token is used from an unusual region after a Friday deployment. The system must determine what happened, what evidence supports the claim, whether customer exposure is confirmed, what actions require approval, and what remediation steps should be taken.
-
----
-
-## Agent Roles
-
-1. **Band Leader** — opens the case, assigns tasks, coordinates the workflow, requests approval.
-2. **Forensics Agent** — reviews logs and builds the timeline.
-3. **Threat Intel Agent** — assesses suspicious indicators and confidence.
-4. **Code Review Agent** — checks recent code/config changes for exposed secrets or unsafe changes.
-5. **Risk & Compliance Agent** — applies policy, challenges unsupported claims, recommends escalation.
-6. **Remediation Agent** — creates fix tasks, mock PR summary, and validation steps.
-
----
-
-## Non-Negotiables
-
-- Band must be central to the workflow.
-- The UI must make agent coordination visible.
-- The demo must include at least one agent challenge/disagreement.
-- High-impact actions require human approval.
-- The final report must be traceable to the agent workflow.
-- Use safe sample data only.
-- Do not commit secrets.
-- One polished scenario beats many unfinished scenarios.
-
----
-
-## First Build Target
-
-Build a stable vertical slice:
-
-1. Start sample incident.
-2. Show War Room dashboard.
-3. Display agent roster.
-4. Simulate or receive Band messages.
-5. Show evidence cards.
-6. Show a challenge from Risk & Compliance.
-7. Request human approval.
-8. Show remediation tasks.
-9. Generate final report.
-10. Replay the audit trail.
-
----
-
-## Team Rule
-
-When deciding what to build, choose the option that makes the final demo more reliable, clearer, more Band-native, and easier for judges to understand.
-
-## Current Baseline Progress
-
-Completed so far:
-
-1. Project vision locked.
-2. GitHub repo and branch rules planned.
-3. Next.js frontend baseline created.
-4. Shared schemas defined.
-5. Mock incident flow built.
-
-The app now has a product-shaped frontend with `/`, `/demo`, `/war-room`, `/report`, and `/status`. The War Room now runs a deterministic 10-step incident workflow with evidence unlocks, agent handoffs, a Risk challenge, a human approval gate, remediation task unlocks, and final report readiness.
-
-Run from the repo root:
+## Verify a change
 
 ```bash
-corepack pnpm install
-corepack pnpm dev
-```
-
-Open:
-
-```txt
-http://localhost:3000
-```
-
-Useful verification commands:
-
-```bash
-corepack pnpm schemas:validate
-corepack pnpm schemas:typecheck
-corepack pnpm workflow:verify
-corepack pnpm typecheck
-corepack pnpm build
 corepack pnpm verify
+node scripts/dev/verify-streamlined-browser.mjs http://127.0.0.1:3000
 ```
 
-## Step 5 Update — Mock Incident Flow Baseline
-
-The mock workflow now lives in:
-
-```txt
-apps/web/src/lib/workflow/
-```
-
-Important rule going forward:
-
-> Mock Mode is not disposable. It is the fallback demo path and the contract the real Band integration should satisfy.
-
-Do not remove the challenge message, approval request, approval decision, remediation unlock, or final report unlock. Those are the main proof that this is a high-stakes, traceable, multi-agent workflow.
-
-The next major task is Step 6: polish the War Room UI so the demo is visually stronger and easier for judges to understand in under three minutes.
-
-
-## Step 6 Update — War Room UI Is Now the Main Demo Surface
-
-The War Room has been upgraded into the main judge-facing command center. It now includes:
-
-- command summary,
-- judge briefing panel,
-- workflow progress controls,
-- critical challenge/approval spotlight,
-- collaboration map,
-- structured Band-style message stream,
-- approval gate,
-- evidence board,
-- decision board,
-- remediation list,
-- audit replay trail,
-- report preview.
-
-Future work should not replace this page unless there is a major reason. Step 7 should connect the collaboration provider layer behind the existing UI.
-
-## Step 7 Update — Collaboration Provider Layer
-
-The War Room now runs through a provider abstraction.
-
-Default mode is still Mock Mode, but it is no longer just a static UI mock. The staged workflow is pushed through `MockCollaborationProvider`, which creates an incident room, registers agents, stores structured messages, records approvals, tracks task statuses, and exposes provider audit events.
-
-Band Mode is scaffolded behind server-side API routes:
-
-```txt
-/api/collaboration/rooms
-/api/collaboration/messages
-/api/collaboration/approvals
-```
-
-Do not put Band secrets in browser code. Step 8 should connect these server routes to the real Band SDK/API.
-
-New War Room hook:
-
-```ts
-useIncidentCollaborationWorkflow()
-```
-
-Do not build new War Room features against direct mock arrays. Build against the workflow/provider state.
-
-
-## Step 8 Live Band Notes
-
-Read these before testing live mode:
-
-```txt
-docs/45_REAL_BAND_INTEGRATION.md
-docs/46_BAND_ENVIRONMENT_SETUP.md
-docs/47_REMOTE_AGENT_RUNBOOK.md
-docs/48_BAND_ROUTE_CONTRACTS.md
-```
-
-Useful commands:
+For production-facing documentation or UI changes, regenerate screenshots with:
 
 ```bash
-corepack pnpm band:verify
-corepack pnpm band:env
-corepack pnpm band:smoke
-```
-
-Live Band Mode requires:
-
-- `NEXT_PUBLIC_COLLABORATION_MODE="band"`
-- `NEXT_PUBLIC_ENABLE_BAND_MODE="true"`
-- `BAND_PROVIDER_ENABLED="true"`
-- `BAND_LEADER_AGENT_API_KEY`
-- specialist participant IDs for routed @mentioned messages
-
-Keep the app in Mock Mode when preparing the final backup demo.
-
-## Step 9 Update — Final Report and Audit Replay
-
-The final report is now an enterprise-style audit artifact. It is not just a paragraph summary. It includes evidence traceability, audit replay, human approval scope, remediation control plan, open questions, and integrity checks.
-
-For demo purposes, after showing the War Room, open `/report` and explain that the final report is built from the same collaboration stream instead of being a black-box summary.
-
-Key files:
-
-```txt
-apps/web/src/app/report/page.tsx
-apps/web/src/lib/report/auditReportModel.ts
-apps/web/src/components/report/
-docs/51_FINAL_REPORT_AND_AUDIT_REPLAY.md
+node scripts/submission/capture-demo.mjs https://sentinel-relay-alpha.vercel.app submission/screenshots
 ```

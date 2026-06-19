@@ -82,6 +82,7 @@ function CustomIncidentSection() {
     reset();
 
     let wantsMoreDetail = false;
+    let streamError = false;
     try {
       const response = await fetch("/api/custom-incident", {
         method: "POST",
@@ -107,10 +108,11 @@ function CustomIncidentSection() {
           setThinkingAgent(null);
         } else if (event.type === "error") {
           setErrorMsg(event.message);
+          streamError = true;
         }
       });
 
-      setPhase(wantsMoreDetail ? "needs_detail" : "done");
+      setPhase(streamError ? "error" : wantsMoreDetail ? "needs_detail" : "done");
     } catch (err) {
       setErrorMsg(err instanceof Error ? err.message : "Request failed.");
       setPhase("error");
@@ -320,6 +322,8 @@ function productLanguage(value: string | undefined) {
     .replace(new RegExp(audienceLabel, "gi"), "operational")
     .replace(new RegExp(collaborationStyle, "gi"), "Band")
     .replace(/\bproof\b/gi, "record")
+    .replace(/traceable record of traceable/gi, "traceable record of")
+    .replace(/traceable record of,?\s*mention-driven/gi, "traceable record of mention-driven")
     .replace(/\bdemo\b/gi, "workflow")
     .replace(/\bmock\b/gi, "verified");
 }

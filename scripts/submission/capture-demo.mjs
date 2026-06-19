@@ -148,6 +148,28 @@ async function main() {
       await sleep(1100);
     }
 
+    async function waitForText(text, timeoutMs = 75_000) {
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        if (await evaluate(`document.body.innerText.includes(${JSON.stringify(text)})`)) return;
+        await sleep(350);
+      }
+      throw new Error(`Timed out waiting for text: ${text}`);
+    }
+
+    async function waitForCustomResponses(timeoutMs = 75_000) {
+      const deadline = Date.now() + timeoutMs;
+      while (Date.now() < deadline) {
+        const count = await evaluate(`(() => {
+          const match = document.body.innerText.match(/([1-6]) of 6 agents responded/);
+          return match ? Number(match[1]) : 0;
+        })()`);
+        if (count > 0) return count;
+        await sleep(500);
+      }
+      return 0;
+    }
+
     async function scrollToText(text) {
       await evaluate(`(() => {
         const node = [...document.querySelectorAll('h1,h2,h3,p,span')]
@@ -168,37 +190,43 @@ async function main() {
       await fs.writeFile(path.join(outputDir, filename), Buffer.from(data, "base64"));
     }
 
-    await navigate(`${baseUrl}/war-room`);
-    await capture("workflow-00-ready.png");
+    await navigate(baseUrl);
+    await capture("workspace.png");
 
-    await clickButton("Start incident");
-    await scrollToText("Band incident room opened");
-    await capture("workflow-01-room.png");
+    await clickButton("Start investigation");
+    await waitForText("Approve scoped containment");
+    await capture("approval.png");
 
-    await clickButton("Run next step");
-    await clickButton("Run next step");
-    await scrollToText("Suspicious token usage identified");
-    await capture("workflow-03-evidence.png");
+    await clickButton("Approve containment →");
+    await waitForText("Accountable response");
+    await capture("result.png");
 
-    for (let index = 0; index < 3; index += 1) await clickButton("Run next step");
-    await scrollToText("Risk challenges customer-impact claim");
-    await capture("workflow-06-challenge.png");
-
-    await clickButton("Run next step");
-    await scrollToText("Human approval requested");
-    await capture("workflow-07-approval-gate.png");
-
-    await clickButton("Approve containment");
-    await scrollToText("Containment approved, disclosure deferred");
-    await capture("workflow-08-approved.png");
-
-    await clickButton("Run next step");
-    await clickButton("Run next step");
-    await scrollToText("Audit-ready report generated");
-    await capture("workflow-10-report-ready.png");
-
-    await navigate(`${baseUrl}/report`);
-    await capture("workflow-report.png");
+    await scrollToText("Describe a security problem");
+    const filled = await evaluate(`(() => {
+      const textarea = document.querySelector('textarea');
+      if (!textarea) return false;
+      const setter = Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype, 'value')?.set;
+      setter?.call(textarea, "After a Friday configuration deployment, unfamiliar IP addresses accessed our customer export endpoint. We rotated the service credential but need to determine whether records were accessed and which containment steps are safe.");
+      textarea.dispatchEvent(new Event('input', { bubbles: true }));
+      return true;
+    })()`);
+    if (!filled) throw new Error("Custom incident textarea was not available.");
+    await clickButton("Investigate");
+    let customResponses = await waitForCustomResponses();
+    if (customResponses === 0) {
+      await sleep(12_000);
+      await clickButton("Run again");
+      customResponses = await waitForCustomResponses();
+    }
+    if (customResponses === 0) throw new Error("No custom-incident agent returned a response.");
+    await client.send("Emulation.setDeviceMetricsOverride", {
+      width: 1440,
+      height: 1400,
+      deviceScaleFactor: 1,
+      mobile: false,
+    });
+    await scrollToText("Describe a security problem");
+    await capture("custom-question.png");
 
     console.log(`Captured workflow screenshots in ${outputDir}`);
   } finally {

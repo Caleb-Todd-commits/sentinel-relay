@@ -1,86 +1,59 @@
 # Architecture
 
-## System Overview
+## Deployed system
 
-Sentinel Relay has four main layers:
+```text
+Browser workspace
+├── Seeded scenario flow ──> POST /api/agent_run
+│   ├── live Band room and remote-agent messages
+│   └── verified evidence replay when live execution degrades
+└── Open-ended problem ───> POST /api/custom-incident
+    └── server-side AI/ML API calls across six specialist roles
 
-```txt
-Frontend War Room UI
-        |
-Collaboration Provider Interface
-        |
-Mock Provider OR Band Provider
-        |
-Specialized Agents + Structured Messages
+Shared foundations
+├── AgentMessage and report schemas
+├── synthetic evidence packets for INC-1042 and INC-1043
+├── Band collaboration adapters and routes
+└── Python evidence-driven agents and verification runners
 ```
 
-## Frontend
+## Browser workspace
 
-The frontend is a Next.js dashboard with pages for:
+The root page renders three primary panels:
 
-- Landing page
-- Demo start page
-- War Room
-- Final report
+- **Incident** selects a seeded scenario and exposes progress and execution mode.
+- **Agents** shows the roster and expands the currently active contribution.
+- **Decision / Result** shows the unresolved risk, approval gate, and final Summary/Evidence/Audit tabs.
 
-The War Room is the primary judge-facing interface.
+The open-ended scenario section sits below those panels and reuses the same specialist roles without adding modal or popup surfaces.
 
-## Collaboration Provider Pattern
+## Seeded scenario path
 
-The UI should not directly depend on Band implementation details. It should call a provider interface.
+`POST /api/agent_run` accepts an investigation start or approval continuation and streams NDJSON. The server attempts Band-backed execution first. If no live workflow completes, it emits a verified replay from evidence-backed scenario transcripts. The client exposes the resulting mode instead of hiding integration degradation.
 
-```ts
-interface CollaborationProvider {
-  createIncidentRoom(caseId: string): Promise<string>;
-  registerAgent(roomId: string, agentId: string): Promise<void>;
-  sendMessage(roomId: string, message: AgentMessage): Promise<void>;
-  getMessages(roomId: string): Promise<AgentMessage[]>;
-  subscribeToMessages(roomId: string, callback: (message: AgentMessage) => void): () => void;
-  requestHumanApproval(roomId: string, request: ApprovalRequest): Promise<void>;
-  submitHumanDecision(roomId: string, decision: ApprovalDecision): Promise<void>;
-}
-```
+The seeded flow has 14 pre-approval events and four post-approval events. Remediation and final reporting cannot appear before the human approval action.
 
-Use two implementations:
+## Open-ended path
 
-- `MockCollaborationProvider`
-- `BandCollaborationProvider`
+`POST /api/custom-incident` accepts a sanitized description of up to 2,000 characters and streams agent-thinking, response, skip, clarification, completion, or error events.
 
-## Message Types
+The Band Leader frames the incident first. Forensics, Code Review, and Threat Intel run from the same framing. Risk & Compliance and Remediation then receive the accumulated findings so they can challenge or act on shared context rather than repeat it.
 
-The system should use structured messages:
+This route uses server-side AI/ML API credentials. It is a model-orchestration path and does not claim to create a Band room.
+The route bounds request bodies, limits descriptions to 2,000 characters, and applies a best-effort six-requests-per-minute application cap per forwarded IP.
 
-- Finding
-- EvidenceReference
-- Challenge
-- RiskAssessment
-- ApprovalRequest
-- ApprovalDecision
-- RemediationTask
-- FinalReportSection
+## Preserved components
 
-## Agent Flow
+- `agents/` contains the evidence-driven Python implementations.
+- `data/incidents/` contains synthetic incident packets.
+- `packages/schemas/` defines shared contracts.
+- `/api/collaboration/*` preserves Band collaboration APIs.
+- `.env.example` documents server-side configuration.
 
-```txt
-Band Leader
-  -> Forensics
-  -> Code Review
-  -> Threat Intel
-  -> Risk & Compliance
-  -> Human Approval
-  -> Remediation
-  -> Final Report
-```
+## Safety boundaries
 
-## Human Approval
-
-Any high-impact action should require approval:
-
-- Revoking tokens
-- Notifying customers
-- Declaring confirmed breach
-- Closing incident
-
-## Audit Trail
-
-Every meaningful message should be shown in the War Room and included in the final report.
+- No visitor credentials.
+- No destructive production actions.
+- Synthetic seeded evidence only.
+- Human approval before seeded high-impact remediation.
+- Public custom descriptions must contain no real sensitive data.

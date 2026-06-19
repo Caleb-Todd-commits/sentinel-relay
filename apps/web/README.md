@@ -1,56 +1,43 @@
-# Sentinel Relay Web App
+# Sentinel Relay web application
 
-This is the judge-facing dashboard for Sentinel Relay.
+This Next.js application serves the current Sentinel Relay workspace and its server-only integrations.
 
-## What should run now
+## Current routes
 
-The web app should run as a fully mocked baseline with these routes:
+| Route | Purpose |
+|---|---|
+| `/` | Incident, Agents, Decision/Result, and custom-scenario workspace |
+| `/api/agent_run` | Seeded investigation and approval NDJSON stream |
+| `/api/custom-incident` | Open-ended multi-agent NDJSON stream |
+| `/api/collaboration/*` | Preserved Band collaboration contracts |
 
-- `/` — product landing page
-- `/demo` — sample incident setup
-- `/war-room` — main demo surface
-- `/report` — final audit report
-- `/status` — local readiness page
+Legacy routes (`/demo`, `/scenarios`, `/scenarios/room`, `/war-room`, `/report`, and `/status`) redirect into the workspace.
 
-## Local commands
+## Local development
 
 From the repository root:
 
 ```bash
-pnpm install
-pnpm dev
+corepack pnpm install
+corepack pnpm dev
 ```
 
-From this folder:
+Then open [http://localhost:3000](http://localhost:3000).
+
+## Runtime behavior
+
+- Seeded scenarios attempt live Band execution and use verified replay when the integration cannot complete.
+- Open-ended incident descriptions use AI/ML API through a server route.
+- Provider keys remain server-side.
+- The UI never asks visitors to supply credentials.
+- Remediation and final reporting remain blocked until explicit approval in the seeded workflow.
+
+## Commands
 
 ```bash
-pnpm install
-pnpm dev
+corepack pnpm --filter sentinel-relay-web typecheck
+corepack pnpm --filter sentinel-relay-web build
+corepack pnpm verify
 ```
 
-## Baseline rules
-
-- Keep the app demoable at all times.
-- Do not require Band credentials to load the UI.
-- Do not commit real secrets.
-- Use `src/lib/types.ts` as the shared contract for the UI.
-- Use `src/lib/demo/sentinelRelayDemo.ts` as the canonical demo data.
-- Use `src/lib/workflow/` as the canonical mock flow engine.
-- Keep the Risk challenge and human approval gate visible.
-- Do not let remediation appear before approval.
-
-## Mock workflow files
-
-```txt
-src/lib/workflow/mockWorkflowScript.ts
-src/lib/workflow/deriveWorkflowState.ts
-src/lib/workflow/useMockIncidentWorkflow.ts
-src/components/war-room/WorkflowControls.tsx
-src/components/war-room/StateMachinePanel.tsx
-src/components/war-room/HandoffPanel.tsx
-src/components/war-room/DecisionPanel.tsx
-```
-
-## When adding real Band
-
-The real Band provider should satisfy the same message contract used by the mock data and workflow view model. The UI should not need a major rewrite when live messages are connected. Mock Mode should remain available as the fallback demo path.
+Do not add public environment variables containing Band, AI/ML API, or signing credentials.

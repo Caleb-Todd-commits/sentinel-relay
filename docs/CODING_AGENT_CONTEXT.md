@@ -1,72 +1,37 @@
-# Coding Agent Context — Sentinel Relay
+# Coding agent context
 
-Use this file when asking an AI coding assistant to work on the project.
+## Objective
 
----
+Maintain a clear, public multi-agent incident workspace that demonstrates evidence grounding, specialist disagreement, human control, and honest integration status.
 
-## Project
+## Current workflow
 
-Sentinel Relay is a Band-powered multi-agent cybersecurity incident command center.
+1. A visitor selects `INC-1042` or `INC-1043`, or enters a sanitized fictional scenario.
+2. Seeded investigations stream through `/api/agent_run` and stop at human approval.
+3. Open-ended analysis streams through `/api/custom-incident` and returns only relevant specialist perspectives.
+4. Seeded remediation and reporting continue only after approval.
+5. Legacy product routes redirect to `/`.
 
----
+## Build rules
 
-## Primary Goal
+- Preserve the three primary panel markers.
+- Do not introduce popup-heavy UI.
+- Keep secrets server-side.
+- Preserve verified replay and evidence fixtures.
+- Never imply the open-ended AI/ML API route creates a Band room.
+- Never process or encourage real sensitive incident data.
+- Update README, current docs, and screenshots when visible behavior changes.
 
-Build a polished, stable, judge-readable hackathon project showing agents coordinating through Band during a high-stakes cybersecurity incident workflow.
+## Read before editing
 
----
+- `README.md`
+- `docs/architecture.md`
+- `docs/05_TERMINOLOGY.md`
+- `SECURITY.md`
+- `apps/web/src/components/LiveInvestigationWorkspace.tsx`
+- `apps/web/src/app/api/agent_run/route.ts`
+- `apps/web/src/app/api/custom-incident/route.ts`
 
-## Main Scenario
+## Verification
 
-Possible API Key Exposure After Friday Deploy.
-
----
-
-## Required Workflow
-
-1. Band Leader opens the case.
-2. Forensics reviews logs and submits evidence.
-3. Code Review checks recent diff/config.
-4. Threat Intel assesses confidence.
-5. Risk & Compliance challenges unsupported claims.
-6. Band Leader requests human approval.
-7. Human approves containment/remediation.
-8. Remediation creates fix tasks.
-9. Final report is generated.
-10. Incident can be replayed as an audit trail.
-
----
-
-## Build Rules
-
-- Do not remove mock mode.
-- Do not commit secrets.
-- Do not add full auth unless explicitly requested.
-- Do not add real destructive security actions.
-- Keep one polished scenario.
-- Use structured message types.
-- Make Band collaboration visible.
-- Preserve existing docs and project direction.
-
----
-
-## Key Files to Read Before Coding
-
-- `docs/01_PROJECT_VISION_LOCK.md`
-- `docs/02_PROJECT_CHARTER.md`
-- `docs/04_PRODUCT_BOUNDARIES_AND_NON_GOALS.md`
-- `apps/web/src/lib/types.ts`
-- `apps/web/src/lib/mockIncident.ts`
-- `apps/web/src/lib/collaboration/CollaborationProvider.ts`
-
----
-
-## Preferred Implementation Style
-
-- Stable before clever.
-- Clear TypeScript types.
-- Small components.
-- Safe fallbacks.
-- Visible error states.
-- No fragile live-only demo path.
-- Thorough comments where integration is incomplete.
+Run `corepack pnpm verify`. For UI changes, also run the browser verifier and regenerate public screenshots.

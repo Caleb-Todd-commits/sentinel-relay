@@ -1,6 +1,31 @@
 export const maxDuration = 60;
 export const dynamic = "force-dynamic";
 
+const RATE_LIMIT_REQUESTS = 6;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+const MAX_BODY_BYTES = 10_000;
+const requestsByIp = new Map<string, number[]>();
+
+function rateLimitResponse(request: Request): Response | null {
+  const forwarded = request.headers.get("x-forwarded-for") ?? "unknown";
+  const ip = forwarded.split(",")[0]?.trim() || "unknown";
+  const now = Date.now();
+  const recent = (requestsByIp.get(ip) ?? []).filter((timestamp) => now - timestamp < RATE_LIMIT_WINDOW_MS);
+  if (recent.length >= RATE_LIMIT_REQUESTS) {
+    requestsByIp.set(ip, recent);
+    return new Response(
+      JSON.stringify({ type: "error", code: "rate_limited", message: "Too many requests. Try again in one minute." }) + "\n",
+      {
+        status: 429,
+        headers: { "Content-Type": "application/x-ndjson", "Retry-After": "60" },
+      },
+    );
+  }
+  recent.push(now);
+  requestsByIp.set(ip, recent);
+  return null;
+}
+
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 type AgentId =
@@ -249,6 +274,17 @@ function encode(event: StreamEvent): Uint8Array {
 // ─── Route ────────────────────────────────────────────────────────────────────
 
 export async function POST(request: Request): Promise<Response> {
+  const limited = rateLimitResponse(request);
+  if (limited) return limited;
+
+  const contentLength = Number(request.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return new Response(
+      JSON.stringify({ type: "error", code: "body_too_large", message: "Request body is too large." }) + "\n",
+      { status: 413, headers: { "Content-Type": "application/x-ndjson" } },
+    );
+  }
+
   let body: { description?: string } = {};
   try { body = await request.json(); } catch { /* ignore */ }
 
@@ -263,6 +299,12 @@ export async function POST(request: Request): Promise<Response> {
     return new Response(
       JSON.stringify({ type: "error", code: "too_long", message: "Keep the description under 2000 characters." }) + "\n",
       { status: 400 },
+    );
+  }
+  if (!process.env.AIMLAPI_API_KEY) {
+    return new Response(
+      JSON.stringify({ type: "error", code: "provider_unavailable", message: "Custom analysis is temporarily unavailable." }) + "\n",
+      { status: 503, headers: { "Content-Type": "application/x-ndjson" } },
     );
   }
 
@@ -307,6 +349,11 @@ export async function POST(request: Request): Promise<Response> {
 
     if (!commanderResult) {
       await writer.write(encode({ type: "agent_skipped", agentId: "agent-commander", agentName: "Band Leader" }));
+      await writer.write(encode({
+        type: "error",
+        code: "provider_unavailable",
+        message: "The analysis provider did not return a usable response. Please try again.",
+      }));
       await writer.write(encode({ type: "complete", respondedCount: 0 }));
       return;
     }

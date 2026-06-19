@@ -1,112 +1,47 @@
 # Contributing to Sentinel Relay
 
-## Purpose
+## Start here
 
-This file explains how teammates should contribute during the hackathon. The goal is to move fast without breaking the demo.
+Read [README.md](README.md), [docs/TEAM_START_HERE.md](docs/TEAM_START_HERE.md), [docs/architecture.md](docs/architecture.md), and [SECURITY.md](SECURITY.md).
 
-## Start Here
-
-Before coding, read:
-
-1. `docs/TEAM_START_HERE.md`
-2. `docs/01_PROJECT_VISION_LOCK.md`
-3. `docs/08_GITHUB_REPO_AND_BRANCH_RULES.md`
-4. `docs/12_FIRST_SPRINT_ISSUE_BOARD.md`
-
-## Local Setup
+## Local setup
 
 ```bash
-cd apps/web
-pnpm install
-pnpm dev
+corepack pnpm install
+corepack pnpm dev
 ```
 
-Open:
+Open [http://localhost:3000](http://localhost:3000).
 
-```txt
-http://localhost:3000
-```
+## Branches and commits
 
-## Branching
+Use a focused branch unless the repository owner explicitly coordinates a direct `main` update.
 
-Create a branch for your task:
-
-```bash
-git checkout -b feature/war-room-shell
-```
-
-Branch patterns:
-
-```txt
+```text
 feature/<task>
 fix/<task>
 docs/<task>
-demo/<task>
 agent/<task>
 band/<task>
 chore/<task>
 ```
 
-## Commit Messages
+Use concise conventional commit messages, for example `feat: add incident clarification flow` or `docs: refresh public product guide`.
 
-Use:
+## Pull requests
 
-```txt
-<type>: <short description>
-```
+Describe what changed, why it matters, how it was verified, and what could regress. Include current screenshots for visible UI changes.
 
-Examples:
+## Definition of done
 
-```txt
-feat: add war room shell
-band: scaffold collaboration provider
-agent: define Band Leader prompt
-demo: add sample api logs
-docs: update setup guide
-fix: prevent report render crash
-```
+- No secrets or real incident data are committed.
+- `corepack pnpm verify` passes.
+- The seeded approval boundary still blocks remediation.
+- Verified replay still works when integrations are unavailable.
+- The custom-scenario path handles provider failure clearly.
+- Public statements and screenshots match the deployed product.
+- The production browser smoke test passes for UI changes.
 
-## Pull Requests
+## Historical documentation
 
-Every PR should include:
-
-- What changed.
-- Why it matters.
-- How to test.
-- What could break.
-- Screenshots for UI changes.
-
-## No Secrets
-
-Never commit:
-
-- `.env`
-- `agent_config.yaml`
-- API keys
-- Band credentials
-- OpenAI keys
-- real customer data
-- real security logs
-
-Only commit `.env.example` with placeholder values.
-
-## Definition of Done
-
-A task is done when:
-
-- Code is committed.
-- It matches the issue acceptance criteria.
-- The app still runs.
-- Mock mode still works if touched.
-- Documentation is updated if behavior changed.
-- PR is opened or merged.
-
-## Demo Safety
-
-The project should always have one working path:
-
-```txt
-Sample incident → War Room → Messages → Evidence → Approval → Report
-```
-
-Do not break that path for optional features.
+Numbered files under `docs/` record the project’s build sequence. Do not treat old route names or intermediate architecture in those files as the current contract; update the authoritative documents listed in [docs/README.md](docs/README.md).

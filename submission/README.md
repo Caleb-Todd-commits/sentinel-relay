@@ -1,28 +1,29 @@
-# Sentinel Relay submission package
+# Sentinel Relay event submission archive
 
-This folder contains the judge-facing assets for the Band of Agents Hackathon.
+This directory preserves the original event deliverables and the current production screenshots.
 
-## Required assets
+## Current references
 
-- `cover.png` — project cover image.
-- `Sentinel-Relay-Pitch-Deck.pptx` — editable slide presentation.
-- `Sentinel-Relay-Demo.mp4` — three-minute demo video.
-- `submission-copy.md` — copy for the lablab submission form.
-- `demo-narration-script.md` — timed narration and visual plan.
-- `screenshots/` — verified captures from the production deployment.
+- Application: https://sentinel-relay-alpha.vercel.app
+- Public repository: https://github.com/Caleb-Todd-commits/sentinel-relay
+- Current screenshots: `screenshots/workspace.png`, `screenshots/approval.png`, `screenshots/result.png`, and `screenshots/custom-question.png`
+- Presentation/voiceover script: `demo-narration-script.md`
 
-## Public links
+## Historical artifacts
 
-- App: https://sentinel-relay-alpha.vercel.app
-- Repository: https://github.com/Caleb-Todd-commits/sentinel-relay
+`cover.png`, `Sentinel-Relay-Pitch-Deck.pptx`, and `Sentinel-Relay-Demo.mp4` are preserved as the original event submission. They may show the retired multi-page interface and should not be used as current product documentation.
 
-## Final handoff checklist
+## Current status
 
-- [ ] Repository visibility is public.
+- [x] Repository is public.
 - [x] MIT license is present.
 - [x] Production deployment is ready.
-- [ ] Cover image uploaded.
-- [ ] Video presentation uploaded.
-- [ ] Slide presentation uploaded.
-- [ ] Every link tested while signed out.
-- [ ] Submission completed before the deadline.
+- [x] Production and repository links work signed out.
+- [x] Current screenshots were captured from production.
+- [x] Seeded approval flow and open-ended analysis were smoke-tested.
+
+Regenerate current screenshots with:
+
+```bash
+node scripts/submission/capture-demo.mjs https://sentinel-relay-alpha.vercel.app submission/screenshots
+```

@@ -1,52 +1,32 @@
-# Security Policy
+# Security policy
 
 ## Scope
 
-Sentinel Relay is a hackathon prototype using fake/sample cybersecurity incident data. It should not process real secrets, real production logs, real customer data, or real incident evidence.
+Sentinel Relay is a public prototype for synthetic cybersecurity incident analysis. It is not an incident-response control plane and must not receive real secrets, production logs, customer records, personal data, or confidential incident evidence.
 
-## Do Not Commit
+The open-ended **Try your own scenario** field sends the submitted description to the configured AI/ML API provider for analysis. Use fictional or fully sanitized text only.
 
-Never commit:
+## Data rules
 
-- API keys
-- Band credentials
-- OpenAI keys
-- AI/ML API keys
-- Featherless keys
-- `.env`
-- `agent_config.yaml`
-- real production logs
-- real customer data
-- screenshots containing secrets
+Never commit or submit:
 
-## Safe Demo Data
+- API keys, session tokens, or Band credentials
+- `.env` files or `agent_config.yaml`
+- real production logs or screenshots containing secrets
+- customer, employee, or attacker personal data
+- unredacted vulnerability or incident details
 
-Use only fake/demo values such as:
+Bundled evidence is synthetic. IP addresses use documentation ranges and token-like values are redacted labels.
 
-```txt
-tok_demo_redacted
-sk_demo_redacted
-user_demo_123
-198.51.100.42
-203.0.113.10
-```
+## Runtime boundaries
 
-## Environment Variables
+- Provider credentials remain server-side.
+- The public custom-analysis route applies a best-effort six-requests-per-minute application limit per forwarded IP.
+- Visitors are never asked for bring-your-own keys.
+- Seeded high-impact actions stop at explicit human approval.
+- Remediation output is advisory and does not execute production changes.
+- Verified replay keeps the workflow useful without claiming a degraded integration is live.
 
-Add new required environment variables to:
+## Reporting a vulnerability
 
-```txt
-.env.example
-README.md
-relevant docs
-```
-
-## Reporting a Security Issue
-
-Because this is a hackathon prototype, report issues directly to the team lead in the group chat and create a GitHub issue labeled:
-
-```txt
-risk:security-sensitive
-```
-
-Do not post real secrets in the issue.
+Report security issues privately to the repository owner. Do not open a public issue containing exploit details, credentials, or sensitive evidence. A sanitized tracking issue may be created after the sensitive details are removed.

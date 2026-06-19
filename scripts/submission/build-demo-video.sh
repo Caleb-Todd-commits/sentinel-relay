@@ -9,23 +9,15 @@ AUDIO="$ROOT/submission/narration.aiff"
 mkdir -p "$WORK/clips"
 
 images=(
-  "$ROOT/outputs/manual-20260618-submission/presentations/sentinel-relay-pitch/preview/slide-01.png"
-  "$ROOT/submission/screenshots/home.png"
-  "$ROOT/submission/screenshots/demo.png"
-  "$ROOT/outputs/manual-20260618-submission/presentations/sentinel-relay-pitch/preview/slide-03.png"
-  "$ROOT/submission/screenshots/workflow-01-room.png"
-  "$ROOT/submission/screenshots/workflow-03-evidence.png"
-  "$ROOT/submission/screenshots/workflow-03-evidence.png"
-  "$ROOT/submission/screenshots/workflow-06-challenge.png"
-  "$ROOT/submission/screenshots/workflow-07-approval-gate.png"
-  "$ROOT/submission/screenshots/workflow-08-approved.png"
-  "$ROOT/submission/screenshots/workflow-10-report-ready.png"
-  "$ROOT/submission/screenshots/workflow-report.png"
-  "$ROOT/submission/screenshots/report.png"
-  "$ROOT/outputs/manual-20260618-submission/presentations/sentinel-relay-pitch/preview/slide-08.png"
+  "$ROOT/submission/cover.png"
+  "$ROOT/submission/screenshots/workspace.png"
+  "$ROOT/submission/screenshots/approval.png"
+  "$ROOT/submission/screenshots/result.png"
+  "$ROOT/submission/screenshots/custom-question.png"
+  "$ROOT/submission/cover.png"
 )
 
-durations=(8.0 11.4 12.6 6.9 12.1 12.6 25.7 25.4 11.3 12.2 9.8 10.9 4.1 12.2)
+durations=(18.0 38.0 38.0 38.0 38.0 10.0)
 
 : > "$WORK/concat.txt"
 

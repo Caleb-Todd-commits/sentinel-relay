@@ -1,39 +1,31 @@
-# Demo Script
+# Current product walkthrough
 
-## 0:00–0:20 — Problem
+Target: 2–3 minutes.
 
-Enterprise incidents do not fail because one person lacked an AI assistant. They fail because security, engineering, compliance, and leadership need shared context, evidence, approvals, and traceability.
+## 1. Show the workspace
 
-## 0:20–0:40 — Start Incident
+Open [the production application](https://sentinel-relay-alpha.vercel.app). Point out that Incident, Agents, and Decision are visible without navigation or popups.
 
-Open Sentinel Relay and start the sample case:
+## 2. Start a seeded investigation
 
-**Possible API Key Exposure After Friday Deploy**
+Keep `INC-1042` selected and choose **Start investigation**. Explain that the six specialists contribute to one decision trail and that the status chip identifies live Band execution or verified replay honestly.
 
-Show the War Room being created.
+## 3. Pause at disagreement
 
-## 0:40–1:25 — Agent Collaboration
+Call out the Risk & Compliance finding: unauthorized access can be supported without claiming downstream exfiltration or attribution. This is the core evidence-quality moment.
 
-Show agents posting structured messages:
+## 4. Show human control
 
-- Band Leader opens the case and assigns investigation.
-- Forensics finds suspicious API token activity.
-- Code Review finds a risky diff.
-- Threat Intel gives confidence.
-- Risk & Compliance challenges the classification.
+At **Approve scoped containment**, read the requested actions and note what is excluded. Choose **Approve containment →** only after showing that remediation is blocked.
 
-## 1:25–1:55 — Human Approval
+## 5. Show the result
 
-Show the approval card.
+Use Summary, Evidence, and Audit tabs. Emphasize that the outcome is traceable to agent messages, evidence IDs, and the recorded approval.
 
-Explain that the system does not automatically mark containment or external communication as approved. A human has to decide.
+## 6. Ask an open-ended question
 
-## 1:55–2:30 — Remediation and Report
+Scroll to **Try your own scenario** and enter a fictional, sanitized problem. Explain that only agents with a specific contribution respond and that this route uses server-side AI/ML API analysis; it is not represented as a Band room.
 
-Show remediation tasks and the final report preview.
+## Closing line
 
-## 2:30–3:00 — Why Band Matters
-
-Close with:
-
-> Band is not a notification layer here. Band is the shared incident coordination layer where specialized agents exchange structured context, hand off tasks, challenge conclusions, and produce an audit trail.
+Sentinel Relay turns specialist AI outputs into an accountable incident decision: evidence first, disagreement visible, high-impact action human-controlled.
